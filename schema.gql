@@ -1,8 +1,8 @@
 enum Measurement {
   TEASPOON
   TABLESPOON
-  OZ
-  LB
+  OUNCE
+  POUND
   CUP
   PINT
   QUART
@@ -17,7 +17,7 @@ type Comment {
 }
 
 type Ingredient {
-  amount: Int!
+  amount: Float!
   measurement: Measurement!
   item: String!
   recipe: Recipe!
@@ -31,7 +31,7 @@ type Recipe {
   steps: [String!]!
   picture: String
   source: String
-  tags: [String]!
+  tags: [String]
   notes: String
   comments: [Comment]! @relation
 }

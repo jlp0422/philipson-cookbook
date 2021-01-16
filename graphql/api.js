@@ -30,7 +30,29 @@ export const useRecipes = () => {
   const query = `query Recipes($size: Int) {
     recipes(_size: $size) {
       data {
-        ...
+        _id
+        _ts
+        author
+        title
+        description
+        ingredients {
+          data {
+            amount
+            measurement
+            item
+          }
+        }
+        steps
+        picture
+        source
+        tags
+        notes
+        comments {
+          data {
+            author
+            text
+          }
+        }
       }
       after
     }
@@ -74,31 +96,44 @@ export const useRecipes = () => {
 | Learn more about GraphQL mutations: https://graphql.org/learn/queries/#mutations
 |--------------------------------------------------
 */
-export const createGuestbookEntry = async (twitterHandle, story) => {
-  const query = `mutation CreateGuestbookEntry($twitterHandle: String!, $story: String!) {
-    createGuestbookEntry(data: {
-      twitter_handle: $twitterHandle,
-      story: $story
-    }) {
-      _id
-      _ts
-      twitter_handle
-      story
+export const createRecipe = async recipeInput => {
+  const query = `mutation CreateRecipe($recipeInput: RecipeInput!) {
+    createRecipe(data: $recipeInput) {
+      data {
+        author
+        title
+        description
+        ingredients {
+          data {
+            amount
+            measurement
+            item
+          }
+        }
+        steps
+        picture
+        source
+        tags
+        notes
+      }
     }
   }`
 
-  const res = useFetch(process.env.NEXT_PUBLIC_FAUNADB_GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_FAUNADB_SECRET}`,
-      'Content-type': 'application/json',
-      Accept: 'application/json'
-    },
-    body: JSON.stringify({
-      query,
-      variables: { twitterHandle, story }
-    })
-  })
+  const { data, error } = useFetch(
+    process.env.NEXT_PUBLIC_FAUNADB_GRAPHQL_ENDPOINT,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_FAUNADB_SECRET}`,
+        'Content-type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        query,
+        variables: { recipeInput }
+      })
+    }
+  )
 
   return {
     data: getData(data),
