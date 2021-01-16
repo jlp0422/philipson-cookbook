@@ -1,0 +1,44 @@
+enum Measurement {
+  TEASPOON
+  TABLESPOON
+  OZ
+  LB
+  CUP
+  PINT
+  QUART
+  GALLON
+  ML
+}
+
+type Comment {
+  author: String!
+  text: String!
+  recipe: Recipe!
+}
+
+type Ingredient {
+  amount: Int!
+  measurement: Measurement!
+  item: String!
+  recipe: Recipe!
+}
+
+type Recipe {
+  author: String!
+  title: String
+  description: String
+  ingredients: [Ingredient!]! @relation
+  steps: [String!]!
+  picture: String
+  source: String
+  tags: [String]!
+  notes: String
+  comments: [Comment]! @relation
+}
+
+type Query {
+  recipes: [Recipe]!
+  ingredients: [Ingredient]!
+  comments: [Comment]!
+  # recipesByIngredients(ingredients: [String!]!): [Recipe]!
+}
