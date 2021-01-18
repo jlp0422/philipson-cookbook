@@ -9,7 +9,7 @@ const Head = ({ title }) => {
       <link
         rel='shortcut icon'
         type='image/x-icon'
-        href='/static/favicon.png'
+        // href='/static/favicon.png'
       />
     </NextHead>
   )

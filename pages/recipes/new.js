@@ -1,5 +1,11 @@
 import { useState } from 'react'
 import Head from 'components/Head'
+import Image from 'next/image'
+
+const getImageDivisor = ({ height, width }) => {
+  const max = height > width ? height : width
+  return max / 300
+}
 
 const MEASUREMENTS = [
   'TEASPOON',
@@ -25,7 +31,7 @@ const initialState = {
     }
   ],
   steps: [''],
-  imageUrl: '',
+  imageData: {},
   source: '',
   tags: [],
   notes: ''
@@ -105,15 +111,32 @@ const CreateRecipe = () => {
     const formData = new FormData()
     formData.append('file', files[0])
     formData.append('upload_preset', 'philipson-cookbook')
-    const options = {
-      method: 'POST',
-      body: formData
-    }
-    console.log({ formData, files, options })
-    const data = await fetch('/api/upload-image', {
-      options
+
+    // const data = await fetch('/api/upload-image', {
+    //   method: 'POST',
+    //   body: formData
+    // })
+
+    const data = await fetch(
+      'https://api.Cloudinary.com/v1_1/jlp0422/image/upload',
+      {
+        method: 'POST',
+        body: formData
+      }
+    ).then(res => res.json())
+
+    const { height, width } = data
+
+    setFormState({
+      ...formState,
+      imageData: {
+        url: data.secure_url,
+        height,
+        width,
+        filename: data.original_filename,
+        divisor: getImageDivisor({ height, width })
+      }
     })
-    console.log({ data })
   }
 
   console.log({ formState })
@@ -267,15 +290,29 @@ const CreateRecipe = () => {
         </label>
         <label className='block' htmlFor='imageUrl'>
           <span className='text-gray-700'>Source</span>
-          <input
-            type='file'
-            className='block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            placeholder=''
-            id='imageUrl'
-            name='imageUrl'
-          />
-          <button onClick={onImageUpload}>submit</button>
-          {formState.imageUrl && <h4>{formState.imageUrl}</h4>}
+          <div className='flex'>
+            <input
+              type='file'
+              className='block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+              placeholder=''
+              id='imageUrl'
+              name='imageUrl'
+            />
+            <button onClick={onImageUpload}>Upload</button>
+          </div>
+          {formState.imageData.url && (
+            <Image
+              src={formState.imageData.url}
+              alt={formState.imageData.filename}
+              title={formState.imageData.filename}
+              width={Math.min(
+                formState.imageData.width / formState.imageData.divisor
+              )}
+              height={Math.min(
+                formState.imageData.height / formState.imageData.divisor
+              )}
+            />
+          )}
         </label>
       </div>
     </>
