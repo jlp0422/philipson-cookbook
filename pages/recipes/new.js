@@ -39,6 +39,7 @@ const initialState = {
 
 const CreateRecipe = () => {
   const [formState, setFormState] = useState(initialState)
+  const [isUploading, setIsUploading] = useState(false)
 
   const onFormChange = key => ev => {
     setFormState({
@@ -107,15 +108,11 @@ const CreateRecipe = () => {
   }
 
   const onImageUpload = async () => {
+    setIsUploading(true)
     const { files } = document.querySelector('input[type="file"]')
     const formData = new FormData()
     formData.append('file', files[0])
     formData.append('upload_preset', 'philipson-cookbook')
-
-    // const data = await fetch('/api/upload-image', {
-    //   method: 'POST',
-    //   body: formData
-    // })
 
     const data = await fetch(
       'https://api.Cloudinary.com/v1_1/jlp0422/image/upload',
@@ -123,18 +120,24 @@ const CreateRecipe = () => {
         method: 'POST',
         body: formData
       }
-    ).then(res => res.json())
-
-    const { height, width } = data
+    )
+      .then(res => {
+        setIsUploading(false)
+        return res.json()
+      })
+      .catch(err => {
+        setIsUploading(false)
+        console.error(err)
+      })
 
     setFormState({
       ...formState,
       imageData: {
         url: data.secure_url,
-        height,
-        width,
+        height: data.height,
+        width: data.width,
         filename: data.original_filename,
-        divisor: getImageDivisor({ height, width })
+        divisor: getImageDivisor({ height: data.height, width: data.width })
       }
     })
   }
@@ -294,12 +297,12 @@ const CreateRecipe = () => {
             <input
               type='file'
               className='block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-              placeholder=''
               id='imageUrl'
               name='imageUrl'
             />
             <button onClick={onImageUpload}>Upload</button>
           </div>
+          <h3>is uploading? {isUploading.toString()}</h3>
           {formState.imageData.url && (
             <Image
               src={formState.imageData.url}

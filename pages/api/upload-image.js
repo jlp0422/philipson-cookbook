@@ -1,14 +1,28 @@
-export default function handler(req, res) {
-  console.log({ body: req.body, method: req.method })
-  // fetch('https://api.Cloudinary.com/v1_1/jlp0422/image/upload', {
-  //   method: 'POST',
-  //   body: formData
-  // })
-  //   .then(res => res.json())
-  //   .then(res => console.log(res))
-  //   .catch(err => console.log(err))
+// import formidable from 'formidable'
 
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'application/json')
-  res.end(JSON.stringify({ name: 'John Doe' }))
-}
+// export default async (req, res) => {
+//   const form = new formidable.IncomingForm()
+
+//   form.parse(req, (err, fields, files) => {
+//     fetch('https://api.Cloudinary.com/v1_1/jlp0422/image/upload', {
+//       method: 'POST',
+//       body: {
+//         ...fields,
+//         ...files
+//       }
+//     })
+//       .then(data => data.json())
+//       .then(data => res.json(data))
+//       .catch(err => console.log(err))
+//   })
+
+//   // res.statusCode = 200
+//   // res.setHeader('Content-Type', 'application/json')
+//   // res.end(JSON.stringify({ name: 'John Doe' }))
+// }
+
+// export const config = {
+//   api: {
+//     bodyParser: false
+//   }
+// }
