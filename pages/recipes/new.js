@@ -1,5 +1,5 @@
-import Head from 'components/Head'
-import RecipeForm from 'components/RecipeForm'
+import Head from '@/components/Head'
+import RecipeForm from '@/components/RecipeForm'
 
 const NewRecipe = () => {
   return (

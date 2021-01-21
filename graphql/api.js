@@ -1,4 +1,5 @@
-import useFetch from '../utils/useFetch'
+import useFetch from '@/utils/useFetch'
+import { transformForQuery } from '@/utils/helpers'
 
 function getData(data) {
   if (!data || data.errors) {
@@ -43,7 +44,7 @@ export const useRecipes = () => {
           }
         }
         steps
-        picture
+        imageUrl
         source
         tags
         notes
@@ -96,30 +97,30 @@ export const useRecipes = () => {
 | Learn more about GraphQL mutations: https://graphql.org/learn/queries/#mutations
 |--------------------------------------------------
 */
-export const createRecipe = async recipeInput => {
+export const createRecipe = async recipeFormData => {
+  const recipeInput = transformForQuery(recipeFormData)
   const query = `mutation CreateRecipe($recipeInput: RecipeInput!) {
     createRecipe(data: $recipeInput) {
-      data {
-        author
-        title
-        description
-        ingredients {
-          data {
-            amount
-            measurement
-            item
-          }
+      _id
+      author
+      title
+      description
+      ingredients {
+        data {
+          amount
+          measurement
+          item
         }
-        steps
-        picture
-        source
-        tags
-        notes
       }
+      steps
+      imageUrl
+      source
+      tags
+      notes
     }
   }`
 
-  const { data, error } = useFetch(
+  const response = await fetch(
     process.env.NEXT_PUBLIC_FAUNADB_GRAPHQL_ENDPOINT,
     {
       method: 'POST',
@@ -134,10 +135,10 @@ export const createRecipe = async recipeInput => {
       })
     }
   )
+  const data = await response.json()
 
   return {
     data: getData(data),
-    errorMessage: getErrorMessage(error, data),
-    error
+    errorMessage: getErrorMessage(null, data)
   }
 }
