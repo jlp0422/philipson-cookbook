@@ -167,3 +167,45 @@ export const createRecipe = async recipeFormData => {
     errorMessage: getErrorMessage(null, data)
   }
 }
+
+export const createComment = async ({ author, text, recipeId }) => {
+  const query = `mutation PostComment($commentInput: CommentInput!) {
+    createComment(data: $commentInput) {
+      author
+      text
+      recipe {
+        _id
+      }
+    }
+  }`
+
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_FAUNADB_GRAPHQL_ENDPOINT,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_FAUNADB_SECRET}`,
+        'Content-type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          commentInput: {
+            author,
+            text,
+            recipe: {
+              connect: recipeId
+            }
+          }
+        }
+      })
+    }
+  )
+  const data = await response.json()
+
+  return {
+    data: getData(data),
+    errorMessage: getErrorMessage(null, data)
+  }
+}

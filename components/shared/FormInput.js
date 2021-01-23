@@ -4,10 +4,11 @@ const FormInput = ({
   value,
   onChange,
   type = 'text',
-  placeholder = ''
+  placeholder = '',
+  labelStyles = ''
 }) => {
   return (
-    <label className='block' htmlFor={id}>
+    <label className={`block ${labelStyles}`} htmlFor={id}>
       <span className='text-gray-700'>{label}</span>
       <input
         type={type}
