@@ -1,9 +1,10 @@
-import { useState } from 'react'
-import Image from 'next/image'
-import { createRecipe } from '@/graphql/api'
-import { getImageDivisor } from '@/utils/helpers'
-import FormInput from '@/components/shared/FormInput'
 import FormArea from '@/components/shared/FormArea'
+import FormInput from '@/components/shared/FormInput'
+import CREATE_RECIPE from '@/graphql/mutations/createRecipe'
+import { formDataToQueryInput, getImageDivisor } from '@/utils/helpers'
+import { useMutation } from '@apollo/client'
+import Image from 'next/image'
+import { useState } from 'react'
 
 const MEASUREMENTS = [
   'PINCH',
@@ -42,6 +43,8 @@ const inputClass =
 const RecipeForm = () => {
   const [formState, setFormState] = useState(initialState)
   const [isUploading, setIsUploading] = useState(false)
+  const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE)
+  console.log({ createRecipe: data, loading, error })
 
   const validateForm = formData => {
     const formErrors = []
@@ -163,8 +166,9 @@ const RecipeForm = () => {
     const formErrors = validateForm(formState)
     console.log({ formErrors })
     if (!formErrors.length) {
-      const data = await createRecipe(formState)
-      console.log({ data })
+      createRecipe({
+        variables: { recipeInput: formDataToQueryInput(formState) }
+      })
     }
   }
 

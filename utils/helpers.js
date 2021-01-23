@@ -1,4 +1,4 @@
-export const transformForQuery = ({
+export const formDataToQueryInput = ({
   author,
   title,
   description,
@@ -31,3 +31,5 @@ export const getImageDivisor = ({ height, width }) => {
   const max = height > width ? height : width
   return max / 300
 }
+
+export const isLink = source => source.includes('https') || source.includes('www.')

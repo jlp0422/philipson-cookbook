@@ -1,17 +1,22 @@
 import Head from '@/components/Head'
-import { useRecipes } from '@/graphql/api'
 import RecipeCard from '@/components/RecipeCard'
+import { useQuery } from '@apollo/client'
+import RECIPES_QUERY from '@/graphql/queries/recipes'
 
 const Recipes = () => {
-  const { data, error, errorMessage } = useRecipes()
-  console.log({ data })
+  const { data, loading, error } = useQuery(RECIPES_QUERY, {
+    variables: {
+      size: 100
+    }
+  })
+  console.log({ 'pages/recipes': data })
 
-  if (!data && !error) {
+  if (loading) {
     return <h2>Loading...</h2>
   }
 
   if (error) {
-    return <h3>error!: {errorMessage}</h3>
+    return <h3>error!: {JSON.stringify(error, null, 2)}</h3>
   }
 
   return (

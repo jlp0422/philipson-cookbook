@@ -1,8 +1,11 @@
-import { useState } from 'react'
-import { useRecipe } from '@/graphql/api'
 import Head from '@/components/Head'
-import Image from 'next/image'
 import FormInput from '@/components/shared/FormInput'
+import CREATE_COMMENT from '@/graphql/mutations/createComment'
+import RECIPE_QUERY from '@/graphql/queries/recipe'
+import { isLink } from '@/utils/helpers'
+import { useMutation, useQuery } from '@apollo/client'
+import Image from 'next/image'
+import { useState } from 'react'
 
 const sectionContainerStyles =
   'flex flex-col items-center w-full pt-0 mb-8 text-left lg:flex-grow md:w-1/2 lg:mr-20 lg:pr-24 md:pr-16 md:items-start md:text-left md:mb-0'
@@ -11,32 +14,52 @@ const sectionHeaderStyles =
 const flexWrapperStyles =
   'container flex flex-col items-start px-5 py-8 mx-auto lg:px-20 md:flex-row'
 
-const isLink = source => source.includes('https') || source.includes('www.')
-
 const Recipe = ({ recipeId }) => {
-  const [newComment, setNewComment] = useState('')
-  const { data, error, errorMessage } = useRecipe(recipeId)
+  const [comment, setComment] = useState({ text: '', author: '' })
+  const { data, error, loading } = useQuery(RECIPE_QUERY, {
+    variables: { id: recipeId }
+  })
 
-  const onSubmitComment = async comment => {
+  const [
+    createComment
+    // { data: commentData, error: commentError, loading: isCommentLoading }
+  ] = useMutation(CREATE_COMMENT, {
+    refetchQueries: [{ query: RECIPE_QUERY, variables: { id: recipeId } }]
+  })
+
+  const onSubmitComment = async ev => {
     ev.preventDefault()
-    const data = await createRecipe(formState)
-    console.log({ data })
+    createComment({
+      variables: {
+        commentInput: {
+          ...comment,
+          recipe: { connect: recipeId }
+        }
+      }
+    })
   }
 
-  if (!data && !error) {
+  const onChangeComment = key => ev => {
+    setComment({
+      ...comment,
+      [key]: ev.target.value
+    })
+  }
+
+  if (loading) {
     return <h2>Loading...</h2>
   }
 
   if (error) {
-    return <h3>error!: {errorMessage}</h3>
+    return <h3>error!: {JSON.stringify(error, null, 2)}</h3>
   }
 
   if (!data.findRecipeByID) {
     return <h3>No recipe found!</h3>
   }
 
-  const recipe = data.findRecipeByID
-  console.log({ recipe })
+  const { findRecipeByID: recipe } = data
+  console.log({ 'components/recipe': recipe })
 
   return (
     <>
@@ -82,7 +105,7 @@ const Recipe = ({ recipeId }) => {
             <h3 className={sectionHeaderStyles}>Steps</h3>
             {recipe.steps.map((step, index) => (
               <p className='py-1' key={index}>
-                {index + 1}) {step}
+                {`${index + 1}) ${step}`}
               </p>
             ))}
           </div>
@@ -119,13 +142,21 @@ const Recipe = ({ recipeId }) => {
             ) : (
               <p>No comments yet, be the first!</p>
             )}
-            <FormInput
-              label='New Comment'
-              id='comment'
-              value={newComment}
-              onChange={ev => setNewComment(ev.target.value)}
-              labelStyles='mt-8 w-full'
-            />
+            <form className='w-full mt-8' onSubmit={onSubmitComment}>
+              <FormInput
+                label='New Comment'
+                id='text'
+                value={comment.text}
+                onChange={onChangeComment('text')}
+              />
+              <FormInput
+                label='Name'
+                id='name'
+                value={comment.author}
+                onChange={onChangeComment('name')}
+              />
+              <button type='submit'>save comment</button>
+            </form>
           </div>
         </div>
       </section>
