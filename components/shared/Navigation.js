@@ -6,7 +6,6 @@ import { useEffect } from 'react'
 
 const getRandom = array => {
   const randomNum = Math.floor(Math.random() * array.length)
-  console.log({ array, randomNum})
   return array[randomNum]._id
 }
 
