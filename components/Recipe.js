@@ -86,7 +86,10 @@ const Recipe = ({ recipeId }) => {
             <Image
               className='object-cover object-center rounded-lg '
               alt='hero'
-              src={recipe.imageUrl}
+              src={
+                recipe.imageUrl ||
+                'https://res.cloudinary.com/jlp0422/image/upload/v1611027786/philipson-cookbook/iavnftxpy1ovsslblpxe.jpg'
+              }
               width={720}
               height={600}
             />
@@ -137,7 +140,10 @@ const Recipe = ({ recipeId }) => {
             <h3 className={sectionHeaderStyles}>Comments</h3>
             {recipe.comments.data.length ? (
               recipe.comments.data.map((comment, index) => (
-                <p className="w-full p-2 my-2 border-2 border-gray-300 border-solid rounded-md" key={index}>{`${comment.text} (${comment.author})`}</p>
+                <p
+                  className='w-full p-2 my-2 border-2 border-gray-300 border-solid rounded-md'
+                  key={index}
+                >{`${comment.text} (${comment.author})`}</p>
               ))
             ) : (
               <p>No comments yet, be the first!</p>

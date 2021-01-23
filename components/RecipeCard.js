@@ -6,7 +6,9 @@ const RecipeCard = ({ recipe }) => {
       <p>author: {recipe.author}</p>
       <p>title: {recipe.title}</p>
       <p>description: {recipe.description}</p>
-      <Link href={`/recipes/${recipe._id}`}>go to recipe</Link>
+      <Link href={`/recipes/${recipe._id}`}>
+        <a>go to recipe</a>
+      </Link>
     </div>
   )
 }

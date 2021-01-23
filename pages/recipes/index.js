@@ -1,7 +1,8 @@
 import Head from '@/components/Head'
 import RecipeCard from '@/components/RecipeCard'
-import { useQuery } from '@apollo/client'
+import Layout from '@/components/shared/Layout'
 import RECIPES_QUERY from '@/graphql/queries/recipes'
+import { useQuery } from '@apollo/client'
 
 const Recipes = () => {
   const { data, loading, error } = useQuery(RECIPES_QUERY, {
@@ -20,12 +21,12 @@ const Recipes = () => {
   }
 
   return (
-    <>
+    <Layout>
       <Head title='Recipes | Philipson Cookbook' />
       {data.recipes.data.slice(-2).map(recipe => (
         <RecipeCard key={recipe._id} recipe={recipe} />
       ))}
-    </>
+    </Layout>
   )
 }
 

@@ -1,10 +1,13 @@
 import Head from '@/components/Head'
+import Layout from '@/components/shared/Layout'
 
 const App = props => {
   return (
     <>
       <Head title='Philipson Cookbook' />
-      <div>my app</div>
+      <Layout>
+        <div>my app</div>
+      </Layout>
     </>
   )
 }

@@ -1,5 +1,6 @@
-import { useRouter } from 'next/router'
 import Recipe from '@/components/Recipe'
+import Layout from '@/components/shared/Layout'
+import { useRouter } from 'next/router'
 
 const RecipePage = () => {
   const router = useRouter()
@@ -9,7 +10,11 @@ const RecipePage = () => {
     return <h2>Loading...</h2>
   }
 
-  return <Recipe recipeId={id} />
+  return (
+    <Layout>
+      <Recipe recipeId={id} />
+    </Layout>
+  )
 }
 
 export default RecipePage
