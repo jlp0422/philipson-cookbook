@@ -1,6 +1,7 @@
 import FormArea from '@/components/shared/FormArea'
 import FormInput from '@/components/shared/FormInput'
 import CREATE_RECIPE from '@/graphql/mutations/createRecipe'
+import Button from '@/components/shared/Button'
 import { formDataToQueryInput, getImageDivisor } from '@/utils/helpers'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
@@ -43,8 +44,8 @@ const inputClass =
 const RecipeForm = () => {
   const [formState, setFormState] = useState(initialState)
   const [isUploading, setIsUploading] = useState(false)
+  const [uploadError, setUploadError] = useState(null)
   const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE)
-  console.log({ createRecipe: data, loading, error })
 
   const validateForm = formData => {
     const formErrors = []
@@ -127,8 +128,12 @@ const RecipeForm = () => {
   }
 
   const onImageUpload = async () => {
-    setIsUploading(true)
     const { files } = document.querySelector('input[type="file"]')
+    if (!files.length) {
+      setUploadError('Please select a file')
+      return
+    }
+    setIsUploading(true)
     const formData = new FormData()
     formData.append('file', files[0])
     formData.append('upload_preset', 'philipson-cookbook')
@@ -173,18 +178,20 @@ const RecipeForm = () => {
   }
 
   return (
-    <form className='mx-auto max-w-prose' onSubmit={onFormSubmit}>
+    <form className='mx-auto prose' onSubmit={onFormSubmit}>
       <FormInput
         label='Author'
         id='author'
         value={formState.author}
         onChange={onFormChange('author')}
+        labelStyles='mb-4'
       />
       <FormInput
         label='Title'
         id='title'
         value={formState.title}
         onChange={onFormChange('title')}
+        labelStyles='mb-4'
       />
       <FormArea
         label='Description'
@@ -193,8 +200,9 @@ const RecipeForm = () => {
         onChange={onFormChange('description')}
         rows='3'
         style={{ height: 70 }}
+        labelStyles='mb-4'
       />
-      <label className='block' htmlFor='ingredients'>
+      <label className='block mb-4' htmlFor='ingredients'>
         <span className='text-gray-700'>Ingredients</span>
         {formState.ingredients.map((ing, index) => (
           <div className='grid grid-cols-4 gap-2' key={index}>
@@ -242,7 +250,7 @@ const RecipeForm = () => {
           add ingredient
         </button>
       </label>
-      <label className='block' htmlFor='steps'>
+      <label className='block mb-4' htmlFor='steps'>
         <span className='text-gray-700'>Steps</span>
         {formState.steps.map((step, index) => (
           <div key={index} className='flex'>
@@ -273,6 +281,7 @@ const RecipeForm = () => {
         id='source'
         value={formState.source}
         onChange={onFormChange('source')}
+        labelStyles='mb-4'
       />
       <FormArea
         label='Notes'
@@ -281,35 +290,45 @@ const RecipeForm = () => {
         onChange={onFormChange('notes')}
         rows='3'
         style={{ height: 70 }}
+        labelStyles='mb-4'
       />
-      <label className='block' htmlFor='imageUrl'>
-        <span className='text-gray-700'>Source</span>
+      <label className='block mb-4' htmlFor='imageUrl'>
+        <span className='text-gray-700'>Image</span>
+        {uploadError && (
+          <p style={{ margin: '.25rem 0' }} className='font-bold text-red-600'>
+            {uploadError}
+          </p>
+        )}
         <div className='flex'>
           <input
             type='file'
-            className={inputClass}
+            className='block w-full mt-1 border-gray-300 rounded-md'
             id='imageUrl'
             name='imageUrl'
           />
-          <button type='button' onClick={onImageUpload}>
+          <Button
+            color='blue'
+            disabled={isUploading}
+            onClick={onImageUpload}
+          >
             Upload
-          </button>
+          </Button>
         </div>
-        <h3>is uploading? {isUploading.toString()}</h3>
-        {formState.imageData.url && (
-          <Image
-            src={formState.imageData.url}
-            alt={formState.imageData.filename}
-            title={formState.imageData.filename}
-            width={Math.min(
-              formState.imageData.width / formState.imageData.divisor
-            )}
-            height={Math.min(
-              formState.imageData.height / formState.imageData.divisor
-            )}
-          />
-        )}
       </label>
+      <h3>is uploading? {isUploading.toString()}</h3>
+      {formState.imageData.url && (
+        <Image
+          src={formState.imageData.url}
+          alt={formState.imageData.filename}
+          title={formState.imageData.filename}
+          width={Math.min(
+            formState.imageData.width / formState.imageData.divisor
+          )}
+          height={Math.min(
+            formState.imageData.height / formState.imageData.divisor
+          )}
+        />
+      )}
       <button type='submit'>create!</button>
     </form>
   )

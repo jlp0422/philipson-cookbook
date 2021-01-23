@@ -137,7 +137,7 @@ const Recipe = ({ recipeId }) => {
             <h3 className={sectionHeaderStyles}>Comments</h3>
             {recipe.comments.data.length ? (
               recipe.comments.data.map((comment, index) => (
-                <p key={index}>{`${comment.text} (${comment.author})`}</p>
+                <p className="w-full p-2 my-2 border-2 border-gray-300 border-solid rounded-md" key={index}>{`${comment.text} (${comment.author})`}</p>
               ))
             ) : (
               <p>No comments yet, be the first!</p>
