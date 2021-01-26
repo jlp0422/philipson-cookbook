@@ -12,20 +12,23 @@ const Recipes = () => {
   })
   console.log({ 'pages/recipes': data })
 
-  if (loading) {
-    return <h2>Loading...</h2>
-  }
+  const renderContent = () => {
+    if (loading) {
+      return <h2>Loading...</h2>
+    }
+    if (error) {
+      return <h3>error!: {JSON.stringify(error, null, 2)}</h3>
+    }
 
-  if (error) {
-    return <h3>error!: {JSON.stringify(error, null, 2)}</h3>
+    return data.recipes.data
+      .slice(-2)
+      .map(recipe => <RecipeCard key={recipe._id} recipe={recipe} />)
   }
 
   return (
     <Layout>
       <Head title='Recipes | Philipson Cookbook' />
-      {data.recipes.data.slice(-2).map(recipe => (
-        <RecipeCard key={recipe._id} recipe={recipe} />
-      ))}
+      {renderContent()}
     </Layout>
   )
 }
