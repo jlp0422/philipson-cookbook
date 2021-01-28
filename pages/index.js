@@ -1,4 +1,4 @@
-import Head from '@/components/Head'
+import Head from '@/components/shared/Head'
 import Layout from '@/components/shared/Layout'
 
 const App = props => {

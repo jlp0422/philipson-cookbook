@@ -1,4 +1,4 @@
-import Head from '@/components/Head'
+import Head from '@/components/shared/Head'
 import FormInput from '@/components/shared/FormInput'
 import CREATE_COMMENT from '@/graphql/mutations/createComment'
 import RECIPE_QUERY from '@/graphql/queries/recipe'
@@ -6,6 +6,8 @@ import { isLink } from '@/utils/helpers'
 import { useMutation, useQuery } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
+import Button from './shared/Button'
+import FormArea from './shared/FormArea'
 
 const sectionContainerStyles =
   'flex flex-col items-center w-full pt-0 mb-8 text-left lg:flex-grow md:w-1/2 lg:mr-20 lg:pr-24 md:pr-16 md:items-start md:text-left md:mb-0'
@@ -24,7 +26,8 @@ const Recipe = ({ recipeId }) => {
     createComment
     // { data: commentData, error: commentError, loading: isCommentLoading }
   ] = useMutation(CREATE_COMMENT, {
-    refetchQueries: [{ query: RECIPE_QUERY, variables: { id: recipeId } }]
+    refetchQueries: [{ query: RECIPE_QUERY, variables: { id: recipeId } }],
+    onCompleted: () => setComment({ text: '', author: '' })
   })
 
   const onSubmitComment = async ev => {
@@ -140,28 +143,37 @@ const Recipe = ({ recipeId }) => {
             <h3 className={sectionHeaderStyles}>Comments</h3>
             {recipe.comments.data.length ? (
               recipe.comments.data.map((comment, index) => (
-                <p
-                  className='w-full p-2 my-2 border-2 border-gray-300 border-solid rounded-md'
+                <div
                   key={index}
-                >{`${comment.text} (${comment.author})`}</p>
+                  className='w-full px-2 py-4 my-2 border-2 border-gray-300 border-solid rounded-md'
+                >
+                  <p>{comment.text}</p>
+                  <p className='text-sm italic'>- {comment.author}</p>
+                </div>
               ))
             ) : (
               <p>No comments yet, be the first!</p>
             )}
             <form className='w-full mt-8' onSubmit={onSubmitComment}>
-              <FormInput
-                label='New Comment'
+              <h3 className="text-xl">New Comment</h3>
+              <FormArea
+                label='Comment'
                 id='text'
                 value={comment.text}
                 onChange={onChangeComment('text')}
+                rows="3"
+                placeholder="This was the best dish I've ever made!"
+                labelStyles="mt-2"
               />
               <FormInput
-                label='Name'
-                id='name'
+                label='Author'
+                id='author'
                 value={comment.author}
-                onChange={onChangeComment('name')}
+                onChange={onChangeComment('author')}
+                labelStyles="mt-2"
+                placeholder="Bobby Flay"
               />
-              <button type='submit'>save comment</button>
+              <Button className="py-2 my-4" color="green" type='submit'>Save comment</Button>
             </form>
           </div>
         </div>
