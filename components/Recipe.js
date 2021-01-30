@@ -18,6 +18,7 @@ const flexWrapperStyles =
 
 const Recipe = ({ recipeId }) => {
   const [comment, setComment] = useState({ text: '', author: '' })
+  const [errors, setErrors] = useState({})
   const { data, error, loading } = useQuery(RECIPE_QUERY, {
     variables: { id: recipeId }
   })
@@ -30,16 +31,38 @@ const Recipe = ({ recipeId }) => {
     onCompleted: () => setComment({ text: '', author: '' })
   })
 
+  const validateComment = comment => {
+    const commentFormErrors = {}
+    if (!comment.author) {
+      commentFormErrors['author'] = {
+        short: 'Author missing',
+        long: 'Please add a comment author.'
+      }
+    }
+    if (!comment.text) {
+      commentFormErrors['text'] = {
+        short: 'Text missing',
+        long: 'Please add a comment.'
+      }
+    }
+    return commentFormErrors
+  }
+
   const onSubmitComment = async ev => {
     ev.preventDefault()
-    createComment({
-      variables: {
-        commentInput: {
-          ...comment,
-          recipe: { connect: recipeId }
+    const formErrors = validateComment(comment)
+    if (Object.keys(formErrors).length) {
+      setErrors(formErrors)
+    } else {
+      createComment({
+        variables: {
+          commentInput: {
+            ...comment,
+            recipe: { connect: recipeId }
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   const onChangeComment = key => ev => {
@@ -155,25 +178,29 @@ const Recipe = ({ recipeId }) => {
               <p>No comments yet, be the first!</p>
             )}
             <form className='w-full mt-8' onSubmit={onSubmitComment}>
-              <h3 className="text-xl">New Comment</h3>
+              <h3 className='text-xl'>New Comment</h3>
               <FormArea
                 label='Comment'
                 id='text'
                 value={comment.text}
                 onChange={onChangeComment('text')}
-                rows="3"
+                rows='3'
                 placeholder="This was the best dish I've ever made!"
-                labelStyles="mt-2"
+                labelStyles='mt-2'
+                error={errors['text']}
               />
               <FormInput
                 label='Author'
                 id='author'
                 value={comment.author}
                 onChange={onChangeComment('author')}
-                labelStyles="mt-2"
-                placeholder="Bobby Flay"
+                labelStyles='mt-2'
+                placeholder='Bobby Flay'
+                error={errors['author']}
               />
-              <Button className="py-2 my-4" color="green" type='submit'>Save comment</Button>
+              <Button className='py-2 my-4' color='green' type='submit'>
+                Save comment
+              </Button>
             </form>
           </div>
         </div>

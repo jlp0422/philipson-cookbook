@@ -14,9 +14,7 @@ const Button = ({
   return (
     <button
       disabled={disabled}
-      className={`px-4 py-1 font-semibold text-white ${buttonColor} rounded-lg shadow-md focus:outline-none focus:ring-2 ${focusColor} focus:ring-opacity-75 ${
-        disabled ? '' : hoverColor
-      } ${className}`}
+      className={`transition duration-500 ease-in-out transform px-4 py-1 font-semibold text-white ${buttonColor} rounded-lg shadow-md focus:outline-none focus:ring-2 ${focusColor} focus:ring-opacity-75 ${disabled ? '' : hoverColor} ${className}`}
       type={type}
       onClick={onClick}
     >

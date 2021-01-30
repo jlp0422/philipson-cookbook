@@ -3,7 +3,7 @@ import { upper } from '@/utils/helpers'
 
 const RecipeCard = ({ recipe }) => {
   const hasTags = Boolean(recipe.tags.length)
-  console.log({ recipeCard: recipe })
+  // console.log({ recipeCard: recipe })
 
   return (
     <Link href={`/recipes/${recipe._id}`}>
@@ -15,11 +15,9 @@ const RecipeCard = ({ recipe }) => {
           }
           alt='content'
         />
-        {hasTags && (
-          <span className='mb-1 text-xs font-medium text-blue-500'>
-            {recipe.tags.map(upper).join(', ')}
-          </span>
-        )}
+        <span className='mb-1 text-xs font-medium text-blue-500'>
+          {hasTags ? recipe.tags.map(upper).join(', ') : <br />}
+        </span>
         <div className=''>
           <h2 className='mb-0 text-xl font-semibold text-gray-600 lg:text-2xl title-font hover:text-gray-800'>
             {recipe.title}
