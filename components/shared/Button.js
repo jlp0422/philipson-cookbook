@@ -1,9 +1,3 @@
-const getColors = color => [
-  `bg-${color}-500`,
-  `focus:ring-${color}-400`,
-  `hover:bg-${color}-700`
-]
-
 const Button = ({
   color,
   children,
@@ -12,7 +6,11 @@ const Button = ({
   type = 'button',
   className
 }) => {
-  const [buttonColor, focusColor, hoverColor] = getColors(color)
+  const [buttonColor, focusColor, hoverColor] = [
+    disabled ? `bg-${color}-400` : `bg-${color}-500`,
+    `focus:ring-${color}-400`,
+    `hover:bg-${color}-700`
+  ]
   return (
     <button
       disabled={disabled}

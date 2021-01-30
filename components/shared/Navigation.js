@@ -7,9 +7,8 @@ import { getRandomId } from '@/utils/helpers'
 
 const newRecipeClass =
   'items-center px-4 py-2 text-sm font-semibold text-green-700 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:inline-flex lg:ml-auto lg:mt-px hover:border-green-700 hover:bg-green-700 hover:text-white focus:ring focus:outline-none'
-
 const navLink =
-  'mr-8 text-sm font-semibold text-gray-600 pb-1.5 hover:text-gray-800 border-b-2 border-gray-600'
+  'mr-8 text-sm font-semibold text-gray-600 pb-1.5 hover:text-gray-800 border-b-2 border-gray-600 hover:border-gray-800'
 
 const Navigation = () => {
   const router = useRouter()
@@ -36,10 +35,10 @@ const Navigation = () => {
   }
 
   const checkActivePath = (current, pathToCheck) =>
-    current === pathToCheck ? 'border-opacity-2' : 'border-opacity-0'
+    current === pathToCheck ? 'border-opacity-100' : 'border-opacity-0'
 
   return (
-    <header className='text-gray-700 bg-white border-t border-b body-font'>
+    <header className='sticky top-0 z-10 text-gray-700 bg-blue-100 border-t border-b body-font'>
       <div className='flex flex-col flex-wrap max-w-screen-xl py-2 mx-8 md:items-center md:flex-row md:mx-12 lg:mx-16 2xl:mx-auto'>
         <nav className='flex flex-wrap items-center justify-center text-base '>
           <Link href='/'>

@@ -2,7 +2,7 @@ import Head from '@/components/shared/Head'
 import FormInput from '@/components/shared/FormInput'
 import CREATE_COMMENT from '@/graphql/mutations/createComment'
 import RECIPE_QUERY from '@/graphql/queries/recipe'
-import { isLink } from '@/utils/helpers'
+import { isLink, upper } from '@/utils/helpers'
 import { useMutation, useQuery } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -71,7 +71,7 @@ const Recipe = ({ recipeId }) => {
         <div className='container flex flex-col items-center px-5 py-8 mx-auto lg:px-20 md:flex-row'>
           <div className='flex flex-col items-center w-full pt-0 mb-16 text-left lg:flex-grow lg:mr-16 lg:pr-18 md:pr-12 md:items-start md:text-left md:mb-0 lg:text-center'>
             <h2 className='mb-1 text-xs font-medium tracking-widest text-blue-500 title-font'>
-              {recipe.tags.join(', ')}
+              {recipe.tags.map(upper).join(', ')}
             </h2>
             <h1 className='mb-8 text-3xl font-bold tracking-tighter text-center text-blue-800 lg:text-left lg:text-5xl title-font'>
               {recipe.title}
