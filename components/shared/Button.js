@@ -29,14 +29,11 @@ const Button = ({
   className
 }) => {
   const [buttonColor, focusColor, hoverColor, disabledColor] = COLORS[color]
+  const dynamicColor = disabled ? disabledColor : `${buttonColor} ${hoverColor}`
   return (
     <button
       disabled={disabled}
-      className={`transition duration-500 ease-in-out transform px-4 py-1 font-semibold text-white ${
-        disabled ? disabledColor : buttonColor
-      } rounded-lg shadow-md focus:outline-none focus:ring-2 ${focusColor} focus:ring-opacity-75 ${
-        disabled ? '' : hoverColor
-      } ${className}`}
+      className={`transition duration-500 ease-in-out transform px-4 py-1 font-semibold text-white ${dynamicColor} rounded-lg shadow-md focus:outline-none focus:ring-2 ${focusColor} focus:ring-opacity-75 ${className}`}
       type={type}
       onClick={onClick}
     >
