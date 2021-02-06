@@ -1,10 +1,14 @@
-import Head from '@/components/Head'
+import Head from '@/components/shared/Head'
+import Layout from '@/components/shared/Layout'
+import PageHeader from '@/components/shared/PageHeader'
 
 const App = props => {
   return (
     <>
       <Head title='Philipson Cookbook' />
-      <div>my app</div>
+      <Layout>
+        <PageHeader>Philipson Cookbook</PageHeader>
+      </Layout>
     </>
   )
 }

@@ -5,7 +5,10 @@ module.exports = {
     extend: {}
   },
   variants: {
-    extend: {}
+    extend: {
+      cursor: ['disabled'],
+      textColor: ['disabled']
+    }
   },
   plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')]
 }

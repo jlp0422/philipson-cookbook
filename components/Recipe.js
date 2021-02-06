@@ -1,10 +1,211 @@
-const Recipe = ({ recipe }) => {
+import Head from '@/components/shared/Head'
+import FormInput from '@/components/shared/FormInput'
+import CREATE_COMMENT from '@/graphql/mutations/createComment'
+import RECIPE_QUERY from '@/graphql/queries/recipe'
+import { isLink, upper } from '@/utils/helpers'
+import { useMutation, useQuery } from '@apollo/client'
+import Image from 'next/image'
+import { useState } from 'react'
+import Button from './shared/Button'
+import FormArea from './shared/FormArea'
+
+const sectionContainerStyles =
+  'flex flex-col items-center w-full pt-0 mb-8 text-left lg:flex-grow md:w-1/2 lg:mr-20 lg:pr-24 md:pr-16 md:items-start md:text-left md:mb-0'
+const sectionHeaderStyles =
+  'mb-4 text-2xl font-bold tracking-tighter text-center text-blue-800 lg:text-left lg:text-4xl'
+const flexWrapperStyles =
+  'container flex flex-col items-start px-5 py-8 mx-auto lg:px-20 md:flex-row'
+
+const Recipe = ({ recipeId }) => {
+  const [comment, setComment] = useState({ text: '', author: '' })
+  const [errors, setErrors] = useState({})
+  const { data, error, loading } = useQuery(RECIPE_QUERY, {
+    variables: { id: recipeId }
+  })
+
+  const [
+    createComment
+    // { data: commentData, error: commentError, loading: isCommentLoading }
+  ] = useMutation(CREATE_COMMENT, {
+    refetchQueries: [{ query: RECIPE_QUERY, variables: { id: recipeId } }],
+    onCompleted: () => setComment({ text: '', author: '' })
+  })
+
+  const validateComment = comment => {
+    const commentFormErrors = {}
+    if (!comment.author) {
+      commentFormErrors['author'] = {
+        short: 'Author missing',
+        long: 'Please add a comment author.'
+      }
+    }
+    if (!comment.text) {
+      commentFormErrors['text'] = {
+        short: 'Text missing',
+        long: 'Please add a comment.'
+      }
+    }
+    return commentFormErrors
+  }
+
+  const onSubmitComment = async ev => {
+    ev.preventDefault()
+    const formErrors = validateComment(comment)
+    if (Object.keys(formErrors).length) {
+      setErrors(formErrors)
+    } else {
+      createComment({
+        variables: {
+          commentInput: {
+            ...comment,
+            recipe: { connect: recipeId }
+          }
+        }
+      })
+    }
+  }
+
+  const onChangeComment = key => ev => {
+    setComment({
+      ...comment,
+      [key]: ev.target.value
+    })
+  }
+
+  if (loading) {
+    return <h2>Loading...</h2>
+  }
+
+  if (error) {
+    return <h3>error!: {JSON.stringify(error, null, 2)}</h3>
+  }
+
+  if (!data.findRecipeByID) {
+    return <h3>No recipe found!</h3>
+  }
+
+  const { findRecipeByID: recipe } = data
+  console.log({ 'components/recipe': recipe })
+
   return (
-    <div key={recipe._id}>
-      <p>author: {recipe.author}</p>
-      <p>title: {recipe.title}</p>
-      <p>description: {recipe.description}</p>
-    </div>
+    <>
+      <Head title={`${recipe.title} | Philipson Cookbook`} />
+      <section className='mx-auto text-gray-700 body-font'>
+        <div className='container flex flex-col items-center px-5 py-8 mx-auto lg:px-20 md:flex-row'>
+          <div className='flex flex-col items-center w-full pt-0 mb-16 text-left lg:flex-grow lg:mr-16 lg:pr-18 md:pr-12 md:items-start md:text-left md:mb-0 lg:text-center'>
+            <h2 className='mb-1 text-xs font-medium tracking-widest text-blue-500 title-font'>
+              {recipe.tags.map(upper).join(', ')}
+            </h2>
+            <h1 className='mb-8 text-3xl font-bold tracking-tighter text-center text-blue-800 lg:text-left lg:text-5xl title-font'>
+              {recipe.title}
+            </h1>
+            <p className='mb-8 text-base leading-relaxed text-center text-gray-700 lg:text-left lg:text-1xl'>
+              {recipe.description}
+            </p>
+            <div className='flex justify-center'>
+              <p className='inline-flex items-center font-semibold text-blue-700 md:mb-2 lg:mb-0'>
+                {recipe.author}
+              </p>
+            </div>
+          </div>
+          <div className='w-5/6 lg:max-w-lg lg:w-full md:w-1/2'>
+            <Image
+              className='object-cover object-center rounded-lg '
+              alt='hero'
+              src={
+                recipe.imageUrl ||
+                'https://res.cloudinary.com/jlp0422/image/upload/v1611027786/philipson-cookbook/iavnftxpy1ovsslblpxe.jpg'
+              }
+              width={720}
+              height={600}
+            />
+          </div>
+        </div>
+        <div className={flexWrapperStyles}>
+          <div className={sectionContainerStyles}>
+            <h3 className={sectionHeaderStyles}>Ingredients</h3>
+            {recipe.ingredients.data.map(({ amount, item, measurement }) => (
+              <p className='py-1' key={item}>
+                {amount} {measurement.toLowerCase()} {item}
+              </p>
+            ))}
+          </div>
+          <div className={sectionContainerStyles}>
+            <h3 className={sectionHeaderStyles}>Steps</h3>
+            {recipe.steps.map((step, index) => (
+              <p className='py-1' key={index}>
+                {`${index + 1}) ${step}`}
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className={flexWrapperStyles}>
+          <div className={sectionContainerStyles}>
+            <h3 className={sectionHeaderStyles}>Notes</h3>
+            <p>{recipe.notes}</p>
+          </div>
+          {recipe.source ? (
+            <div className={sectionContainerStyles}>
+              <h3 className={sectionHeaderStyles}>Source</h3>
+              {isLink(recipe.source) ? (
+                <a
+                  className='text-blue-500 hover:text-blue-700'
+                  href={recipe.source}
+                  target='_blank'
+                >
+                  {recipe.source}
+                </a>
+              ) : (
+                <p>{recipe.source}</p>
+              )}
+            </div>
+          ) : null}
+        </div>
+        <div className={flexWrapperStyles}>
+          <div className={`${sectionContainerStyles} md:w-full`}>
+            <h3 className={sectionHeaderStyles}>Comments</h3>
+            {recipe.comments.data.length ? (
+              recipe.comments.data.map((comment, index) => (
+                <div
+                  key={index}
+                  className='w-full px-2 py-4 my-2 border-2 border-gray-300 border-solid rounded-md'
+                >
+                  <p>{comment.text}</p>
+                  <p className='text-sm italic'>- {comment.author}</p>
+                </div>
+              ))
+            ) : (
+              <p>No comments yet, be the first!</p>
+            )}
+            <form className='w-full mt-8' onSubmit={onSubmitComment}>
+              <h3 className='text-xl'>New Comment</h3>
+              <FormArea
+                label='Comment'
+                id='text'
+                value={comment.text}
+                onChange={onChangeComment('text')}
+                rows='3'
+                placeholder="This was the best dish I've ever made!"
+                labelStyles='mt-2'
+                error={errors['text']}
+              />
+              <FormInput
+                label='Author'
+                id='author'
+                value={comment.author}
+                onChange={onChangeComment('author')}
+                labelStyles='mt-2'
+                placeholder='Bobby Flay'
+                error={errors['author']}
+              />
+              <Button className='py-2 my-4' color='green' type='submit'>
+                Save comment
+              </Button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </>
   )
 }
 
