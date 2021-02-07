@@ -24,7 +24,7 @@ const Button = ({
   color,
   children,
   disabled,
-  onClick,
+  onClick = () => {},
   type = 'button',
   className
 }) => {

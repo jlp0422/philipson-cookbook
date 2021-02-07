@@ -1,6 +1,8 @@
-import Checkbox from './shared/Checkbox'
+import Checkbox from './shared/form/Checkbox'
+import { useState } from 'react'
 
 const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
+  const [showTags, setShowTags] = useState(false)
   const onHandleCheck = ev => {
     const tag = ev.target.value
     if (selectedTags.includes(tag)) {
@@ -14,10 +16,22 @@ const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
     setSelectedTags(tag)
   }
 
+  const tagCopy = showTags ? (
+    <button onClick={() => setShowTags(!showTags)}>&#8593;</button>
+  ) : (
+    <button onClick={() => setShowTags(!showTags)}>&#8595;</button>
+  )
+
   return (
     <div>
-      <h3>Recipe Tag</h3>
-      <div className='flex flex-col'>
+      <h3 className='text-xl sm:text-2xl'>Recipe Type {tagCopy}</h3>
+      <div
+        className="overflow-scroll max-h-24"
+        style={{
+          transformOrigin: 'top center',
+          ...(showTags ? { display: 'block' } : { display: 'none' })
+        }}
+      >
         <Checkbox
           label='All'
           id='all'

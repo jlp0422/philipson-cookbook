@@ -1,36 +1,31 @@
-import TAGS_QUERY from '@/graphql/queries/tags'
-import { useQuery } from '@apollo/client'
 import { useState } from 'react'
-import IngredientFilter from './IngredientFilter'
+import FilterSlideout from './FilterSlideout'
 import Button from './shared/Button'
-import FormInput from './shared/FormInput'
-import TagFilter from './TagFilter'
+import FormInput from './shared/form/FormInput'
 
-const FilterBar = ({
-  selectedTags,
-  setSelectedTags,
-  searchQuery,
-  setSearchQuery,
-  maxNumIngredients,
-  setMaxNumIngredients
-}) => {
+const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
   const [showFilters, setShowFilters] = useState(false)
-  const [tags, setTags] = useState([])
-  const { loading, error } = useQuery(TAGS_QUERY, {
-    onCompleted: data => {
-      const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
-      const uniqueTags = new Set(allTags)
-      setTags(Array.from(uniqueTags).sort())
-    }
-  })
-
-  if (!tags.length) {
-    return null
-  }
+  const closeFilters = () => setShowFilters(false)
 
   return (
     <section className='mb-4'>
+      {showFilters && (
+        <div
+          className='fixed left-0 z-10 w-full h-full bg-gray-500 opacity-40'
+          onClick={closeFilters}
+          style={{
+            top: '56px'
+          }}
+        />
+      )}
       <div className='flex items-center'>
+        <Button
+          color='yellow'
+          className='mt-1 mr-4 w-36 h-11'
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          {showFilters ? 'Hide' : 'Show'} Filters
+        </Button>
         <FormInput
           labelStyles='flex-grow'
           id='search'
@@ -38,27 +33,16 @@ const FilterBar = ({
           onChange={ev => setSearchQuery(ev.target.value)}
           placeholder='Search for a recipe'
         />
-        <Button
-          color='yellow'
-          className='mt-1 ml-4 w-36 h-11'
-          onClick={() => setShowFilters(!showFilters)}
-        >
-          {showFilters ? 'Hide' : 'Show'} Filters
-        </Button>
       </div>
-      {showFilters && (
-        <>
-          <TagFilter
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-            tags={tags}
-          />
-          <IngredientFilter
-            maxNumIngredients={maxNumIngredients}
-            setMaxNumIngredients={setMaxNumIngredients}
-          />
-        </>
-      )}
+      <div
+        className='fixed right-0 z-20 w-2/5 h-screen transition duration-500 ease-in-out bg-gray-400 shadow-md'
+        style={{
+          top: '56px',
+          transform: showFilters ? 'translateX(0)' : 'translateX(105%)'
+        }}
+      >
+        <FilterSlideout {...props} close={closeFilters} />
+      </div>
     </section>
   )
 }

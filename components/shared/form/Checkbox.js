@@ -24,12 +24,12 @@ const Checkbox = ({
         onChange={onHandleCheck}
         className={`${size} border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50`}
       />
-      <span className='pl-1'>{label}</span>
+      <span className='ml-2'>{label}</span>
       {onSelectOnly && (
         <button
           disabled={onlyDisabled}
           onClick={onSelectOnly}
-          className='pl-2 text-sm disabled:text-gray-500 cursor disabled:cursor-default'
+          className='ml-2 text-sm disabled:text-gray-500 cursor disabled:cursor-default'
         >
           Only
         </button>

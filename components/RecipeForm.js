@@ -1,5 +1,5 @@
-import FormArea from '@/components/shared/FormArea'
-import FormInput from '@/components/shared/FormInput'
+import FormArea from '@/components/shared/form/FormArea'
+import FormInput from '@/components/shared/form/FormInput'
 import CREATE_RECIPE from '@/graphql/mutations/createRecipe'
 import Button from '@/components/shared/Button'
 import { formDataToQueryInput, getImageDivisor } from '@/utils/helpers'
@@ -177,9 +177,10 @@ const RecipeForm = () => {
       })
       window.scrollTo(0, 0)
     } else {
-      createRecipe({
-        variables: { recipeInput: formDataToQueryInput(formState) }
-      })
+      console.log('creating recipe...', formState)
+      // createRecipe({
+      //   variables: { recipeInput: formDataToQueryInput(formState) }
+      // })
     }
   }
 
@@ -352,7 +353,7 @@ const RecipeForm = () => {
           )}
         />
       )}
-      <Button className='h-11' type='submit' color='green' onClick={() => {}}>
+      <Button className='h-11' type='submit' color='green'>
         Create Recipe
       </Button>
     </form>
