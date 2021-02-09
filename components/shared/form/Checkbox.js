@@ -11,11 +11,15 @@ const Checkbox = ({
   checked,
   onSelectOnly = null,
   onlyDisabled,
-  modifier = 'small'
+  modifier = 'small',
+  first
 }) => {
   const size = SIZES[modifier]
   return (
-    <label className='flex items-center mt-2 w-max' htmlFor={id}>
+    <label
+      className={`flex items-center w-max ${first ? '' : 'mt-2'}`}
+      htmlFor={id}
+    >
       <input
         checked={checked}
         value={id}

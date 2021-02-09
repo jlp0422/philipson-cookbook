@@ -193,7 +193,7 @@ const RecipeForm = () => {
   console.log({ formState })
 
   return (
-    <form className='mx-auto prose' onSubmit={onFormSubmit}>
+    <form className='mx-auto mt-4 prose' onSubmit={onFormSubmit}>
       <FormInput
         label='Author'
         id='author'

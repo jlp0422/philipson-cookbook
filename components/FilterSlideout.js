@@ -40,7 +40,7 @@ const FilterSlideout = ({
   }, [])
 
   return (
-    <div className='px-6 py-4'>
+    <div className='p-4'>
       {tags.length ? (
         <TagFilter
           selectedTags={selectedTags}

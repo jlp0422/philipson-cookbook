@@ -7,7 +7,7 @@ const NewRecipe = () => {
   return (
     <Layout>
       <Head title='New Recipe | Philipson Cookbook' />
-      <PageHeader>create new recipe</PageHeader>
+      <PageHeader>New Recipe</PageHeader>
       <RecipeForm />
     </Layout>
   )

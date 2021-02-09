@@ -2,6 +2,7 @@ import FilterBar from '@/components/FilterBar'
 import RecipeCard from '@/components/RecipeCard'
 
 const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
+  const hasRecipes = recipes.length > 0
   if (loading) {
     return <h2>Loading...</h2>
   }
@@ -19,9 +20,13 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
         }}
         className='grid text-left gap-x-8 gap-y-8'
       >
-        {recipes.map(recipe => (
-          <RecipeCard key={recipe._id} recipe={recipe} />
-        ))}
+        {hasRecipes ? (
+          recipes.map(recipe => <RecipeCard key={recipe._id} recipe={recipe} />)
+        ) : (
+          <div>
+            <h2>no recipes found - adjust your filters!</h2>
+          </div>
+        )}
       </div>
     </section>
   )

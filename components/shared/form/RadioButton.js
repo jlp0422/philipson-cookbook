@@ -4,10 +4,20 @@ const SIZES = {
   large: 'w-12-h-12'
 }
 
-const Radio = ({ label, id, onHandleCheck, checked, modifier = 'small' }) => {
+const Radio = ({
+  label,
+  id,
+  onHandleCheck,
+  checked,
+  first,
+  modifier = 'small'
+}) => {
   const size = SIZES[modifier]
   return (
-    <label className='flex items-center mt-2 w-max' htmlFor={id}>
+    <label
+      className={`flex items-center w-max ${first ? '' : 'mt-2'}`}
+      htmlFor={id}
+    >
       <input
         checked={checked}
         value={id}

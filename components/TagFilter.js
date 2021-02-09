@@ -23,10 +23,10 @@ const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
   )
 
   return (
-    <div>
+    <div className='p-4 bg-white rounded'>
       <h3 className='text-xl sm:text-2xl'>Recipe Type {tagCopy}</h3>
       <div
-        className="overflow-scroll max-h-24"
+        className='p-2 mt-2 overflow-scroll border border-gray-300 border-solid rounded shadow-inner max-h-24'
         style={{
           transformOrigin: 'top center',
           ...(showTags ? { display: 'block' } : { display: 'none' })
@@ -35,6 +35,7 @@ const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
         <Checkbox
           label='All'
           id='all'
+          first
           checked={!selectedTags.length}
           onHandleCheck={() => onSelectOnly([])}
         />
