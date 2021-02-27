@@ -10,7 +10,11 @@ import MobileNav from '@/components/MobileNav'
 const newRecipeClass =
   'items-center px-4 py-2 text-sm font-semibold text-green-700 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:inline-flex lg:ml-auto lg:mt-px border-green-700 hover:bg-green-700 hover:text-white focus:ring focus:outline-none'
 const navLink =
-  'mr-8 text-sm font-semibold text-gray-600 pb-1.5 hover:text-gray-800 border-b-2 border-gray-600 hover:border-gray-800'
+  'block sm:inline-block sm:mr-8 text-base sm:text-sm rounded font-semibold text-gray-600 py-1.5 hover:bg-blue-300 px-2'
+const xPath =
+  'M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z'
+const hamburgerPath =
+  'M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z'
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -38,12 +42,27 @@ const Navigation = () => {
   }
 
   const checkActivePath = (current, pathToCheck) =>
-    current === pathToCheck ? 'border-opacity-100' : 'border-opacity-0'
+    current === pathToCheck ? 'bg-blue-200' : 'bg-blue-100'
 
   return (
     <header className='sticky top-0 z-10 text-gray-700 bg-blue-100 border-blue-300 sm:border-t sm:border-b body-font'>
-      <div className='flex-col flex-wrap justify-between hidden max-w-screen-xl py-2 mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto'>
-        <nav className='flex flex-wrap items-center justify-center text-base'>
+      <nav className='flex-col items-center justify-between max-w-screen-xl px-2 py-2 border-b border-blue-300 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
+        <div className='sm:hidden'>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            type='button'
+            className='block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none'
+          >
+            <svg className='w-8 h-8 fill-current' viewBox='0 0 24 24'>
+              <path fill-rule='evenodd' d={isOpen ? xPath : hamburgerPath} />
+            </svg>
+          </button>
+        </div>
+        <div
+          className={`mt-2 sm:mt-0 sm:flex items-center justify-center text-base ${
+            isOpen ? 'block' : 'hidden'
+          }`}
+        >
           <Link href='/'>
             <a className={`${navLink} ${checkActivePath(asPath, '/')}`}>Home</a>
           </Link>
@@ -61,16 +80,25 @@ const Navigation = () => {
           >
             Random Recipe
           </button>
-        </nav>
+          <Link href='/recipes/new'>
+            <a className='block sm:hidden'>
+              <button
+                className={`${navLink} ${checkActivePath(
+                  asPath,
+                  '/recipes/new'
+                )}`}
+              >
+                New Recipe
+              </button>
+            </a>
+          </Link>
+        </div>
         <Link href='/recipes/new'>
           <a className='hidden sm:block'>
             <button className={newRecipeClass}>New Recipe</button>
           </a>
         </Link>
-      </div>
-      {/* <MobileNav
-        {...{ isOpen, setIsOpen, getRandomRecipe, pathname, asPath }}
-      /> */}
+      </nav>
     </header>
   )
 }
