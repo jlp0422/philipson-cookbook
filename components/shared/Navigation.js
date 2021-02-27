@@ -5,12 +5,11 @@ import { useLazyQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import MobileNav from '@/components/MobileNav'
 
 const newRecipeClass =
-  'items-center px-4 py-2 text-sm font-semibold text-green-700 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:inline-flex lg:ml-auto lg:mt-px border-green-700 hover:bg-green-700 hover:text-white focus:ring focus:outline-none'
+  'items-center px-4 py-2 text-sm font-semibold text-green-700 transition duration-500 ease-in-out transform bg-white border border-green-700 rounded-lg lg:inline-flex lg:ml-auto lg:mt-px hover:bg-green-700 hover:text-white focus:ring focus:outline-none'
 const navLink =
-  'block sm:inline-block sm:mr-8 text-base sm:text-sm rounded font-semibold text-gray-600 py-1.5 hover:bg-blue-300 px-2'
+  'block sm:inline-block sm:mr-8 text-base sm:text-sm rounded font-semibold text-gray-600 py-1.5 hover:bg-blue-300 px-2 transition duration-300 ease-in-out transform'
 const xPath =
   'M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z'
 const hamburgerPath =
@@ -46,21 +45,23 @@ const Navigation = () => {
 
   return (
     <header className='sticky top-0 z-10 text-gray-700 bg-blue-100 border-blue-300 sm:border-t sm:border-b body-font'>
-      <nav className='flex-col items-center justify-between max-w-screen-xl px-2 py-2 border-b border-blue-300 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
-        <div className='sm:hidden'>
+      <nav className='flex-col items-center justify-between max-w-screen-xl px-2 py-2 border-b border-blue-300 sm:px-0 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
+        <div className='py-1 sm:hidden'>
           <button
             onClick={() => setIsOpen(!isOpen)}
             type='button'
-            className='block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none'
+            className='block text-gray-500 transition duration-500 ease-in-out transform hover:text-gray-700 focus:text-gray-700 focus:outline-none '
           >
             <svg className='w-8 h-8 fill-current' viewBox='0 0 24 24'>
-              <path fill-rule='evenodd' d={isOpen ? xPath : hamburgerPath} />
+              <path fillRule='evenodd' d={isOpen ? xPath : hamburgerPath} />
             </svg>
           </button>
         </div>
         <div
-          className={`mt-2 sm:mt-0 sm:flex items-center justify-center text-base ${
-            isOpen ? 'block' : 'hidden'
+          className={`sm:mt-0 sm:flex sm:visible sm:opacity-100 sm:h-auto items-center justify-center text-base transition-opacity ${
+            isOpen
+              ? 'visible opacity-100 h-auto mt-2'
+              : 'invisible opacity-0 h-0 mt-0'
           }`}
         >
           <Link href='/'>

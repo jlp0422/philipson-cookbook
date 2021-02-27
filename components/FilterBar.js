@@ -24,9 +24,7 @@ const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
           className='w-16 mt-1 mr-4 sm:w-24 h-11'
           onClick={() => setShowFilters(!showFilters)}
         >
-          <span className='hidden sm:block'>
-            {/*{showFilters ? 'Hide' : 'Show'} */}Filters
-          </span>
+          <span className='hidden sm:block'>Filters</span>
           <span className='block mb-0.5 text-2xl sm:hidden'>&#9776;</span>
         </Button>
         <FormInput

@@ -16,15 +16,20 @@ const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
     setSelectedTags(tag)
   }
 
-  const tagCopy = showTags ? <span>&#8593;</span> : <span>&#8595;</span>
-
   return (
     <div className='p-4 bg-white rounded'>
       <button
         onClick={() => setShowTags(!showTags)}
-        className='text-xl sm:text-2xl'
+        className='text-xl sm:text-2xl focus:outline-none'
       >
-        Recipe Type {tagCopy}
+        Recipe Type{' '}
+        <span
+          className={`transition transform inline-block ${
+            showTags ? 'rotate-180' : 'rotate-0'
+          }`}
+        >
+          &#8595;
+        </span>
       </button>
       <div
         className='p-2 mt-2 overflow-scroll border border-gray-300 border-solid rounded shadow-inner max-h-32'

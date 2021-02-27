@@ -33,7 +33,7 @@ const Checkbox = ({
         <button
           disabled={onlyDisabled}
           onClick={onSelectOnly}
-          className='ml-2 text-sm disabled:text-gray-500 cursor disabled:cursor-default'
+          className='ml-2 text-sm text-gray-600 disabled:text-gray-500 cursor disabled:cursor-default'
         >
           Only
         </button>

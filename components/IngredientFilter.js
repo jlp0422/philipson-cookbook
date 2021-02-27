@@ -19,15 +19,20 @@ const IngredientFilter = ({ maxNumIngredients, setMaxNumIngredients }) => {
     }
   ]
 
-  const ingCopy = showIng ? <span>&#8593;</span> : <span>&#8595;</span>
-
   return (
     <div className='p-4 mt-4 bg-white rounded'>
       <button
         onClick={() => setShowIng(!showIng)}
-        className='text-xl sm:text-2xl'
+        className='text-xl sm:text-2xl focus:outline-none'
       >
-        Ingredients {ingCopy}
+        Ingredients{' '}
+        <span
+          className={`transition transform inline-block ${
+            showIng ? 'rotate-180' : 'rotate-0'
+          }`}
+        >
+          &#8595;
+        </span>
       </button>
       <div
         className='p-2 mt-2 overflow-scroll border border-gray-300 border-solid rounded shadow-inner max-h-32'

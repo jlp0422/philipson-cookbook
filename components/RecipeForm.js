@@ -46,7 +46,7 @@ const initialState = {
 }
 
 const inputClass =
-  'block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 h-11'
+  'block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 h-11'
 
 const RecipeForm = () => {
   const [formState, setFormState] = useState(initialState)
@@ -207,6 +207,28 @@ const RecipeForm = () => {
     return null
   }
 
+  const addAnotherButton = (key, defaultValue) => (
+    <Button
+      className='ml-4 text-sm'
+      color='green'
+      onClick={() => add(key, defaultValue)}
+    >
+      Add Another
+    </Button>
+  )
+
+  const xButton = (key, index) => (
+    <Button
+      className='text-sm'
+      size='small'
+      color='red'
+      onClick={() => remove(key, index)}
+      disabled={!index}
+    >
+      X
+    </Button>
+  )
+
   console.log({ formState })
 
   return (
@@ -239,23 +261,19 @@ const RecipeForm = () => {
       <label className='block mb-4' htmlFor='ingredients'>
         <div className=''>
           <span className='text-lg text-gray-700'>Ingredients</span>
-          <Button
-            className='ml-4 text-sm'
-            color='green'
-            onClick={() =>
-              add('ingredients', { amount: '', item: '', measurement: '' })
-            }
-          >
-            Add
-          </Button>
+          {addAnotherButton('ingredients', {
+            amount: '',
+            item: '',
+            measurement: ''
+          })}
         </div>
         {renderError('ingredients')}
         {formState.ingredients.map((ing, index) => {
           return (
             <div
-              className='grid items-baseline gap-3 space-y-2'
+              className='grid items-center gap-3 mt-2'
               key={index}
-              style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 40px' }}
+              style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
             >
               <FormInput
                 id='amount'
@@ -281,15 +299,7 @@ const RecipeForm = () => {
                 onChange={onChangeIngredient('item', index)}
                 placeholder='Item'
               />
-              <Button
-                className='text-sm h-11'
-                size='small'
-                color='red'
-                onClick={() => remove('ingredients', index)}
-                disabled={!index}
-              >
-                X
-              </Button>
+              {xButton('ingredients', index)}
             </div>
           )
         })}
@@ -297,19 +307,13 @@ const RecipeForm = () => {
       <label className='block mb-4' htmlFor='steps'>
         <div className=''>
           <span className='text-lg text-gray-700'>Steps</span>
-          <Button
-            className='ml-4 text-sm'
-            color='green'
-            onClick={() => add('steps', '')}
-          >
-            Add
-          </Button>
+          {addAnotherButton('steps', '')}
         </div>
         {renderError('steps')}
         {formState.steps.map((step, index) => {
           return (
             <div
-              className='grid items-baseline gap-3 space-y-2'
+              className='grid items-center gap-3 mt-2'
               key={index}
               style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
             >
@@ -324,15 +328,7 @@ const RecipeForm = () => {
                 id={`step-${index}`}
                 name={`step-${index}`}
               />
-              <Button
-                className='text-sm h-11'
-                size='small'
-                color='red'
-                onClick={() => remove('steps', index)}
-                disabled={!index}
-              >
-                X
-              </Button>
+              {xButton('steps', index)}
             </div>
           )
         })}
@@ -354,27 +350,27 @@ const RecipeForm = () => {
         labelStyles='mb-4'
       />
       <label className='block mb-4' htmlFor='imageUrl'>
-        <span className='text-lg text-gray-700'>Image</span>
+        <span className='text-lg text-gray-700'>Image</span>{' '}
+        <Button
+          className='ml-4 text-sm'
+          color='blue'
+          disabled={isUploading}
+          onClick={onImageUpload}
+        >
+          Upload
+        </Button>
         {uploadError && (
           <span className='block my-1 font-bold text-red-600'>
             {uploadError}
           </span>
         )}
-        <div className='flex'>
+        <div className='block bg-white mt-2 p-0.5 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
           <input
             type='file'
-            className='items-center block w-full p-1 mt-1 bg-white rounded'
+            className='w-full p-1'
             id='imageUrl'
             name='imageUrl'
           />
-          <Button
-            className='self-end ml-2 h-11'
-            color='blue'
-            disabled={isUploading}
-            onClick={onImageUpload}
-          >
-            Upload
-          </Button>
         </div>
       </label>
       <h3>is uploading? {isUploading.toString()}</h3>
