@@ -6,7 +6,8 @@ const FormInput = ({
   type = 'text',
   placeholder = '',
   labelStyles = '',
-  error = null
+  error = null,
+  onClear
 }) => {
   return (
     <label className={`block ${labelStyles}`} htmlFor={id}>
@@ -23,6 +24,14 @@ const FormInput = ({
         name={id}
         id={id}
       />
+      {onClear && (
+        <button
+          onClick={onClear}
+          className='text-gray-500 font-semibold absolute top-3.5 right-2 px-1 bg-white'
+        >
+          X
+        </button>
+      )}
     </label>
   )
 }

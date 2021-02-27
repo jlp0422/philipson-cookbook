@@ -19,17 +19,18 @@ const IngredientFilter = ({ maxNumIngredients, setMaxNumIngredients }) => {
     }
   ]
 
-  const ingCopy = showIng ? (
-    <button onClick={() => setShowIng(!showIng)}>&#8593;</button>
-  ) : (
-    <button onClick={() => setShowIng(!showIng)}>&#8595;</button>
-  )
+  const ingCopy = showIng ? <span>&#8593;</span> : <span>&#8595;</span>
 
   return (
     <div className='p-4 mt-4 bg-white rounded'>
-      <h3 className='text-xl sm:text-2xl'>Ingredients {ingCopy}</h3>
+      <button
+        onClick={() => setShowIng(!showIng)}
+        className='text-xl sm:text-2xl'
+      >
+        Ingredients {ingCopy}
+      </button>
       <div
-        className='p-2 mt-2 overflow-scroll border border-gray-300 border-solid rounded shadow-inner max-h-24'
+        className='p-2 mt-2 overflow-scroll border border-gray-300 border-solid rounded shadow-inner max-h-32'
         style={{
           transformOrigin: 'top center',
           ...(showIng ? { display: 'block' } : { display: 'none' })

@@ -41,7 +41,7 @@ const Navigation = () => {
     current === pathToCheck ? 'border-opacity-100' : 'border-opacity-0'
 
   return (
-    <header className='sticky top-0 z-10 text-gray-700 bg-blue-100 border-t border-b border-blue-300 body-font'>
+    <header className='sticky top-0 z-10 text-gray-700 bg-blue-100 border-blue-300 sm:border-t sm:border-b body-font'>
       <div className='flex-col flex-wrap justify-between hidden max-w-screen-xl py-2 mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto'>
         <nav className='flex flex-wrap items-center justify-center text-base'>
           <Link href='/'>
@@ -68,9 +68,9 @@ const Navigation = () => {
           </a>
         </Link>
       </div>
-      <MobileNav
+      {/* <MobileNav
         {...{ isOpen, setIsOpen, getRandomRecipe, pathname, asPath }}
-      />
+      /> */}
     </header>
   )
 }

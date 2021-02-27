@@ -7,18 +7,24 @@ import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
 
-const MEASUREMENTS = [
-  'PINCH',
-  'TEASPOON',
-  'TABLESPOON',
-  'OUNCE',
-  'POUND',
-  'CUP',
-  'PINT',
-  'QUART',
-  'GALLON',
-  'ML'
-]
+const MEASUREMENTS = {
+  CUP: 'CUP',
+  EACH: 'EACH',
+  GALLON: 'GAL',
+  GRAM: 'GRAM',
+  'FLUID OUNCE': 'FL OZ',
+  KILOGRAM: 'KG',
+  LITER: 'LITER',
+  MILLILITER: 'ML',
+  OUNCE: 'OZ',
+  PACKAGE: 'PKG',
+  PINCH: 'PINCH',
+  PINT: 'PINT',
+  POUND: 'LB',
+  QUART: 'QT',
+  TABLESPOON: 'TBSP',
+  TEASPOON: 'TSP'
+}
 
 const initialState = {
   author: '',
@@ -62,6 +68,12 @@ const RecipeForm = () => {
         long: 'Please add a recipe title.'
       }
     }
+    if (formData.steps.every(step => !step.trim().length)) {
+      formErrors['steps'] = {
+        short: 'Steps missing',
+        long: 'Please add at least one step for the recipe.'
+      }
+    }
     formData.ingredients.forEach(ing => {
       if (!ing.amount || !ing.measurement || !ing.item) {
         formErrors['ingredients'] = {
@@ -79,7 +91,7 @@ const RecipeForm = () => {
       <option disabled value=''>
         Select...
       </option>
-      {MEASUREMENTS.map(m => (
+      {Object.keys(MEASUREMENTS).map(m => (
         <option key={m} value={m}>
           {m}
         </option>
@@ -184,10 +196,15 @@ const RecipeForm = () => {
     }
   }
 
-  const getAddOrRemoveButton = ({ key, defaultValue, index }) => {
-    return index === 0
-      ? ['green', () => add(key, defaultValue), 'Add']
-      : ['red', () => remove(key, index), 'Remove']
+  const renderError = key => {
+    if (formState.errors[key]) {
+      return (
+        <span className='block font-bold text-red-600'>
+          {formState.errors[key].long}
+        </span>
+      )
+    }
+    return null
   }
 
   console.log({ formState })
@@ -220,27 +237,26 @@ const RecipeForm = () => {
         labelStyles='mb-4'
       />
       <label className='block mb-4' htmlFor='ingredients'>
-        <span className='text-lg text-gray-700'>Ingredients</span>
-        {formState.errors['ingredients'] ? (
-          <span className='block font-bold text-red-600'>
-            {formState.errors['ingredients'].long}
-          </span>
-        ) : null}
+        <div className=''>
+          <span className='text-lg text-gray-700'>Ingredients</span>
+          <Button
+            className='ml-4 text-sm'
+            color='green'
+            onClick={() =>
+              add('ingredients', { amount: '', item: '', measurement: '' })
+            }
+          >
+            Add
+          </Button>
+        </div>
+        {renderError('ingredients')}
         {formState.ingredients.map((ing, index) => {
-          const [color, onClick, copy] = getAddOrRemoveButton({
-            key: 'ingredients',
-            defaultValue: { amount: '', item: '', measurement: '' },
-            index
-          })
           return (
             <div
-              className='grid gap-3 space-y-2'
+              className='grid items-baseline gap-3 space-y-2'
               key={index}
-              style={{ gridTemplateColumns: '100px repeat(3, minmax(0, 1fr))' }}
+              style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 40px' }}
             >
-              <Button onClick={onClick} color={color} className='self-end h-11'>
-                {copy}
-              </Button>
               <FormInput
                 id='amount'
                 value={ing.amount}
@@ -265,27 +281,38 @@ const RecipeForm = () => {
                 onChange={onChangeIngredient('item', index)}
                 placeholder='Item'
               />
+              <Button
+                className='text-sm h-11'
+                size='small'
+                color='red'
+                onClick={() => remove('ingredients', index)}
+                disabled={!index}
+              >
+                X
+              </Button>
             </div>
           )
         })}
       </label>
       <label className='block mb-4' htmlFor='steps'>
-        <span className='text-lg text-gray-700'>Steps</span>
+        <div className=''>
+          <span className='text-lg text-gray-700'>Steps</span>
+          <Button
+            className='ml-4 text-sm'
+            color='green'
+            onClick={() => add('steps', '')}
+          >
+            Add
+          </Button>
+        </div>
+        {renderError('steps')}
         {formState.steps.map((step, index) => {
-          const [color, onClick, copy] = getAddOrRemoveButton({
-            key: 'steps',
-            defaultValue: '',
-            index
-          })
           return (
             <div
-              className='grid gap-3 space-y-2'
+              className='grid items-baseline gap-3 space-y-2'
               key={index}
-              style={{ gridTemplateColumns: '100px minmax(0, 1fr)' }}
+              style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
             >
-              <Button className='self-end h-11' color={color} onClick={onClick}>
-                {copy}
-              </Button>
               <textarea
                 className={inputClass}
                 placeholder=''
@@ -297,6 +324,15 @@ const RecipeForm = () => {
                 id={`step-${index}`}
                 name={`step-${index}`}
               />
+              <Button
+                className='text-sm h-11'
+                size='small'
+                color='red'
+                onClick={() => remove('steps', index)}
+                disabled={!index}
+              >
+                X
+              </Button>
             </div>
           )
         })}
@@ -320,7 +356,9 @@ const RecipeForm = () => {
       <label className='block mb-4' htmlFor='imageUrl'>
         <span className='text-lg text-gray-700'>Image</span>
         {uploadError && (
-          <span className='my-1 font-bold text-red-600'>{uploadError}</span>
+          <span className='block my-1 font-bold text-red-600'>
+            {uploadError}
+          </span>
         )}
         <div className='flex'>
           <input

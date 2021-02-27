@@ -3,12 +3,18 @@ enum Measurement {
   TEASPOON
   TABLESPOON
   OUNCE
+  FLUID_OUNCE
   POUND
   CUP
   PINT
   QUART
   GALLON
-  ML
+  MILLILITER
+  LITER
+  PACKAGE
+  GRAM
+  KILOGRAM
+  EACH
 }
 
 type Comment {

@@ -16,17 +16,18 @@ const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
     setSelectedTags(tag)
   }
 
-  const tagCopy = showTags ? (
-    <button onClick={() => setShowTags(!showTags)}>&#8593;</button>
-  ) : (
-    <button onClick={() => setShowTags(!showTags)}>&#8595;</button>
-  )
+  const tagCopy = showTags ? <span>&#8593;</span> : <span>&#8595;</span>
 
   return (
     <div className='p-4 bg-white rounded'>
-      <h3 className='text-xl sm:text-2xl'>Recipe Type {tagCopy}</h3>
+      <button
+        onClick={() => setShowTags(!showTags)}
+        className='text-xl sm:text-2xl'
+      >
+        Recipe Type {tagCopy}
+      </button>
       <div
-        className='p-2 mt-2 overflow-scroll border border-gray-300 border-solid rounded shadow-inner max-h-24'
+        className='p-2 mt-2 overflow-scroll border border-gray-300 border-solid rounded shadow-inner max-h-32'
         style={{
           transformOrigin: 'top center',
           ...(showTags ? { display: 'block' } : { display: 'none' })

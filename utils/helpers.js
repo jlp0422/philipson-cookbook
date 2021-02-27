@@ -14,8 +14,9 @@ export const formDataToQueryInput = ({
     title,
     description,
     ingredients: {
-      create: ingredients.map(({ amount, ...rest }) => ({
-        ...rest,
+      create: ingredients.map(({ amount, item, measurement }) => ({
+        item,
+        measurement: measurement.split(' ').join('_'),
         amount: Number(amount)
       }))
     },

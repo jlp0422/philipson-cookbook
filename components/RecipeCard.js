@@ -19,7 +19,7 @@ const RecipeCard = ({ recipe }) => {
           {hasTags ? recipe.tags.map(upper).join(', ') : <br />}
         </span>
         <div className=''>
-          <h2 className='mb-0 text-xl font-semibold text-gray-600 lg:text-2xl title-font hover:text-gray-800'>
+          <h2 className='mb-0 text-xl font-semibold text-gray-700 lg:text-2xl title-font hover:text-gray-800'>
             {recipe.title}
           </h2>
         </div>

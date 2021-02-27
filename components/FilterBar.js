@@ -21,21 +21,25 @@ const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
       <div className='flex items-center'>
         <Button
           color='yellow'
-          className='mt-1 mr-4 w-36 h-11'
+          className='w-16 mt-1 mr-4 sm:w-24 h-11'
           onClick={() => setShowFilters(!showFilters)}
         >
-          {showFilters ? 'Hide' : 'Show'} Filters
+          <span className='hidden sm:block'>
+            {/*{showFilters ? 'Hide' : 'Show'} */}Filters
+          </span>
+          <span className='block mb-0.5 text-2xl sm:hidden'>&#9776;</span>
         </Button>
         <FormInput
-          labelStyles='flex-grow'
+          labelStyles='flex-grow relative'
           id='search'
           value={searchQuery}
           onChange={ev => setSearchQuery(ev.target.value)}
           placeholder='Search for a recipe'
+          onClear={() => setSearchQuery('')}
         />
       </div>
       <div
-        className='fixed right-0 z-20 w-2/5 h-screen transition duration-500 ease-in-out bg-gray-400 shadow-md'
+        className='fixed right-0 z-20 w-3/4 h-screen transition duration-500 ease-in-out bg-gray-400 shadow-md sm:w-3/5 md:w-1/2 lg:2/5'
         style={{
           top: '56px',
           transform: showFilters ? 'translateX(0)' : 'translateX(105%)'
