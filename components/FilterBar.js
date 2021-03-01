@@ -9,19 +9,10 @@ const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
 
   return (
     <section className='mb-4'>
-      {showFilters && (
-        <div
-          className='fixed left-0 z-10 w-full h-full bg-gray-500 opacity-40'
-          onClick={closeFilters}
-          style={{
-            top: '56px'
-          }}
-        />
-      )}
       <div className='flex items-center'>
         <Button
           color='yellow'
-          className='w-16 mt-1 mr-4 sm:w-24 h-11'
+          className='w-16 mr-4 sm:w-24 h-11'
           onClick={() => setShowFilters(!showFilters)}
         >
           <span className='hidden sm:block'>Filters</span>
@@ -36,10 +27,16 @@ const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
           onClear={() => setSearchQuery('')}
         />
       </div>
+      {showFilters && (
+        <button
+          className='fixed inset-0 w-full h-full overflow-hidden bg-gray-500 cursor-default opacity-40'
+          onClick={closeFilters}
+          tabIndex='-1'
+        />
+      )}
       <div
-        className='fixed right-0 z-20 w-3/4 h-screen transition duration-500 ease-in-out bg-gray-400 shadow-md sm:w-3/5 md:w-1/2 lg:2/5'
+        className='absolute right-0 z-20 w-3/4 h-screen transition duration-500 ease-in-out bg-gray-400 shadow-md -top-4 sm:w-3/5 md:w-1/2 lg:2/5'
         style={{
-          top: '56px',
           transform: showFilters ? 'translateX(0)' : 'translateX(105%)'
         }}
       >

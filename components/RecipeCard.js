@@ -7,7 +7,7 @@ const RecipeCard = ({ recipe }) => {
 
   return (
     <Link href={`/recipes/${recipe._id}`}>
-      <a className='px-4 py-6 transition duration-300 ease-in-out bg-gray-200 rounded shadow-md sm:shadow-sm hover:shadow-lg'>
+      <a className='px-4 py-6 transition duration-300 ease-in-out bg-gray-200 rounded shadow-md sm:shadow-sm'>
         <img
           className='object-cover object-center w-full h-40 mb-2 rounded cursor-pointer'
           src={

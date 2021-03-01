@@ -28,7 +28,7 @@ const FormInput = ({
         <button
           onClick={onClear}
           disabled={!value.length}
-          className='text-gray-600 font-semibold absolute top-3.5 right-2 px-1 bg-white disabled:text-gray-400'
+          className='text-gray-600 font-semibold absolute top-2.5 right-2 px-1 bg-white disabled:text-gray-400'
         >
           <svg className='w-6 h-6 fill-current' viewBox='0 0 24 24'>
             <path

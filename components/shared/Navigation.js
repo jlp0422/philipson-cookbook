@@ -44,7 +44,7 @@ const Navigation = () => {
     current === pathToCheck ? 'bg-blue-200' : 'bg-blue-100'
 
   return (
-    <header className='sticky top-0 z-10 text-gray-700 bg-blue-100 border-blue-300 sm:border-t sm:border-b body-font'>
+    <header className='sticky top-0 z-50 text-gray-700 bg-blue-100 border-blue-300 sm:border-t sm:border-b body-font'>
       <nav className='flex-col items-center justify-between max-w-screen-xl px-2 py-2 border-b border-blue-300 sm:px-0 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
         <div className='py-1 sm:hidden'>
           <button

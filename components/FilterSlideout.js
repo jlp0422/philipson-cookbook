@@ -39,6 +39,19 @@ const FilterSlideout = ({
     setTags(Array.from(uniqueTags).sort())
   }, [])
 
+  const handleEscape = ev => {
+    if (ev.key === 'Esc' || ev.key === 'Escape' || ev.keyCode === 27) {
+      close()
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleEscape)
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+    }
+  })
+
   return (
     <div className='p-4'>
       {tags.length ? (
