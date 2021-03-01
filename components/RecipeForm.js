@@ -373,20 +373,28 @@ const RecipeForm = () => {
           />
         </div>
       </label>
-      <h3>is uploading? {isUploading.toString()}</h3>
-      {formState.imageData.url && (
+      <span className='text-lg'>
+        Image Preview (is uploading? {isUploading.toString()})
+      </span>
+      <div className='block mx-auto w-96'>
+        {/* {formState.imageData.url && ( */}
         <Image
-          src={formState.imageData.url}
+          src='https://res.cloudinary.com/jlp0422/image/upload/v1614567748/philipson-cookbook/wyynzik5elvumlzbdk7j.jpg'
+          // src={formState.imageData.url}
           alt={formState.imageData.filename}
           title={formState.imageData.filename}
-          width={Math.min(
-            formState.imageData.width / formState.imageData.divisor
-          )}
-          height={Math.min(
-            formState.imageData.height / formState.imageData.divisor
-          )}
+          className='rounded'
+          width={1024 / (1024 / 500)}
+          height={682 / (1024 / 500)}
+          // width={Math.min(
+          //   formState.imageData.width / formState.imageData.divisor
+          // )}
+          // height={Math.min(
+          //   formState.imageData.height / formState.imageData.divisor
+          // )}
         />
-      )}
+        {/* )} */}
+      </div>
       <Button className='h-11' type='submit' color='green'>
         Create Recipe
       </Button>

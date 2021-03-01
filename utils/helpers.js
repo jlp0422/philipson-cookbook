@@ -29,8 +29,11 @@ export const formDataToQueryInput = ({
 }
 
 export const getImageDivisor = ({ height, width }) => {
+  if (height < 500 && width < 500) {
+    return Math.max(height, width)
+  }
   const max = height > width ? height : width
-  return max / 300
+  return max / 500
 }
 
 export const isLink = source =>
@@ -42,6 +45,7 @@ export const getRandomId = array => {
 }
 
 export const upper = string => string.toUpperCase()
+export const lower = string => string.toLowerCase()
 
 export const isEqualArray = (arr1, arr2) =>
   arr1.length === arr2.length && arr1.every((el, index) => el === arr2[index])
