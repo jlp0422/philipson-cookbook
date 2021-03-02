@@ -5,15 +5,13 @@ import { useLazyQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import XIcon from '@/icons/X'
+import HamburgerIcon from '@/icons/Hamburger'
 
 const newRecipeClass =
   'items-center px-4 py-2 text-sm font-semibold text-green-700 transition duration-500 ease-in-out transform bg-white border border-green-700 rounded-lg lg:inline-flex lg:ml-auto lg:mt-px hover:bg-green-700 hover:text-white focus:ring focus:outline-none'
 const navLink =
   'block sm:inline-block sm:mr-8 text-base sm:text-sm rounded font-semibold text-gray-600 py-1.5 hover:bg-blue-300 px-2 transition duration-300 ease-in-out transform'
-const xPath =
-  'M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z'
-const hamburgerPath =
-  'M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z'
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -52,9 +50,7 @@ const Navigation = () => {
             type='button'
             className='block text-gray-500 transition duration-500 ease-in-out transform hover:text-gray-700 focus:text-gray-700 focus:outline-none '
           >
-            <svg className='w-8 h-8 fill-current' viewBox='0 0 24 24'>
-              <path fillRule='evenodd' d={isOpen ? xPath : hamburgerPath} />
-            </svg>
+            {isOpen ? <XIcon /> : <HamburgerIcon />}
           </button>
         </div>
         <div

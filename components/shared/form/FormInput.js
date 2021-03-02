@@ -1,3 +1,5 @@
+import XIcon from '@/icons/X'
+
 const FormInput = ({
   label,
   id,
@@ -30,12 +32,7 @@ const FormInput = ({
           disabled={!value.length}
           className='text-gray-600 font-semibold absolute top-2.5 right-2 px-1 bg-white disabled:text-gray-400'
         >
-          <svg className='w-6 h-6 fill-current' viewBox='0 0 24 24'>
-            <path
-              fillRule='evenodd'
-              d='M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z'
-            />
-          </svg>
+          <XIcon height='h-6' width='w-6' />
         </button>
       )}
     </label>

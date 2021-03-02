@@ -11,6 +11,9 @@
       "@/graphql/*": [
         "graphql/*"
       ],
+      "@/icons/*": [
+        "icons/*"
+      ],
     }
   }
 }
