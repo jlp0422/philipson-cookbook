@@ -1,5 +1,6 @@
 import Checkbox from './shared/form/Checkbox'
 import { useState } from 'react'
+import ArrowDown from '@/icons/ArrowDown'
 
 const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
   const [showTags, setShowTags] = useState(false)
@@ -20,15 +21,15 @@ const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
     <div className='p-4 bg-white rounded'>
       <button
         onClick={() => setShowTags(!showTags)}
-        className='text-xl sm:text-2xl focus:outline-none'
+        className='flex items-center w-full text-xl sm:text-2xl focus:outline-none'
       >
-        Recipe Type{' '}
+        <span>Recipe Type</span>
         <span
-          className={`transition transform inline-block ${
+          className={`ml-1 transition transform inline-block ${
             showTags ? 'rotate-180' : 'rotate-0'
           }`}
         >
-          &#8595;
+          <ArrowDown />
         </span>
       </button>
       <div

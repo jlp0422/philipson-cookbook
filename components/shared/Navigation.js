@@ -5,7 +5,7 @@ import { useLazyQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import XIcon from '@/icons/NakedX'
+import NakedXIcon from '@/icons/NakedX'
 import HamburgerIcon from '@/icons/Hamburger'
 
 const newRecipeClass =
@@ -50,7 +50,7 @@ const Navigation = () => {
             type='button'
             className='block text-gray-500 transition duration-500 ease-in-out transform hover:text-gray-700 focus:text-gray-700 focus:outline-none '
           >
-            {isOpen ? <XIcon /> : <HamburgerIcon />}
+            {isOpen ? <NakedXIcon /> : <HamburgerIcon />}
           </button>
         </div>
         <div

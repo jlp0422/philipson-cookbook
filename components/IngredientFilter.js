@@ -1,5 +1,6 @@
 import RadioButton from './shared/form/RadioButton'
 import { useState } from 'react'
+import ArrowDown from '@/icons/ArrowDown'
 
 const IngredientFilter = ({ maxNumIngredients, setMaxNumIngredients }) => {
   const [showIng, setShowIng] = useState(false)
@@ -23,15 +24,15 @@ const IngredientFilter = ({ maxNumIngredients, setMaxNumIngredients }) => {
     <div className='p-4 mt-4 bg-white rounded'>
       <button
         onClick={() => setShowIng(!showIng)}
-        className='text-xl sm:text-2xl focus:outline-none'
+        className='flex items-center w-full text-xl sm:text-2xl focus:outline-none'
       >
-        Ingredients{' '}
+        <span>Ingredients</span>
         <span
-          className={`transition transform inline-block ${
+          className={`ml-1 transition transform inline-block ${
             showIng ? 'rotate-180' : 'rotate-0'
           }`}
         >
-          &#8595;
+          <ArrowDown />
         </span>
       </button>
       <div
