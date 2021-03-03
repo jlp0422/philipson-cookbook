@@ -20,20 +20,28 @@ const COLORS = {
   ]
 }
 
+const PADDING_X = {
+  small: 'px-2',
+  medium: 'px-4',
+  large: 'px-6'
+}
+
 const Button = ({
   color,
   children,
   disabled,
-  onClick,
+  size = 'medium',
+  onClick = () => {},
   type = 'button',
   className
 }) => {
   const [buttonColor, focusColor, hoverColor, disabledColor] = COLORS[color]
   const dynamicColor = disabled ? disabledColor : `${buttonColor} ${hoverColor}`
+  const paddingX = PADDING_X[size]
   return (
     <button
       disabled={disabled}
-      className={`transition duration-500 ease-in-out transform px-4 py-1 font-semibold text-white ${dynamicColor} rounded-lg shadow-md focus:outline-none focus:ring-2 ${focusColor} focus:ring-opacity-75 ${className}`}
+      className={`transition duration-500 ease-in-out transform ${paddingX} py-1 font-semibold text-white ${dynamicColor} rounded-lg shadow-md focus:outline-none focus:ring-2 ${focusColor} focus:ring-opacity-75 ${className}`}
       type={type}
       onClick={onClick}
     >

@@ -1,64 +1,48 @@
-import TAGS_QUERY from '@/graphql/queries/tags'
-import { useQuery } from '@apollo/client'
 import { useState } from 'react'
-import IngredientFilter from './IngredientFilter'
+import FilterSlideout from './FilterSlideout'
 import Button from './shared/Button'
-import FormInput from './shared/FormInput'
-import TagFilter from './TagFilter'
+import FormInput from './shared/form/FormInput'
+import FilterIcon from '@/icons/Filter'
 
-const FilterBar = ({
-  selectedTags,
-  setSelectedTags,
-  searchQuery,
-  setSearchQuery,
-  maxNumIngredients,
-  setMaxNumIngredients
-}) => {
+const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
   const [showFilters, setShowFilters] = useState(false)
-  const [tags, setTags] = useState([])
-  const { loading, error } = useQuery(TAGS_QUERY, {
-    onCompleted: data => {
-      const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
-      const uniqueTags = new Set(allTags)
-      setTags(Array.from(uniqueTags).sort())
-    }
-  })
-
-  if (!tags.length) {
-    return null
-  }
+  const closeFilters = () => setShowFilters(false)
 
   return (
     <section className='mb-4'>
       <div className='flex items-center'>
+        <Button
+          color='yellow'
+          className='w-16 mr-4 sm:w-24 h-11'
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          <span className='hidden sm:block'>Filters</span>
+          <span className='flex justify-center items-center mb-0.5 text-2xl sm:hidden text-gray-100'>
+            <FilterIcon />
+          </span>
+        </Button>
         <FormInput
-          labelStyles='flex-grow'
+          labelStyles='flex-grow relative'
           id='search'
           value={searchQuery}
           onChange={ev => setSearchQuery(ev.target.value)}
           placeholder='Search for a recipe'
+          onClear={() => setSearchQuery('')}
         />
-        <Button
-          color='yellow'
-          className='mt-1 ml-4 w-36 h-11'
-          onClick={() => setShowFilters(!showFilters)}
-        >
-          {showFilters ? 'Hide' : 'Show'} Filters
-        </Button>
       </div>
       {showFilters && (
-        <>
-          <TagFilter
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-            tags={tags}
-          />
-          <IngredientFilter
-            maxNumIngredients={maxNumIngredients}
-            setMaxNumIngredients={setMaxNumIngredients}
-          />
-        </>
+        <button
+          className='fixed inset-0 w-full h-full overflow-hidden bg-gray-500 cursor-default opacity-40'
+          onClick={closeFilters}
+          tabIndex='-1'
+        />
       )}
+
+      <FilterSlideout
+        {...props}
+        showFilters={showFilters}
+        close={closeFilters}
+      />
     </section>
   )
 }

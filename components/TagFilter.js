@@ -1,6 +1,9 @@
-import Checkbox from './shared/Checkbox'
+import Checkbox from './shared/form/Checkbox'
+import { useState } from 'react'
+import ArrowDown from '@/icons/ArrowDown'
 
 const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
+  const [showTags, setShowTags] = useState(false)
   const onHandleCheck = ev => {
     const tag = ev.target.value
     if (selectedTags.includes(tag)) {
@@ -15,12 +18,31 @@ const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
   }
 
   return (
-    <div>
-      <h3>Recipe Tag</h3>
-      <div className='flex flex-col'>
+    <div className='p-4 bg-white rounded'>
+      <button
+        onClick={() => setShowTags(!showTags)}
+        className='flex items-center w-full text-xl sm:text-2xl focus:outline-none'
+      >
+        <span>Recipe Type</span>
+        <span
+          className={`ml-1 transition transform inline-block ${
+            showTags ? 'rotate-180' : 'rotate-0'
+          }`}
+        >
+          <ArrowDown />
+        </span>
+      </button>
+      <div
+        className='p-2 mt-2 overflow-scroll border border-gray-300 border-solid rounded shadow-inner max-h-32'
+        style={{
+          transformOrigin: 'top center',
+          ...(showTags ? { display: 'block' } : { display: 'none' })
+        }}
+      >
         <Checkbox
           label='All'
           id='all'
+          first
           checked={!selectedTags.length}
           onHandleCheck={() => onSelectOnly([])}
         />

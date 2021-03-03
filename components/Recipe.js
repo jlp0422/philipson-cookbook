@@ -1,5 +1,5 @@
 import Head from '@/components/shared/Head'
-import FormInput from '@/components/shared/FormInput'
+import FormInput from '@/components/shared/form/FormInput'
 import CREATE_COMMENT from '@/graphql/mutations/createComment'
 import RECIPE_QUERY from '@/graphql/queries/recipe'
 import { isLink, upper } from '@/utils/helpers'
@@ -7,7 +7,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
 import Button from './shared/Button'
-import FormArea from './shared/FormArea'
+import FormArea from './shared/form/FormArea'
 
 const sectionContainerStyles =
   'flex flex-col items-center w-full pt-0 mb-8 text-left lg:flex-grow md:w-1/2 lg:mr-20 lg:pr-24 md:pr-16 md:items-start md:text-left md:mb-0'
@@ -19,9 +19,13 @@ const flexWrapperStyles =
 const Recipe = ({ recipeId }) => {
   const [comment, setComment] = useState({ text: '', author: '' })
   const [errors, setErrors] = useState({})
-  const { data, error, loading } = useQuery(RECIPE_QUERY, {
-    variables: { id: recipeId }
-  })
+  // const { data, error, loading } = useQuery(RECIPE_QUERY, {
+  //   variables: { id: recipeId }
+  // })
+
+  const loading = false
+  const error = false
+  const data = {"findRecipeByID":{"author":"carolyn fine","title":"falafel v2","description":"the second best falafel recipe on the earth","ingredients":{"data":[{"amount":2.0,"measurement":"CUP","item":"water","__typename":"Ingredient"},{"amount":5.0,"measurement":"TEASPOON","item":"falafel","__typename":"Ingredient"}],"__typename":"IngredientPage"},"steps":["pour the water","add the mix","put in oven"],"imageUrl":null,"source":null,"tags":["Dinner"],"notes":"be sure to wait 30 minutes!","comments":{"data":[{"author":"","text":"","__typename":"Comment"}],"__typename":"CommentPage"},"__typename":"Recipe"}}
 
   const [
     createComment
@@ -104,17 +108,17 @@ const Recipe = ({ recipeId }) => {
             </p>
             <div className='flex justify-center'>
               <p className='inline-flex items-center font-semibold text-blue-700 md:mb-2 lg:mb-0'>
-                {recipe.author}
+                Submitted by: {recipe.author}
               </p>
             </div>
           </div>
           <div className='w-5/6 lg:max-w-lg lg:w-full md:w-1/2'>
             <Image
-              className='object-cover object-center rounded-lg '
+              className='object-cover object-center rounded-lg'
               alt='hero'
               src={
                 recipe.imageUrl ||
-                'https://res.cloudinary.com/jlp0422/image/upload/v1611027786/philipson-cookbook/iavnftxpy1ovsslblpxe.jpg'
+                'https://dummyimage.com/720x400/F3F4F7/8693ac'
               }
               width={720}
               height={600}

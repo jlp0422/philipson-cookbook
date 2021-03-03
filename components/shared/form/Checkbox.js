@@ -11,11 +11,15 @@ const Checkbox = ({
   checked,
   onSelectOnly = null,
   onlyDisabled,
-  modifier = 'small'
+  modifier = 'small',
+  first
 }) => {
   const size = SIZES[modifier]
   return (
-    <label className='flex items-center mt-2 w-max' htmlFor={id}>
+    <label
+      className={`flex items-center w-max ${first ? '' : 'mt-2'}`}
+      htmlFor={id}
+    >
       <input
         checked={checked}
         value={id}
@@ -24,12 +28,12 @@ const Checkbox = ({
         onChange={onHandleCheck}
         className={`${size} border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50`}
       />
-      <span className='pl-1'>{label}</span>
+      <span className='ml-2'>{label}</span>
       {onSelectOnly && (
         <button
           disabled={onlyDisabled}
           onClick={onSelectOnly}
-          className='pl-2 text-sm disabled:text-gray-500 cursor disabled:cursor-default'
+          className='ml-2 text-sm text-gray-600 disabled:text-gray-500 cursor disabled:cursor-default'
         >
           Only
         </button>
