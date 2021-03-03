@@ -1,4 +1,4 @@
-import XIcon from '@/icons/X'
+import CircledXIcon from '@/icons/CircledX'
 
 const FormInput = ({
   label,
@@ -32,7 +32,7 @@ const FormInput = ({
           disabled={!value.length}
           className='text-gray-600 font-semibold absolute top-2.5 right-2 px-1 bg-white disabled:text-gray-400'
         >
-          <XIcon height='h-6' width='w-6' />
+          <CircledXIcon height='h-6' width='w-6' />
         </button>
       )}
     </label>

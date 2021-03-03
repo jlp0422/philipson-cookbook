@@ -5,7 +5,7 @@ import { useLazyQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import XIcon from '@/icons/X'
+import XIcon from '@/icons/NakedX'
 import HamburgerIcon from '@/icons/Hamburger'
 
 const newRecipeClass =
