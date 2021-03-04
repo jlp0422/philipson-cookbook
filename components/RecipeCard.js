@@ -15,7 +15,7 @@ const RecipeCard = ({ recipe }) => {
           }
           alt='content'
         />
-        <span className='mb-1 text-xs font-medium text-blue-500'>
+        <span className='mb-1 text-xs font-medium tracking-wider text-blue-500'>
           {hasTags ? recipe.tags.map(upper).join(', ') : <br />}
         </span>
         <div className=''>

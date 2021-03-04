@@ -25,7 +25,40 @@ const Recipe = ({ recipeId }) => {
 
   const loading = false
   const error = false
-  const data = {"findRecipeByID":{"author":"carolyn fine","title":"falafel v2","description":"the second best falafel recipe on the earth","ingredients":{"data":[{"amount":2.0,"measurement":"CUP","item":"water","__typename":"Ingredient"},{"amount":5.0,"measurement":"TEASPOON","item":"falafel","__typename":"Ingredient"}],"__typename":"IngredientPage"},"steps":["pour the water","add the mix","put in oven"],"imageUrl":null,"source":null,"tags":["Dinner"],"notes":"be sure to wait 30 minutes!","comments":{"data":[{"author":"","text":"","__typename":"Comment"}],"__typename":"CommentPage"},"__typename":"Recipe"}}
+  const data = {
+    findRecipeByID: {
+      author: 'carolyn fine',
+      title: 'falafel v2',
+      description: 'the second best falafel recipe on the earth',
+      ingredients: {
+        data: [
+          {
+            amount: 2.0,
+            measurement: 'CUP',
+            item: 'water',
+            __typename: 'Ingredient'
+          },
+          {
+            amount: 5.0,
+            measurement: 'TEASPOON',
+            item: 'falafel',
+            __typename: 'Ingredient'
+          }
+        ],
+        __typename: 'IngredientPage'
+      },
+      steps: ['pour the water', 'add the mix', 'put in oven'],
+      imageUrl: null,
+      source: null,
+      tags: ['Dinner'],
+      notes: 'be sure to wait 30 minutes!',
+      comments: {
+        data: [{ author: '', text: '', __typename: 'Comment' }],
+        __typename: 'CommentPage'
+      },
+      __typename: 'Recipe'
+    }
+  }
 
   const [
     createComment
@@ -97,7 +130,7 @@ const Recipe = ({ recipeId }) => {
       <section className='mx-auto text-gray-700 body-font'>
         <div className='container flex flex-col items-center px-5 py-8 mx-auto lg:px-20 md:flex-row'>
           <div className='flex flex-col items-center w-full pt-0 mb-16 text-left lg:flex-grow lg:mr-16 lg:pr-18 md:pr-12 md:items-start md:text-left md:mb-0 lg:text-center'>
-            <h2 className='mb-1 text-xs font-medium tracking-widest text-blue-500 title-font'>
+            <h2 className='mb-1 text-xs font-medium tracking-wider text-blue-500 title-font'>
               {recipe.tags.map(upper).join(', ')}
             </h2>
             <h1 className='mb-8 text-3xl font-bold tracking-tighter text-center text-blue-800 lg:text-left lg:text-5xl title-font'>

@@ -17,7 +17,7 @@ const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
           onClick={() => setShowFilters(!showFilters)}
         >
           <span className='hidden sm:block'>Filters</span>
-          <span className='flex justify-center items-center mb-0.5 text-2xl sm:hidden text-gray-100'>
+          <span className='text-gray-100 sm:hidden w-8 h-8'>
             <FilterIcon />
           </span>
         </Button>

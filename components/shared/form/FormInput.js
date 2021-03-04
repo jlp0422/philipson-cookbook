@@ -30,9 +30,9 @@ const FormInput = ({
         <button
           onClick={onClear}
           disabled={!value.length}
-          className='text-gray-600 font-semibold absolute top-2.5 right-2 px-1 bg-white disabled:text-gray-400'
+          className='text-gray-600 font-semibold absolute top-1.5 right-2 px-1 bg-white disabled:text-gray-400 h-8 w-8'
         >
-          <CircledXIcon height='h-6' width='w-6' />
+          <CircledXIcon />
         </button>
       )}
     </label>

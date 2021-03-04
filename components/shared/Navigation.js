@@ -48,7 +48,7 @@ const Navigation = () => {
           <button
             onClick={() => setIsOpen(!isOpen)}
             type='button'
-            className='block text-gray-500 transition duration-500 ease-in-out transform hover:text-gray-700 focus:text-gray-700 focus:outline-none '
+            className='block w-8 h-8 text-gray-500 transition duration-500 ease-in-out transform hover:text-gray-700 focus:text-gray-700 focus:outline-none'
           >
             {isOpen ? <NakedXIcon /> : <HamburgerIcon />}
           </button>
