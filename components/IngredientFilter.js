@@ -1,6 +1,6 @@
 import RadioButton from './shared/form/RadioButton'
 import { useState } from 'react'
-import ArrowDown from '@/icons/ArrowDown'
+import RotatingArrow from './shared/RotatingArrow'
 
 const IngredientFilter = ({ maxNumIngredients, setMaxNumIngredients }) => {
   const [showIng, setShowIng] = useState(false)
@@ -27,13 +27,7 @@ const IngredientFilter = ({ maxNumIngredients, setMaxNumIngredients }) => {
         className='flex items-center w-full text-xl sm:text-2xl focus:outline-none'
       >
         <span>Ingredients</span>
-        <span
-          className={`ml-1 transition transform inline-block ${
-            showIng ? 'rotate-180' : 'rotate-0'
-          }`}
-        >
-          <ArrowDown />
-        </span>
+        <RotatingArrow flip={showIng} />
       </button>
       <div
         className='p-2 mt-2 overflow-scroll border border-gray-300 border-solid rounded shadow-inner max-h-32'
