@@ -38,6 +38,8 @@ type Recipe {
   steps: [String!]!
   imageUrl: String
   source: String
+  servings: String
+  totalTime: String
   tags: [String]
   notes: String
   comments: [Comment]! @relation

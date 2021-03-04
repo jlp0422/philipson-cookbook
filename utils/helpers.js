@@ -4,6 +4,8 @@ export const formDataToQueryInput = ({
   description,
   ingredients,
   steps,
+  totalTime,
+  servings,
   imageData,
   source,
   tags,
@@ -21,6 +23,8 @@ export const formDataToQueryInput = ({
       }))
     },
     steps,
+    totalTime,
+    servings,
     imageUrl: imageData.url,
     source,
     tags,

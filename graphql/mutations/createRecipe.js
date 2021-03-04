@@ -15,6 +15,8 @@ export default gql`
         }
       }
       steps
+      totalTime
+      servings
       imageUrl
       source
       tags

@@ -6,6 +6,10 @@ import { formDataToQueryInput, getImageDivisor } from '@/utils/helpers'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
+import NakedX from '@/icons/NakedX'
+
+const CLOUDINARY_UPLOAD_URL =
+  'https://api.Cloudinary.com/v1_1/jlp0422/image/upload'
 
 const MEASUREMENTS = {
   CUP: 'CUP',
@@ -30,6 +34,8 @@ const initialState = {
   author: '',
   title: '',
   description: '',
+  totalTime: '',
+  servings: '',
   ingredients: [
     {
       amount: '',
@@ -68,20 +74,28 @@ const RecipeForm = () => {
         long: 'Please add a recipe title.'
       }
     }
+    if (!formData.servings) {
+      formErrors['servings'] = {
+        short: 'No servings',
+        long: 'Please add a serving size.'
+      }
+    }
     if (formData.steps.every(step => !step.trim().length)) {
       formErrors['steps'] = {
         short: 'Steps missing',
         long: 'Please add at least one step for the recipe.'
       }
     }
-    formData.ingredients.forEach(ing => {
-      if (!ing.amount || !ing.measurement || !ing.item) {
-        formErrors['ingredients'] = {
-          short: 'Ingredient incorrect',
-          long: 'Please ensure you have added all ingredient information.'
-        }
+    if (
+      formData.ingredients.every(
+        ing => !ing.amount || !ing.measurement || !ing.item
+      )
+    ) {
+      formErrors['ingredients'] = {
+        short: 'Ingredient incorrect',
+        long: 'Please ensure you have added all ingredient information.'
       }
-    })
+    }
 
     return formErrors
   }
@@ -143,21 +157,17 @@ const RecipeForm = () => {
   const onImageUpload = async () => {
     const { files } = document.querySelector('input[type="file"]')
     if (!files.length) {
-      setUploadError('Please select a file')
-      return
+      return setUploadError('Please select a file')
     }
     setIsUploading(true)
     const formData = new FormData()
     formData.append('file', files[0])
     formData.append('upload_preset', 'philipson-cookbook')
 
-    const data = await fetch(
-      'https://api.Cloudinary.com/v1_1/jlp0422/image/upload',
-      {
-        method: 'POST',
-        body: formData
-      }
-    )
+    const data = await fetch(CLOUDINARY_UPLOAD_URL, {
+      method: 'POST',
+      body: formData
+    })
       .then(res => {
         setIsUploading(false)
         return res.json()
@@ -165,6 +175,7 @@ const RecipeForm = () => {
       .catch(err => {
         setIsUploading(false)
         console.error(err)
+        // set form error here
       })
 
     setFormState({
@@ -225,7 +236,9 @@ const RecipeForm = () => {
       onClick={() => remove(key, index)}
       disabled={!index}
     >
-      X
+      <span>
+        <NakedX />
+      </span>
     </Button>
   )
 
@@ -259,7 +272,7 @@ const RecipeForm = () => {
         labelStyles='mb-4'
       />
       <label className='block mb-4' htmlFor='ingredients'>
-        <div className=''>
+        <div>
           <span className='text-lg text-gray-700'>Ingredients</span>
           {addAnotherButton('ingredients', {
             amount: '',
@@ -305,7 +318,7 @@ const RecipeForm = () => {
         })}
       </label>
       <label className='block mb-4' htmlFor='steps'>
-        <div className=''>
+        <div>
           <span className='text-lg text-gray-700'>Steps</span>
           {addAnotherButton('steps', '')}
         </div>
@@ -333,6 +346,24 @@ const RecipeForm = () => {
           )
         })}
       </label>
+      <FormInput
+        label='Total Time'
+        placeholder='Time in minutes'
+        id='time'
+        type='number'
+        value={formState.totalTime}
+        onChange={onFormChange('totalTime')}
+        labelStyles='mb-4'
+      />
+      <FormInput
+        label='Servings'
+        id='servings'
+        type='number'
+        value={formState.servings}
+        onChange={onFormChange('servings')}
+        labelStyles='mb-4'
+        error={formState.errors['servings']}
+      />
       <FormInput
         label='Source'
         id='source'
@@ -376,7 +407,7 @@ const RecipeForm = () => {
       <span className='text-lg'>
         Image Preview (is uploading? {isUploading.toString()})
       </span>
-      <div className='block mx-auto w-96'>
+      <div className='flex items-center justify-center max-w-96'>
         {/* {formState.imageData.url && ( */}
         <Image
           src='https://res.cloudinary.com/jlp0422/image/upload/v1614567748/philipson-cookbook/wyynzik5elvumlzbdk7j.jpg'
