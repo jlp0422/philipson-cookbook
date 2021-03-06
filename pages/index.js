@@ -2,12 +2,13 @@ import Head from '@/components/shared/Head'
 import Layout from '@/components/shared/Layout'
 import PageHeader from '@/components/shared/PageHeader'
 
-const App = props => {
+const App = () => {
+  const pageTitle = 'Philipson Cookbook'
   return (
     <>
-      <Head title='Philipson Cookbook' />
-      <Layout>
-        <PageHeader>Philipson Cookbook</PageHeader>
+      <Head title={pageTitle} />
+      <Layout title={pageTitle}>
+        <PageHeader>{pageTitle}</PageHeader>
       </Layout>
     </>
   )

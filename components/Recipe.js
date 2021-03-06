@@ -128,7 +128,7 @@ const Recipe = ({ recipeId }) => {
     <>
       <Head title={`${recipe.title} | Philipson Cookbook`} />
       <section className='mx-auto text-gray-700 body-font'>
-        <div className='container flex flex-col items-center px-5 py-8 mx-auto lg:px-20 md:flex-row'>
+        <div className='container flex flex-col items-center px-5 py-8 pt-0 mx-auto sm:py-8 lg:px-20 md:flex-row'>
           <div className='flex flex-col items-center w-full pt-0 mb-16 text-left lg:flex-grow lg:mr-16 lg:pr-18 md:pr-12 md:items-start md:text-left md:mb-0 lg:text-center'>
             <h2 className='mb-1 text-xs font-medium tracking-wider text-blue-500 title-font'>
               {recipe.tags.map(upper).join(', ')}

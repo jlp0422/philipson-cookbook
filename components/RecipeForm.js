@@ -2,11 +2,16 @@ import FormArea from '@/components/shared/form/FormArea'
 import FormInput from '@/components/shared/form/FormInput'
 import CREATE_RECIPE from '@/graphql/mutations/createRecipe'
 import Button from '@/components/shared/Button'
-import { formDataToQueryInput, getImageDivisor } from '@/utils/helpers'
+import {
+  formDataToQueryInput,
+  getImageDivisor,
+  getImageMin
+} from '@/utils/helpers'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
 import NakedX from '@/icons/NakedX'
+import Upload from '@/icons/Upload'
 
 const CLOUDINARY_UPLOAD_URL =
   'https://api.Cloudinary.com/v1_1/jlp0422/image/upload'
@@ -159,6 +164,7 @@ const RecipeForm = () => {
     if (!files.length) {
       return setUploadError('Please select a file')
     }
+    setUploadError(null)
     setIsUploading(true)
     const formData = new FormData()
     formData.append('file', files[0])
@@ -170,24 +176,27 @@ const RecipeForm = () => {
     })
       .then(res => {
         setIsUploading(false)
+        if (!res.ok) {
+          throw new Error(
+            `Image upload error with status ${res.status}: ${res.statusText}. Please try again.`
+          )
+        }
         return res.json()
       })
-      .catch(err => {
-        setIsUploading(false)
-        console.error(err)
-        // set form error here
-      })
+      .catch(err => setUploadError(err.message))
 
-    setFormState({
-      ...formState,
-      imageData: {
-        url: data.secure_url,
-        height: data.height,
-        width: data.width,
-        filename: data.original_filename,
-        divisor: getImageDivisor({ height: data.height, width: data.width })
-      }
-    })
+    if (data) {
+      setFormState({
+        ...formState,
+        imageData: {
+          url: data.secure_url,
+          height: data.height,
+          width: data.width,
+          filename: data.original_filename,
+          divisor: getImageDivisor({ height: data.height, width: data.width })
+        }
+      })
+    }
   }
 
   const onFormSubmit = async ev => {
@@ -242,7 +251,7 @@ const RecipeForm = () => {
     </Button>
   )
 
-  console.log({ formState })
+  console.log({ formState, uploadError })
 
   return (
     <form className='mx-auto mt-4 prose' onSubmit={onFormSubmit}>
@@ -381,51 +390,54 @@ const RecipeForm = () => {
         labelStyles='mb-4'
       />
       <label className='block mb-4' htmlFor='imageUrl'>
-        <span className='text-lg text-gray-700'>Image</span>{' '}
-        <Button
-          className='ml-4 text-sm'
-          color='blue'
-          disabled={isUploading}
-          onClick={onImageUpload}
-        >
-          Upload
-        </Button>
+        <span className='text-lg text-gray-700'>Image</span>
         {uploadError && (
           <span className='block my-1 font-bold text-red-600'>
             {uploadError}
           </span>
         )}
-        <div className='block bg-white mt-2 p-0.5 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
-          <input
-            type='file'
-            className='w-full p-1'
-            id='imageUrl'
-            name='imageUrl'
-          />
+        <div className='flex'>
+          <div className='block flex-1 bg-white p-0.5 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
+            <input
+              type='file'
+              className='w-full p-1'
+              id='imageUrl'
+              name='imageUrl'
+            />
+          </div>
+          <Button
+            className='flex items-center ml-4 text-sm'
+            color='blue'
+            disabled={isUploading}
+            onClick={onImageUpload}
+          >
+            <span className='hidden mr-2 sm:inline-block'>Upload</span>
+            <span className='inline-block w-4 h-4'>
+              <Upload />
+            </span>
+          </Button>
         </div>
       </label>
-      <span className='text-lg'>
-        Image Preview (is uploading? {isUploading.toString()})
-      </span>
-      <div className='flex items-center justify-center max-w-96'>
-        {/* {formState.imageData.url && ( */}
-        <Image
-          src='https://res.cloudinary.com/jlp0422/image/upload/v1614567748/philipson-cookbook/wyynzik5elvumlzbdk7j.jpg'
-          // src={formState.imageData.url}
-          alt={formState.imageData.filename}
-          title={formState.imageData.filename}
-          className='rounded'
-          width={1024 / (1024 / 500)}
-          height={682 / (1024 / 500)}
-          // width={Math.min(
-          //   formState.imageData.width / formState.imageData.divisor
-          // )}
-          // height={Math.min(
-          //   formState.imageData.height / formState.imageData.divisor
-          // )}
-        />
-        {/* )} */}
-      </div>
+      {(isUploading || formState.imageData.url) && (
+        <div className='my-4'>
+          <span className='text-lg'>Image Preview</span>
+          {isUploading && (
+            <div className='block mx-auto text-center'>is uploading</div>
+          )}
+          {!isUploading && !uploadError && formState.imageData.url && (
+            <div className='flex items-center justify-center max-w-96'>
+              <Image
+                src={formState.imageData.url}
+                alt={formState.imageData.filename}
+                title={formState.imageData.filename}
+                className='rounded'
+                width={getImageMin(formState.imageData, 'width')}
+                height={getImageMin(formState.imageData, 'height')}
+              />
+            </div>
+          )}
+        </div>
+      )}
       <Button className='h-11' type='submit' color='green'>
         Create Recipe
       </Button>

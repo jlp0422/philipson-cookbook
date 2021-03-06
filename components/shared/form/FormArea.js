@@ -16,7 +16,7 @@ const FormArea = ({
         <span className='block font-bold text-red-600'>{error.long}</span>
       ) : null}
       <textarea
-        className='block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+        className='block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
         placeholder={placeholder}
         value={value}
         rows={rows}

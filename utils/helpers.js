@@ -53,3 +53,8 @@ export const lower = string => string.toLowerCase()
 
 export const isEqualArray = (arr1, arr2) =>
   arr1.length === arr2.length && arr1.every((el, index) => el === arr2[index])
+
+export const createPageTitle = title => `${title} | Philipson Cookbook`
+
+export const getImageMin = (imageData, key) =>
+  Math.min(imageData[key] / imageData.divisor)

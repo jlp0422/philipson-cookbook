@@ -12,7 +12,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
   }
 
   return (
-    <section className='pt-4 pb-8 mx-auto text-gray-700 body-font'>
+    <section className='py-0 mx-auto text-gray-700 sm:py-4 body-font'>
       <FilterBar {...filterProps} />
       <div
         style={{

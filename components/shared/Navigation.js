@@ -13,7 +13,7 @@ const newRecipeClass =
 const navLink =
   'block sm:inline-block sm:mr-8 text-base sm:text-sm rounded font-semibold text-gray-600 py-1.5 hover:bg-blue-300 px-2 transition duration-300 ease-in-out transform'
 
-const Navigation = () => {
+const Navigation = ({ title }) => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
   const { asPath, pathname, query } = router
@@ -44,7 +44,7 @@ const Navigation = () => {
   return (
     <header className='sticky top-0 z-50 text-gray-700 bg-blue-100 border-blue-300 sm:border-t sm:border-b body-font'>
       <nav className='flex-col items-center justify-between max-w-screen-xl px-2 py-2 border-b border-blue-300 sm:px-0 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
-        <div className='py-1 sm:hidden'>
+        <div className='flex items-center py-1 text-center sm:hidden'>
           <button
             onClick={() => setIsOpen(!isOpen)}
             type='button'
@@ -52,6 +52,7 @@ const Navigation = () => {
           >
             {isOpen ? <NakedXIcon /> : <HamburgerIcon />}
           </button>
+          <h3 className="ml-4 text-xl text-gray-700">{title}</h3>
         </div>
         <div
           className={`sm:mt-0 sm:flex sm:visible sm:opacity-100 sm:h-auto items-center justify-center text-base transition-opacity ${
