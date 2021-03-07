@@ -43,7 +43,7 @@ const Navigation = ({ title }) => {
 
   return (
     <header className='sticky top-0 z-50 text-gray-700 bg-blue-100 border-blue-300 sm:border-t sm:border-b body-font'>
-      <nav className='flex-col items-center justify-between max-w-screen-xl px-2 py-2 border-b border-blue-300 sm:px-0 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
+      <nav className='flex-col items-center justify-between px-2 py-2 border-b border-blue-300 max-w-screen-xl sm:px-0 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
         <div className='flex items-center py-1 text-center sm:hidden'>
           <button
             onClick={() => setIsOpen(!isOpen)}
