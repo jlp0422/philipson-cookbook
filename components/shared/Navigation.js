@@ -74,9 +74,9 @@ const Navigation = ({ title }) => {
               All Recipes
             </a>
           </Link>
-          <button className={navLink} onClick={getRandomRecipe}>
+          {/*<button className={navLink} onClick={getRandomRecipe}>
             Random Recipe
-          </button>
+          </button>*/}
           <Link href='/recipes/new'>
             <a className='block sm:hidden'>
               <button

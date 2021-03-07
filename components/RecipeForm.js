@@ -1,12 +1,14 @@
 import FormArea from '@/components/shared/form/FormArea'
 import FormInput from '@/components/shared/form/FormInput'
 import CREATE_RECIPE from '@/graphql/mutations/createRecipe'
+import FormError from '@/components/shared/form/FormError'
 import Button from '@/components/shared/Button'
 import {
   formDataToQueryInput,
   getImageDivisor,
   getImageMin
 } from '@/utils/helpers'
+import recipeFormValidator from '@/utils/recipeFormValidator'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -64,46 +66,6 @@ const RecipeForm = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
   const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE)
-
-  const validateForm = formData => {
-    const formErrors = {}
-    if (!formData.author) {
-      formErrors['author'] = {
-        short: 'Author missing',
-        long: 'Please add a recipe author.'
-      }
-    }
-    if (!formData.title) {
-      formErrors['title'] = {
-        short: 'Title missing',
-        long: 'Please add a recipe title.'
-      }
-    }
-    if (!formData.servings) {
-      formErrors['servings'] = {
-        short: 'No servings',
-        long: 'Please add a serving size.'
-      }
-    }
-    if (formData.steps.every(step => !step.trim().length)) {
-      formErrors['steps'] = {
-        short: 'Steps missing',
-        long: 'Please add at least one step for the recipe.'
-      }
-    }
-    if (
-      formData.ingredients.every(
-        ing => !ing.amount || !ing.measurement || !ing.item
-      )
-    ) {
-      formErrors['ingredients'] = {
-        short: 'Ingredient incorrect',
-        long: 'Please ensure you have added all ingredient information.'
-      }
-    }
-
-    return formErrors
-  }
 
   const renderIngredientMeasurements = () => (
     <>
@@ -199,9 +161,9 @@ const RecipeForm = () => {
     }
   }
 
-  const onFormSubmit = async ev => {
+  const onFormSubmit = ev => {
     ev.preventDefault()
-    const formErrors = validateForm(formState)
+    const formErrors = recipeFormValidator(formState)
     if (Object.keys(formErrors).length) {
       setFormState({
         ...formState,
@@ -217,14 +179,9 @@ const RecipeForm = () => {
   }
 
   const renderError = key => {
-    if (formState.errors[key]) {
-      return (
-        <span className='block font-bold text-red-600'>
-          {formState.errors[key].long}
-        </span>
-      )
-    }
-    return null
+    return formState.errors[key] ? (
+      <FormError error={formState.errors[key]} />
+    ) : null
   }
 
   const addAnotherButton = (key, defaultValue) => (
@@ -251,7 +208,7 @@ const RecipeForm = () => {
     </Button>
   )
 
-  console.log({ formState, uploadError })
+  console.log({ formState })
 
   return (
     <form className='mx-auto mt-4 prose' onSubmit={onFormSubmit}>
@@ -290,41 +247,39 @@ const RecipeForm = () => {
           })}
         </div>
         {renderError('ingredients')}
-        {formState.ingredients.map((ing, index) => {
-          return (
-            <div
-              className='items-center mt-2 grid gap-3'
-              key={index}
-              style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
-            >
-              <FormInput
-                id='amount'
-                value={ing.amount}
-                onChange={onChangeIngredient('amount', index)}
-                type='number'
-                placeholder='Amount'
-              />
-              <label className='block' htmlFor='measurement'>
-                <select
-                  name='measurement'
-                  id='measurement'
-                  className={inputClass}
-                  value={ing.measurement}
-                  onChange={onChangeIngredient('measurement', index)}
-                >
-                  {renderIngredientMeasurements()}
-                </select>
-              </label>
-              <FormInput
-                id='item'
-                value={ing.item}
-                onChange={onChangeIngredient('item', index)}
-                placeholder='Item'
-              />
-              {xButton('ingredients', index)}
-            </div>
-          )
-        })}
+        {formState.ingredients.map((ing, index) => (
+          <div
+            className='grid items-center gap-3 mt-2'
+            key={index}
+            style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
+          >
+            <FormInput
+              id='amount'
+              value={ing.amount}
+              onChange={onChangeIngredient('amount', index)}
+              type='number'
+              placeholder='Amount'
+            />
+            <label className='block' htmlFor='measurement'>
+              <select
+                name='measurement'
+                id='measurement'
+                className={inputClass}
+                value={ing.measurement}
+                onChange={onChangeIngredient('measurement', index)}
+              >
+                {renderIngredientMeasurements()}
+              </select>
+            </label>
+            <FormInput
+              id='item'
+              value={ing.item}
+              onChange={onChangeIngredient('item', index)}
+              placeholder='Item'
+            />
+            {xButton('ingredients', index)}
+          </div>
+        ))}
       </label>
       <label className='block mb-4' htmlFor='steps'>
         <div>
@@ -332,28 +287,26 @@ const RecipeForm = () => {
           {addAnotherButton('steps', '')}
         </div>
         {renderError('steps')}
-        {formState.steps.map((step, index) => {
-          return (
-            <div
-              className='items-center mt-2 grid gap-3'
+        {formState.steps.map((step, index) => (
+          <div
+            className='grid items-center gap-3 mt-2'
+            key={index}
+            style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
+          >
+            <textarea
+              className={inputClass}
+              placeholder=''
+              rows='3'
+              value={step}
+              style={{ height: 44 }}
+              onChange={onChangeStep(index)}
               key={index}
-              style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
-            >
-              <textarea
-                className={inputClass}
-                placeholder=''
-                rows='3'
-                value={step}
-                style={{ height: 44 }}
-                onChange={onChangeStep(index)}
-                key={index}
-                id={`step-${index}`}
-                name={`step-${index}`}
-              />
-              {xButton('steps', index)}
-            </div>
-          )
-        })}
+              id={`step-${index}`}
+              name={`step-${index}`}
+            />
+            {xButton('steps', index)}
+          </div>
+        ))}
       </label>
       <FormInput
         label='Total Time'
@@ -363,6 +316,7 @@ const RecipeForm = () => {
         value={formState.totalTime}
         onChange={onFormChange('totalTime')}
         labelStyles='mb-4'
+        error={formState.errors['totalTime']}
       />
       <FormInput
         label='Servings'

@@ -16,6 +16,8 @@ export default gql`
       steps
       imageUrl
       source
+      servings
+      totalTime
       tags
       notes
       comments {
