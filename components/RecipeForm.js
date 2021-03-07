@@ -1,11 +1,22 @@
 import FormArea from '@/components/shared/form/FormArea'
 import FormInput from '@/components/shared/form/FormInput'
 import CREATE_RECIPE from '@/graphql/mutations/createRecipe'
+import FormError from '@/components/shared/form/FormError'
 import Button from '@/components/shared/Button'
-import { formDataToQueryInput, getImageDivisor } from '@/utils/helpers'
+import {
+  formDataToQueryInput,
+  getImageDivisor,
+  getImageMin
+} from '@/utils/helpers'
+import recipeFormValidator from '@/utils/recipeFormValidator'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
+import NakedX from '@/icons/NakedX'
+import Upload from '@/icons/Upload'
+
+const CLOUDINARY_UPLOAD_URL =
+  'https://api.Cloudinary.com/v1_1/jlp0422/image/upload'
 
 const MEASUREMENTS = {
   CUP: 'CUP',
@@ -30,6 +41,8 @@ const initialState = {
   author: '',
   title: '',
   description: '',
+  totalTime: '',
+  servings: '',
   ingredients: [
     {
       amount: '',
@@ -53,38 +66,6 @@ const RecipeForm = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
   const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE)
-
-  const validateForm = formData => {
-    const formErrors = {}
-    if (!formData.author) {
-      formErrors['author'] = {
-        short: 'Author missing',
-        long: 'Please add a recipe author.'
-      }
-    }
-    if (!formData.title) {
-      formErrors['title'] = {
-        short: 'Title missing',
-        long: 'Please add a recipe title.'
-      }
-    }
-    if (formData.steps.every(step => !step.trim().length)) {
-      formErrors['steps'] = {
-        short: 'Steps missing',
-        long: 'Please add at least one step for the recipe.'
-      }
-    }
-    formData.ingredients.forEach(ing => {
-      if (!ing.amount || !ing.measurement || !ing.item) {
-        formErrors['ingredients'] = {
-          short: 'Ingredient incorrect',
-          long: 'Please ensure you have added all ingredient information.'
-        }
-      }
-    })
-
-    return formErrors
-  }
 
   const renderIngredientMeasurements = () => (
     <>
@@ -143,45 +124,46 @@ const RecipeForm = () => {
   const onImageUpload = async () => {
     const { files } = document.querySelector('input[type="file"]')
     if (!files.length) {
-      setUploadError('Please select a file')
-      return
+      return setUploadError('Please select a file')
     }
+    setUploadError(null)
     setIsUploading(true)
     const formData = new FormData()
     formData.append('file', files[0])
     formData.append('upload_preset', 'philipson-cookbook')
 
-    const data = await fetch(
-      'https://api.Cloudinary.com/v1_1/jlp0422/image/upload',
-      {
-        method: 'POST',
-        body: formData
-      }
-    )
+    const data = await fetch(CLOUDINARY_UPLOAD_URL, {
+      method: 'POST',
+      body: formData
+    })
       .then(res => {
         setIsUploading(false)
+        if (!res.ok) {
+          throw new Error(
+            `Image upload error with status ${res.status}: ${res.statusText}. Please try again.`
+          )
+        }
         return res.json()
       })
-      .catch(err => {
-        setIsUploading(false)
-        console.error(err)
-      })
+      .catch(err => setUploadError(err.message))
 
-    setFormState({
-      ...formState,
-      imageData: {
-        url: data.secure_url,
-        height: data.height,
-        width: data.width,
-        filename: data.original_filename,
-        divisor: getImageDivisor({ height: data.height, width: data.width })
-      }
-    })
+    if (data) {
+      setFormState({
+        ...formState,
+        imageData: {
+          url: data.secure_url,
+          height: data.height,
+          width: data.width,
+          filename: data.original_filename,
+          divisor: getImageDivisor({ height: data.height, width: data.width })
+        }
+      })
+    }
   }
 
-  const onFormSubmit = async ev => {
+  const onFormSubmit = ev => {
     ev.preventDefault()
-    const formErrors = validateForm(formState)
+    const formErrors = recipeFormValidator(formState)
     if (Object.keys(formErrors).length) {
       setFormState({
         ...formState,
@@ -197,14 +179,9 @@ const RecipeForm = () => {
   }
 
   const renderError = key => {
-    if (formState.errors[key]) {
-      return (
-        <span className='block font-bold text-red-600'>
-          {formState.errors[key].long}
-        </span>
-      )
-    }
-    return null
+    return formState.errors[key] ? (
+      <FormError error={formState.errors[key]} />
+    ) : null
   }
 
   const addAnotherButton = (key, defaultValue) => (
@@ -225,7 +202,9 @@ const RecipeForm = () => {
       onClick={() => remove(key, index)}
       disabled={!index}
     >
-      X
+      <span>
+        <NakedX />
+      </span>
     </Button>
   )
 
@@ -259,7 +238,7 @@ const RecipeForm = () => {
         labelStyles='mb-4'
       />
       <label className='block mb-4' htmlFor='ingredients'>
-        <div className=''>
+        <div>
           <span className='text-lg text-gray-700'>Ingredients</span>
           {addAnotherButton('ingredients', {
             amount: '',
@@ -268,71 +247,86 @@ const RecipeForm = () => {
           })}
         </div>
         {renderError('ingredients')}
-        {formState.ingredients.map((ing, index) => {
-          return (
-            <div
-              className='grid items-center gap-3 mt-2'
-              key={index}
-              style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
-            >
-              <FormInput
-                id='amount'
-                value={ing.amount}
-                onChange={onChangeIngredient('amount', index)}
-                type='number'
-                placeholder='Amount'
-              />
-              <label className='block' htmlFor='measurement'>
-                <select
-                  name='measurement'
-                  id='measurement'
-                  className={inputClass}
-                  value={ing.measurement}
-                  onChange={onChangeIngredient('measurement', index)}
-                >
-                  {renderIngredientMeasurements()}
-                </select>
-              </label>
-              <FormInput
-                id='item'
-                value={ing.item}
-                onChange={onChangeIngredient('item', index)}
-                placeholder='Item'
-              />
-              {xButton('ingredients', index)}
-            </div>
-          )
-        })}
+        {formState.ingredients.map((ing, index) => (
+          <div
+            className='grid items-center gap-3 mt-2'
+            key={index}
+            style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
+          >
+            <FormInput
+              id='amount'
+              value={ing.amount}
+              onChange={onChangeIngredient('amount', index)}
+              type='number'
+              placeholder='Amount'
+            />
+            <label className='block' htmlFor='measurement'>
+              <select
+                name='measurement'
+                id='measurement'
+                className={inputClass}
+                value={ing.measurement}
+                onChange={onChangeIngredient('measurement', index)}
+              >
+                {renderIngredientMeasurements()}
+              </select>
+            </label>
+            <FormInput
+              id='item'
+              value={ing.item}
+              onChange={onChangeIngredient('item', index)}
+              placeholder='Item'
+            />
+            {xButton('ingredients', index)}
+          </div>
+        ))}
       </label>
       <label className='block mb-4' htmlFor='steps'>
-        <div className=''>
+        <div>
           <span className='text-lg text-gray-700'>Steps</span>
           {addAnotherButton('steps', '')}
         </div>
         {renderError('steps')}
-        {formState.steps.map((step, index) => {
-          return (
-            <div
-              className='grid items-center gap-3 mt-2'
+        {formState.steps.map((step, index) => (
+          <div
+            className='grid items-center gap-3 mt-2'
+            key={index}
+            style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
+          >
+            <textarea
+              className={inputClass}
+              placeholder=''
+              rows='3'
+              value={step}
+              style={{ height: 44 }}
+              onChange={onChangeStep(index)}
               key={index}
-              style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
-            >
-              <textarea
-                className={inputClass}
-                placeholder=''
-                rows='3'
-                value={step}
-                style={{ height: 44 }}
-                onChange={onChangeStep(index)}
-                key={index}
-                id={`step-${index}`}
-                name={`step-${index}`}
-              />
-              {xButton('steps', index)}
-            </div>
-          )
-        })}
+              id={`step-${index}`}
+              name={`step-${index}`}
+            />
+            {xButton('steps', index)}
+          </div>
+        ))}
       </label>
+      <FormInput
+        label='Total Time'
+        placeholder='Time in minutes'
+        id='time'
+        type='number'
+        value={formState.totalTime}
+        onChange={onFormChange('totalTime')}
+        labelStyles='mb-4'
+        error={formState.errors['totalTime']}
+      />
+      <FormInput
+        label='Servings'
+        id='servings'
+        type='number'
+        value={formState.servings}
+        onChange={onFormChange('servings')}
+        labelStyles='mb-4'
+        error={formState.errors['servings']}
+      />
       <FormInput
         label='Source'
         id='source'
@@ -350,51 +344,54 @@ const RecipeForm = () => {
         labelStyles='mb-4'
       />
       <label className='block mb-4' htmlFor='imageUrl'>
-        <span className='text-lg text-gray-700'>Image</span>{' '}
-        <Button
-          className='ml-4 text-sm'
-          color='blue'
-          disabled={isUploading}
-          onClick={onImageUpload}
-        >
-          Upload
-        </Button>
+        <span className='text-lg text-gray-700'>Image</span>
         {uploadError && (
           <span className='block my-1 font-bold text-red-600'>
             {uploadError}
           </span>
         )}
-        <div className='block bg-white mt-2 p-0.5 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
-          <input
-            type='file'
-            className='w-full p-1'
-            id='imageUrl'
-            name='imageUrl'
-          />
+        <div className='flex'>
+          <div className='block flex-1 bg-white p-0.5 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
+            <input
+              type='file'
+              className='w-full p-1'
+              id='imageUrl'
+              name='imageUrl'
+            />
+          </div>
+          <Button
+            className='flex items-center ml-4 text-sm'
+            color='blue'
+            disabled={isUploading}
+            onClick={onImageUpload}
+          >
+            <span className='hidden mr-2 sm:inline-block'>Upload</span>
+            <span className='inline-block w-4 h-4'>
+              <Upload />
+            </span>
+          </Button>
         </div>
       </label>
-      <span className='text-lg'>
-        Image Preview (is uploading? {isUploading.toString()})
-      </span>
-      <div className='block mx-auto w-96'>
-        {/* {formState.imageData.url && ( */}
-        <Image
-          src='https://res.cloudinary.com/jlp0422/image/upload/v1614567748/philipson-cookbook/wyynzik5elvumlzbdk7j.jpg'
-          // src={formState.imageData.url}
-          alt={formState.imageData.filename}
-          title={formState.imageData.filename}
-          className='rounded'
-          width={1024 / (1024 / 500)}
-          height={682 / (1024 / 500)}
-          // width={Math.min(
-          //   formState.imageData.width / formState.imageData.divisor
-          // )}
-          // height={Math.min(
-          //   formState.imageData.height / formState.imageData.divisor
-          // )}
-        />
-        {/* )} */}
-      </div>
+      {(isUploading || formState.imageData.url) && (
+        <div className='my-4'>
+          <span className='text-lg'>Image Preview</span>
+          {isUploading && (
+            <div className='block mx-auto text-center'>is uploading</div>
+          )}
+          {!isUploading && !uploadError && formState.imageData.url && (
+            <div className='flex items-center justify-center max-w-96'>
+              <Image
+                src={formState.imageData.url}
+                alt={formState.imageData.filename}
+                title={formState.imageData.filename}
+                className='rounded'
+                width={getImageMin(formState.imageData, 'width')}
+                height={getImageMin(formState.imageData, 'height')}
+              />
+            </div>
+          )}
+        </div>
+      )}
       <Button className='h-11' type='submit' color='green'>
         Create Recipe
       </Button>

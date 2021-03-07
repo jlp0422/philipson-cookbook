@@ -17,7 +17,7 @@ const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
           onClick={() => setShowFilters(!showFilters)}
         >
           <span className='hidden sm:block'>Filters</span>
-          <span className='text-gray-100 sm:hidden w-8 h-8'>
+          <span className='block w-8 h-8 text-gray-100 transform rotate-90 sm:hidden'>
             <FilterIcon />
           </span>
         </Button>

@@ -5,8 +5,10 @@ import PageHeader from '@/components/shared/PageHeader'
 import RECIPES_QUERY from '@/graphql/queries/recipes'
 import { useQuery } from '@apollo/client'
 import { useMemo, useState } from 'react'
+import { createPageTitle } from '@/utils/helpers'
 
 const Recipes = () => {
+  const pageTitle = 'All Recipes'
   const [selectedTags, setSelectedTags] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [maxNumIngredients, setMaxNumIngredients] = useState(0)
@@ -211,16 +213,20 @@ const Recipes = () => {
     }
 
     if (searchQuery.length > 2) {
-      recipes = recipes.filter(recipe => recipe.title.includes(searchQuery))
+      recipes = recipes.filter(
+        recipe =>
+          recipe.title.includes(searchQuery) ||
+          recipe.description.includes(searchQuery)
+      )
     }
 
     return recipes
   }, [selectedTags, searchQuery, maxNumIngredients, data])
 
   return (
-    <Layout>
-      <Head title='Recipes | Philipson Cookbook' />
-      <PageHeader>All Recipes</PageHeader>
+    <Layout title={pageTitle}>
+      <Head title={createPageTitle(pageTitle)} />
+      <PageHeader>{pageTitle}</PageHeader>
       <RecipeList
         recipes={filteredRecipes}
         {...{

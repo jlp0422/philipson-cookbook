@@ -3,11 +3,11 @@ import Navigation from './Navigation'
 
 // const Navigation = dynamic(() => import('./Navigation'))
 
-const Layout = ({ children }) => {
+const Layout = ({ title, children }) => {
   return (
     <>
-      <Navigation />
-      <main className='max-w-screen-xl mx-4 my-4 sm:mx-8 md:mx-12 lg:mx-16 2xl:mx-auto'>
+      <Navigation title={title} />
+      <main className='mx-4 my-4 max-w-screen-xl sm:mx-8 md:mx-12 lg:mx-16 2xl:mx-auto'>
         {children}
       </main>
     </>
