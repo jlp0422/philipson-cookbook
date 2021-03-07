@@ -15,9 +15,6 @@ import { useRef, useState } from 'react'
 import NakedX from '@/icons/NakedX'
 import Upload from '@/icons/Upload'
 
-const CLOUDINARY_UPLOAD_URL =
-  'https://api.Cloudinary.com/v1_1/jlp0422/image/upload'
-
 const MEASUREMENTS = {
   CUP: 'CUP',
   EACH: 'EACH',
@@ -130,13 +127,6 @@ const RecipeForm = () => {
     }
     setUploadError(null)
     setIsUploading(true)
-    setFormState({
-      ...formState,
-      imageData: {
-        ...formState.imageData,
-        filename: imageFile.name
-      }
-    })
 
     const formData = new FormData()
     formData.append('image', imageFile)
@@ -163,7 +153,7 @@ const RecipeForm = () => {
       setFormState({
         ...formState,
         imageData: {
-          ...formState.imageData,
+          filename: imageFile.name,
           url: data.secure_url,
           height: data.height,
           width: data.width,
