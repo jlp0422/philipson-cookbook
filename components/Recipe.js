@@ -2,7 +2,7 @@ import Head from '@/components/shared/Head'
 import FormInput from '@/components/shared/form/FormInput'
 import CREATE_COMMENT from '@/graphql/mutations/createComment'
 import RECIPE_QUERY from '@/graphql/queries/recipe'
-import { isLink, upper } from '@/utils/helpers'
+import { isLink, upper, lower, createPageTitle } from '@/utils/helpers'
 import { useMutation, useQuery } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -16,48 +16,23 @@ const sectionHeaderStyles =
 const flexWrapperStyles =
   'container flex flex-col items-start px-5 py-8 mx-auto lg:px-20 md:flex-row'
 
-const Recipe = ({ recipeId }) => {
+const Recipe = ({ recipeId, data, loading, error }) => {
   const [comment, setComment] = useState({ text: '', author: '' })
   const [errors, setErrors] = useState({})
   // const { data, error, loading } = useQuery(RECIPE_QUERY, {
   //   variables: { id: recipeId }
   // })
 
-  const loading = false
-  const error = false
-  const data = {
-    findRecipeByID: {
-      author: 'carolyn fine',
-      title: 'falafel v2',
-      description: 'the second best falafel recipe on the earth',
-      ingredients: {
-        data: [
-          {
-            amount: 2.0,
-            measurement: 'CUP',
-            item: 'water',
-            __typename: 'Ingredient'
-          },
-          {
-            amount: 5.0,
-            measurement: 'TEASPOON',
-            item: 'falafel',
-            __typename: 'Ingredient'
-          }
-        ],
-        __typename: 'IngredientPage'
-      },
-      steps: ['pour the water', 'add the mix', 'put in oven'],
-      imageUrl: null,
-      source: null,
-      tags: ['Dinner'],
-      notes: 'be sure to wait 30 minutes!',
-      comments: {
-        data: [{ author: '', text: '', __typename: 'Comment' }],
-        __typename: 'CommentPage'
-      },
-      __typename: 'Recipe'
-    }
+  if (loading) {
+    return <h2>Loading...</h2>
+  }
+
+  if (error) {
+    return <h3>error!: {JSON.stringify(error, null, 2)}</h3>
+  }
+
+  if (!data.findRecipeByID) {
+    return <h3>No recipe found!</h3>
   }
 
   const [
@@ -85,7 +60,7 @@ const Recipe = ({ recipeId }) => {
     return commentFormErrors
   }
 
-  const onSubmitComment = async ev => {
+  const onSubmitComment = ev => {
     ev.preventDefault()
     const formErrors = validateComment(comment)
     if (Object.keys(formErrors).length) {
@@ -109,24 +84,12 @@ const Recipe = ({ recipeId }) => {
     })
   }
 
-  if (loading) {
-    return <h2>Loading...</h2>
-  }
-
-  if (error) {
-    return <h3>error!: {JSON.stringify(error, null, 2)}</h3>
-  }
-
-  if (!data.findRecipeByID) {
-    return <h3>No recipe found!</h3>
-  }
-
   const { findRecipeByID: recipe } = data
   console.log({ 'components/recipe': recipe })
 
   return (
     <>
-      <Head title={`${recipe.title} | Philipson Cookbook`} />
+      <Head title={createPageTitle(recipe.title)} />
       <section className='mx-auto text-gray-700 body-font'>
         <div className='container flex flex-col items-center px-5 py-8 pt-0 mx-auto sm:py-8 lg:px-20 md:flex-row'>
           <div className='flex flex-col items-center w-full pt-0 mb-16 text-left lg:flex-grow lg:mr-16 lg:pr-18 md:pr-12 md:items-start md:text-left md:mb-0 lg:text-center'>
@@ -163,7 +126,7 @@ const Recipe = ({ recipeId }) => {
             <h3 className={sectionHeaderStyles}>Ingredients</h3>
             {recipe.ingredients.data.map(({ amount, item, measurement }) => (
               <p className='py-1' key={item}>
-                {amount} {measurement.toLowerCase()} {item}
+                {amount} {lower(measurement)} {item}
               </p>
             ))}
           </div>
@@ -205,10 +168,12 @@ const Recipe = ({ recipeId }) => {
               recipe.comments.data.map((comment, index) => (
                 <div
                   key={index}
-                  className='w-full px-2 py-4 my-2 border-2 border-gray-300 border-solid rounded-md'
+                  className='w-full p-3 my-2 border-2 border-gray-300 border-solid rounded-md'
                 >
                   <p>{comment.text}</p>
-                  <p className='text-sm italic'>- {comment.author}</p>
+                  <p className='text-sm italic'>
+                    &ndash;&nbsp;{comment.author}
+                  </p>
                 </div>
               ))
             ) : (
@@ -222,7 +187,7 @@ const Recipe = ({ recipeId }) => {
                 value={comment.text}
                 onChange={onChangeComment('text')}
                 rows='3'
-                placeholder="This was the best dish I've ever made!"
+                placeholder="This was the best dish I've ever eaten!"
                 labelStyles='mt-2'
                 error={errors['text']}
               />

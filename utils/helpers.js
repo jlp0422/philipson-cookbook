@@ -40,8 +40,7 @@ export const getImageDivisor = ({ height, width }) => {
   return max / 500
 }
 
-export const isLink = source =>
-  source.includes('https') || source.includes('www.')
+export const isLink = source => source.match(/(^http(s?):\/\/|www\.)/)
 
 export const getRandomId = array => {
   const randomNum = Math.floor(Math.random() * array.length)
