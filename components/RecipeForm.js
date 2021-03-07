@@ -127,38 +127,40 @@ const RecipeForm = () => {
       return setUploadError('Please select a file')
     }
     setUploadError(null)
-    setIsUploading(true)
+    // setIsUploading(true)
     const formData = new FormData()
     formData.append('file', files[0])
     formData.append('upload_preset', 'philipson-cookbook')
 
-    const data = await fetch(CLOUDINARY_UPLOAD_URL, {
+    const data = await fetch('/api/upload-image', {
       method: 'POST',
       body: formData
     })
-      .then(res => {
-        setIsUploading(false)
-        if (!res.ok) {
-          throw new Error(
-            `Image upload error with status ${res.status}: ${res.statusText}. Please try again.`
-          )
-        }
-        return res.json()
-      })
-      .catch(err => setUploadError(err.message))
 
-    if (data) {
-      setFormState({
-        ...formState,
-        imageData: {
-          url: data.secure_url,
-          height: data.height,
-          width: data.width,
-          filename: data.original_filename,
-          divisor: getImageDivisor({ height: data.height, width: data.width })
-        }
-      })
-    }
+    console.log({ data })
+    //   .then(res => {
+    //     setIsUploading(false)
+    //     if (!res.ok) {
+    //       throw new Error(
+    //         `Image upload error with status ${res.status}: ${res.statusText}. Please try again.`
+    //       )
+    //     }
+    //     return res.json()
+    //   })
+    //   .catch(err => setUploadError(err.message))
+
+    // if (data) {
+    //   setFormState({
+    //     ...formState,
+    //     imageData: {
+    //       url: data.secure_url,
+    //       height: data.height,
+    //       width: data.width,
+    //       filename: data.original_filename,
+    //       divisor: getImageDivisor({ height: data.height, width: data.width })
+    //     }
+    //   })
+    // }
   }
 
   const onFormSubmit = ev => {
