@@ -1,8 +1,8 @@
-const cloudinary = require('cloudinary').v2
-const multer = require('multer')
 const path = require('path')
+const multer = require('multer')
+const cloudinary = require('cloudinary').v2
 const DatauriParser = require('datauri/parser')
-const parser = new DatauriParser()
+const nextConnect = require('next-connect')
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -10,65 +10,58 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
+const parser = new DatauriParser()
+
 const formatBufferTo64 = file =>
   parser.format(path.extname(file.originalname).toString(), file.buffer)
 
-// const ALLOWED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg']
+const ALLOWED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg']
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  fileFilter: function (req, file, cb) {
+  fileFilter: (req, file, cb) => {
     if (ALLOWED_FORMATS.includes(file.mimetype)) {
       cb(null, true)
     } else {
-      cb(new Error('Not supported file type!'), false)
+      cb(new Error('File type not supported'), false)
     }
   }
 })
 
-const singleUpload = upload.single('image')
-const singleUploadCtrl = (req, res, next) => {
-  singleUpload(req, res, error => {
-    if (error) {
-      return res.status(422).send({ message: 'Image upload fail!' })
-    }
+const apiRoute = nextConnect({
+  // Handle error
+  onError(error, req, res) {
+    res.status(501).json({ error: error.message })
+  },
+  // Handle any other HTTP method
+  onNoMatch(req, res) {
+    res.status(405).json({ error: `Method '${req.method}' Not Allowed` })
+  }
+})
 
-    next()
+apiRoute.use(upload.single('image'))
+
+apiRoute.post(async (req, res) => {
+  const file = formatBufferTo64(req.file)
+  const uploadResult = await cloudinary.uploader.upload(file.content, {
+    folder: 'philipson-cookbook'
   })
-}
 
-function streamToBase64String(stream) {
-  const chunks = []
-  return new Promise((resolve, reject) => {
-    stream.on('data', chunk => {
-      console.log({ chunk })
-      chunks.push(chunk)
-    })
-    stream.on('error', err => reject(err))
-    stream.on('end', () => resolve(Buffer.concat(chunks)))
-  })
-}
-
-const apiRoute = async (req, res) => {
-  const buffer = await streamToBase64String(req)
-  const file = formatBufferTo64(buffer)
-  // const data = await cloudinary.uploader.upload(file)
-
-  console.log('** file', file)
+  const { secure_url, height, width } = uploadResult
 
   return res.json({
     statusCode: 200,
-    body: 'no body'
+    secure_url,
+    height,
+    width
   })
-}
-
-apiRoute.use(singleUpload)
+})
 
 export default apiRoute
 
 export const config = {
   api: {
-    bodyParser: false // Disallow body parsing, consume as stream
-    // sizeLimit: '500kb'
+    bodyParser: false, // Disallow body parsing, consume as stream
+    sizeLimit: '100mb' // max allowed by cloudinary
   }
 }

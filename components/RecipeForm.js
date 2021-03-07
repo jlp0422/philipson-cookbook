@@ -11,7 +11,7 @@ import {
 import recipeFormValidator from '@/utils/recipeFormValidator'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import NakedX from '@/icons/NakedX'
 import Upload from '@/icons/Upload'
 
@@ -62,6 +62,7 @@ const inputClass =
   'block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 h-11'
 
 const RecipeForm = () => {
+  const fileInputRef = useRef(null)
   const [formState, setFormState] = useState(initialState)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
@@ -122,45 +123,54 @@ const RecipeForm = () => {
   }
 
   const onImageUpload = async () => {
-    const { files } = document.querySelector('input[type="file"]')
-    if (!files.length) {
-      return setUploadError('Please select a file')
+    const { files } = fileInputRef.current
+    const imageFile = files[0]
+    if (!imageFile) {
+      return setUploadError('Please select a file.')
     }
     setUploadError(null)
-    // setIsUploading(true)
+    setIsUploading(true)
+    setFormState({
+      ...formState,
+      imageData: {
+        ...formState.imageData,
+        filename: imageFile.name
+      }
+    })
+
     const formData = new FormData()
-    formData.append('file', files[0])
-    formData.append('upload_preset', 'philipson-cookbook')
+    formData.append('image', imageFile)
 
     const data = await fetch('/api/upload-image', {
       method: 'POST',
       body: formData
     })
+      .then(async res => {
+        setIsUploading(false)
+        if (!res.ok) {
+          const { error } = await res.json()
+          throw new Error(
+            `Image upload error with status ${res.status}: ${
+              error || res.statusText
+            }. Please try again.`
+          )
+        }
+        return res.json()
+      })
+      .catch(err => setUploadError(err.message))
 
-    console.log({ data })
-    //   .then(res => {
-    //     setIsUploading(false)
-    //     if (!res.ok) {
-    //       throw new Error(
-    //         `Image upload error with status ${res.status}: ${res.statusText}. Please try again.`
-    //       )
-    //     }
-    //     return res.json()
-    //   })
-    //   .catch(err => setUploadError(err.message))
-
-    // if (data) {
-    //   setFormState({
-    //     ...formState,
-    //     imageData: {
-    //       url: data.secure_url,
-    //       height: data.height,
-    //       width: data.width,
-    //       filename: data.original_filename,
-    //       divisor: getImageDivisor({ height: data.height, width: data.width })
-    //     }
-    //   })
-    // }
+    if (data) {
+      setFormState({
+        ...formState,
+        imageData: {
+          ...formState.imageData,
+          url: data.secure_url,
+          height: data.height,
+          width: data.width,
+          divisor: getImageDivisor({ height: data.height, width: data.width })
+        }
+      })
+    }
   }
 
   const onFormSubmit = ev => {
@@ -355,6 +365,7 @@ const RecipeForm = () => {
         <div className='flex'>
           <div className='block flex-1 bg-white p-0.5 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
             <input
+              ref={fileInputRef}
               type='file'
               className='w-full p-1'
               id='imageUrl'
