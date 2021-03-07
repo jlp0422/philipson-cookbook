@@ -3,11 +3,8 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      inset: {
-        '-4': '-1rem'
-      },
       spacing: {
-        '18': '72px'
+        18: '72px'
       }
     }
   },
