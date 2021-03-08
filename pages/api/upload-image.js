@@ -23,7 +23,7 @@ const upload = multer({
     if (ALLOWED_FORMATS.includes(file.mimetype)) {
       cb(null, true)
     } else {
-      cb(new Error('File type not supported'), false)
+      cb(new Error('File type not supported, please use JPEG, JPG, or PNG'), false)
     }
   }
 })
@@ -49,8 +49,7 @@ apiRoute.post(async (req, res) => {
 
   const { secure_url, height, width } = uploadResult
 
-  return res.json({
-    statusCode: 200,
+  return res.status(200).json({
     secure_url,
     height,
     width
@@ -61,6 +60,7 @@ export default apiRoute
 
 export const config = {
   api: {
+    externalResolver: true,
     bodyParser: false, // Disallow body parsing, consume as stream
     sizeLimit: '100mb' // max allowed by cloudinary
   }

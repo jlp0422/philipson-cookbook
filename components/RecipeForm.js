@@ -61,7 +61,7 @@ const inputClass =
 const RecipeForm = () => {
   const fileInputRef = useRef(null)
   const [formState, setFormState] = useState(initialState)
-  const [isUploading, setIsUploading] = useState(false)
+  const [isUploading, setIsUploading] = useState(true)
   const [uploadError, setUploadError] = useState(null)
   const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE)
 
@@ -347,11 +347,7 @@ const RecipeForm = () => {
       />
       <label className='block mb-4' htmlFor='imageUrl'>
         <span className='text-lg text-gray-700'>Image</span>
-        {uploadError && (
-          <span className='block my-1 font-bold text-red-600'>
-            {uploadError}
-          </span>
-        )}
+        {uploadError && <FormError error={{ long: uploadError }} />}
         <div className='flex'>
           <div className='block flex-1 bg-white p-0.5 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
             <input
@@ -379,15 +375,15 @@ const RecipeForm = () => {
         <div className='my-4'>
           <span className='text-lg'>Image Preview</span>
           {isUploading && (
-            <div className='block mx-auto text-center'>is uploading</div>
+            <div className='block mx-auto text-center'>Image is uploading</div>
           )}
           {!isUploading && !uploadError && formState.imageData.url && (
             <div className='flex items-center justify-center max-w-96'>
               <Image
+                className='rounded'
                 src={formState.imageData.url}
                 alt={formState.imageData.filename}
                 title={formState.imageData.filename}
-                className='rounded'
                 width={getImageMin(formState.imageData, 'width')}
                 height={getImageMin(formState.imageData, 'height')}
               />
