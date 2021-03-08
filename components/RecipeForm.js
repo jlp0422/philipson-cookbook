@@ -9,6 +9,7 @@ import {
   getImageMin
 } from '@/utils/helpers'
 import recipeFormValidator from '@/utils/recipeFormValidator'
+import Loading from '@/components/shared/Loading'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
@@ -123,7 +124,7 @@ const RecipeForm = () => {
     const { files } = fileInputRef.current
     const imageFile = files[0]
     if (!imageFile) {
-      return setUploadError('Please select a file.')
+      return setUploadError('Please select an image.')
     }
     setUploadError(null)
     setIsUploading(true)
@@ -251,7 +252,7 @@ const RecipeForm = () => {
         {renderError('ingredients')}
         {formState.ingredients.map((ing, index) => (
           <div
-            className='grid items-center gap-3 mt-2'
+            className='items-center mt-2 grid gap-3'
             key={index}
             style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
           >
@@ -291,7 +292,7 @@ const RecipeForm = () => {
         {renderError('steps')}
         {formState.steps.map((step, index) => (
           <div
-            className='grid items-center gap-3 mt-2'
+            className='items-center mt-2 grid gap-3'
             key={index}
             style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
           >
@@ -375,7 +376,9 @@ const RecipeForm = () => {
         <div className='my-4'>
           <span className='text-lg'>Image Preview</span>
           {isUploading && (
-            <div className='block mx-auto text-center'>Image is uploading</div>
+            <div className='block mx-auto text-center'>
+              <Loading />
+            </div>
           )}
           {!isUploading && !uploadError && formState.imageData.url && (
             <div className='flex items-center justify-center max-w-96'>
