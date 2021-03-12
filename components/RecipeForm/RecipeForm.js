@@ -1,60 +1,18 @@
-import FormArea from '@/components/shared/form/FormArea'
-import FormInput from '@/components/shared/form/FormInput'
-import CREATE_RECIPE from '@/graphql/mutations/createRecipe'
-import FormError from '@/components/shared/form/FormError'
-import Button from '@/components/shared/Button'
-import {
-  formDataToQueryInput,
-  getImageDivisor,
-  getImageMin
-} from '@/utils/helpers'
-import recipeFormValidator from '@/utils/recipeFormValidator'
-import Loading from '@/components/shared/Loading'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
-import NakedX from '@/icons/NakedX'
-import Upload from '@/icons/Upload'
-
-const MEASUREMENTS = {
-  CUP: 'CUP',
-  EACH: 'EACH',
-  GALLON: 'GAL',
-  GRAM: 'GRAM',
-  'FLUID OUNCE': 'FL OZ',
-  KILOGRAM: 'KG',
-  LITER: 'LITER',
-  MILLILITER: 'ML',
-  OUNCE: 'OZ',
-  PACKAGE: 'PKG',
-  PINCH: 'PINCH',
-  PINT: 'PINT',
-  POUND: 'LB',
-  QUART: 'QT',
-  TABLESPOON: 'TBSP',
-  TEASPOON: 'TSP'
-}
-
-const initialState = {
-  author: '',
-  title: '',
-  description: '',
-  totalTime: '',
-  servings: '',
-  ingredients: [
-    {
-      amount: '',
-      item: '',
-      measurement: ''
-    }
-  ],
-  steps: [''],
-  imageData: {},
-  source: '',
-  tags: [],
-  notes: '',
-  errors: {}
-}
+import Button from '~/components/shared/Button'
+import FormArea from '~/components/shared/form/FormArea'
+import FormError from '~/components/shared/form/FormError'
+import FormInput from '~/components/shared/form/FormInput'
+import Loading from '~/components/shared/Loading'
+import CREATE_RECIPE from '~/graphql/mutations/createRecipe'
+import NakedX from '~/icons/NakedX'
+import Upload from '~/icons/Upload'
+import { getImageMin } from '~/utils/helpers'
+import { initialState, MEASUREMENTS } from './constants'
+import { formDataToQueryInput, getImageDivisor } from './helpers'
+import recipeFormValidator from './validator'
 
 const inputClass =
   'block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 h-11'
@@ -251,7 +209,7 @@ const RecipeForm = () => {
         {renderError('ingredients')}
         {formState.ingredients.map((ing, index) => (
           <div
-            className='items-center mt-2 grid gap-3'
+            className='grid items-center gap-3 mt-2'
             key={index}
             style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
           >
@@ -291,7 +249,7 @@ const RecipeForm = () => {
         {renderError('steps')}
         {formState.steps.map((step, index) => (
           <div
-            className='items-center mt-2 grid gap-3'
+            className='grid items-center gap-3 mt-2'
             key={index}
             style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
           >

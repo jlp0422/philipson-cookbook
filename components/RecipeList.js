@@ -1,5 +1,5 @@
-import FilterBar from '@/components/FilterBar'
-import RecipeCard from '@/components/RecipeCard'
+import FilterBar from '~/components/FilterBar'
+import RecipeCard from '~/components/RecipeCard'
 
 const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
   const hasRecipes = recipes.length > 0

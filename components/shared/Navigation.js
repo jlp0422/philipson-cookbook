@@ -1,12 +1,12 @@
-import { client } from '@/graphql/apolloClient'
-import RECIPES_BY_ID from '@/graphql/queries/recipesById'
-import { getRandomId } from '@/utils/helpers'
 import { useLazyQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import NakedXIcon from '@/icons/NakedX'
-import HamburgerIcon from '@/icons/Hamburger'
+import { client } from '~/graphql/apolloClient'
+import RECIPES_BY_ID from '~/graphql/queries/recipesById'
+import HamburgerIcon from '~/icons/Hamburger'
+import NakedXIcon from '~/icons/NakedX'
+import { getRandomId } from '~/utils/helpers'
 
 const newRecipeClass =
   'items-center px-4 py-2 text-sm font-semibold text-green-700 transition duration-500 ease-in-out transform bg-white border border-green-700 rounded-lg lg:inline-flex lg:ml-auto lg:mt-px hover:bg-green-700 hover:text-white focus:ring focus:outline-none'

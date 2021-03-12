@@ -1,6 +1,6 @@
-import Recipe from '@/components/Recipe'
-import Layout from '@/components/shared/Layout'
-import RECIPE_QUERY from '@/graphql/queries/recipe'
+import Recipe from '~/components/Recipe'
+import Layout from '~/components/shared/Layout'
+import RECIPE_QUERY from '~/graphql/queries/recipe'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 

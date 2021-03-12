@@ -1,5 +1,5 @@
-import RadioButton from './shared/form/RadioButton'
 import { useState } from 'react'
+import RadioButton from './shared/form/RadioButton'
 import RotatingArrow from './shared/RotatingArrow'
 
 const IngredientFilter = ({ maxNumIngredients, setMaxNumIngredients }) => {

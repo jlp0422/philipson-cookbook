@@ -1,5 +1,3 @@
-import TAGS_QUERY from '@/graphql/queries/tags'
-import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import IngredientFilter from './IngredientFilter'
 import Button from './shared/Button'

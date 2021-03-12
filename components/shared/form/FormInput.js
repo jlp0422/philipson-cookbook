@@ -1,5 +1,5 @@
-import CircledXIcon from '@/icons/CircledX'
-import FormError from '@/components/shared/form/FormError'
+import FormError from '~/components/shared/form/FormError'
+import CircledXIcon from '~/icons/CircledX'
 
 const FormInput = ({
   label,

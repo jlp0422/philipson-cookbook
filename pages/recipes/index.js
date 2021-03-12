@@ -1,11 +1,11 @@
-import RecipeList from '@/components/RecipeList'
-import Head from '@/components/shared/Head'
-import Layout from '@/components/shared/Layout'
-import PageHeader from '@/components/shared/PageHeader'
-import RECIPES_QUERY from '@/graphql/queries/recipes'
+import RecipeList from '~/components/RecipeList'
+import Head from '~/components/shared/Head'
+import Layout from '~/components/shared/Layout'
+import PageHeader from '~/components/shared/PageHeader'
+import RECIPES_QUERY from '~/graphql/queries/recipes'
 import { useQuery } from '@apollo/client'
 import { useMemo, useState } from 'react'
-import { createPageTitle } from '@/utils/helpers'
+import { createPageTitle } from '~/utils/helpers'
 
 const Recipes = () => {
   const pageTitle = 'All Recipes'

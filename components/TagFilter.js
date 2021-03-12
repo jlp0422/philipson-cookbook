@@ -1,5 +1,5 @@
-import Checkbox from './shared/form/Checkbox'
 import { useState } from 'react'
+import Checkbox from './shared/form/Checkbox'
 import RotatingArrow from './shared/RotatingArrow'
 
 const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {

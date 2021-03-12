@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client'
-import { client } from '@/graphql/apolloClient'
+import { client } from '~/graphql/apolloClient'
 import '../styles/globals.css'
 // import "tailwindcss/tailwind.css";
 
