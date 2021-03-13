@@ -3,11 +3,21 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      inset: {
-        '-4': '-1rem'
-      },
       spacing: {
-        '18': '72px'
+        18: '72px'
+      },
+      animation: {
+        loader: 'spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite'
+      },
+      keyframes: {
+        spinner: {
+          '0%': {
+            transform: 'rotate(0deg)'
+          },
+          '100%': {
+            transform: 'rotate(360deg)'
+          }
+        }
       }
     }
   },

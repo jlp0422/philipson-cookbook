@@ -9,14 +9,12 @@ import {
   getImageMin
 } from '@/utils/helpers'
 import recipeFormValidator from '@/utils/recipeFormValidator'
+import Loading from '@/components/shared/Loading'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import NakedX from '@/icons/NakedX'
 import Upload from '@/icons/Upload'
-
-const CLOUDINARY_UPLOAD_URL =
-  'https://api.Cloudinary.com/v1_1/jlp0422/image/upload'
 
 const MEASUREMENTS = {
   CUP: 'CUP',
@@ -62,6 +60,7 @@ const inputClass =
   'block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 h-11'
 
 const RecipeForm = () => {
+  const fileInputRef = useRef(null)
   const [formState, setFormState] = useState(initialState)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
@@ -122,25 +121,28 @@ const RecipeForm = () => {
   }
 
   const onImageUpload = async () => {
-    const { files } = document.querySelector('input[type="file"]')
-    if (!files.length) {
-      return setUploadError('Please select a file')
+    const [imageFile] = fileInputRef.current.files
+    if (!imageFile) {
+      return setUploadError('Please select an image.')
     }
     setUploadError(null)
     setIsUploading(true)
-    const formData = new FormData()
-    formData.append('file', files[0])
-    formData.append('upload_preset', 'philipson-cookbook')
 
-    const data = await fetch(CLOUDINARY_UPLOAD_URL, {
+    const formData = new FormData()
+    formData.append('image', imageFile)
+
+    const data = await fetch('/api/upload-image', {
       method: 'POST',
       body: formData
     })
-      .then(res => {
+      .then(async res => {
         setIsUploading(false)
         if (!res.ok) {
+          const { error } = await res.json()
           throw new Error(
-            `Image upload error with status ${res.status}: ${res.statusText}. Please try again.`
+            `Image upload error with status ${res.status}: ${
+              error || res.statusText
+            }. Please try again.`
           )
         }
         return res.json()
@@ -151,10 +153,10 @@ const RecipeForm = () => {
       setFormState({
         ...formState,
         imageData: {
+          filename: imageFile.name,
           url: data.secure_url,
           height: data.height,
           width: data.width,
-          filename: data.original_filename,
           divisor: getImageDivisor({ height: data.height, width: data.width })
         }
       })
@@ -249,7 +251,7 @@ const RecipeForm = () => {
         {renderError('ingredients')}
         {formState.ingredients.map((ing, index) => (
           <div
-            className='grid items-center gap-3 mt-2'
+            className='items-center mt-2 grid gap-3'
             key={index}
             style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
           >
@@ -289,7 +291,7 @@ const RecipeForm = () => {
         {renderError('steps')}
         {formState.steps.map((step, index) => (
           <div
-            className='grid items-center gap-3 mt-2'
+            className='items-center mt-2 grid gap-3'
             key={index}
             style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
           >
@@ -345,14 +347,11 @@ const RecipeForm = () => {
       />
       <label className='block mb-4' htmlFor='imageUrl'>
         <span className='text-lg text-gray-700'>Image</span>
-        {uploadError && (
-          <span className='block my-1 font-bold text-red-600'>
-            {uploadError}
-          </span>
-        )}
+        {uploadError && <FormError error={{ long: uploadError }} />}
         <div className='flex'>
           <div className='block flex-1 bg-white p-0.5 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
             <input
+              ref={fileInputRef}
               type='file'
               className='w-full p-1'
               id='imageUrl'
@@ -375,16 +374,14 @@ const RecipeForm = () => {
       {(isUploading || formState.imageData.url) && (
         <div className='my-4'>
           <span className='text-lg'>Image Preview</span>
-          {isUploading && (
-            <div className='block mx-auto text-center'>is uploading</div>
-          )}
+          {isUploading && <Loading />}
           {!isUploading && !uploadError && formState.imageData.url && (
             <div className='flex items-center justify-center max-w-96'>
               <Image
+                className='rounded'
                 src={formState.imageData.url}
                 alt={formState.imageData.filename}
                 title={formState.imageData.filename}
-                className='rounded'
                 width={getImageMin(formState.imageData, 'width')}
                 height={getImageMin(formState.imageData, 'height')}
               />
