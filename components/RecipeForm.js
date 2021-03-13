@@ -121,8 +121,7 @@ const RecipeForm = () => {
   }
 
   const onImageUpload = async () => {
-    const { files } = fileInputRef.current
-    const imageFile = files[0]
+    const [imageFile] = fileInputRef.current.files
     if (!imageFile) {
       return setUploadError('Please select an image.')
     }
@@ -252,7 +251,7 @@ const RecipeForm = () => {
         {renderError('ingredients')}
         {formState.ingredients.map((ing, index) => (
           <div
-            className='grid items-center gap-3 mt-2'
+            className='items-center mt-2 grid gap-3'
             key={index}
             style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
           >
@@ -292,7 +291,7 @@ const RecipeForm = () => {
         {renderError('steps')}
         {formState.steps.map((step, index) => (
           <div
-            className='grid items-center gap-3 mt-2'
+            className='items-center mt-2 grid gap-3'
             key={index}
             style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
           >

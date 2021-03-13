@@ -7,7 +7,6 @@ module.exports = {
         18: '72px'
       },
       animation: {
-        wiggle: 'wiggle 1s ease-in-out infinite',
         loader: 'spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite'
       },
       keyframes: {
@@ -18,10 +17,6 @@ module.exports = {
           '100%': {
             transform: 'rotate(360deg)'
           }
-        },
-        wiggle: {
-          '0%, 100%': { transform: 'rotate(-3deg)' },
-          '50%': { transform: 'rotate(3deg)' }
         }
       }
     }
