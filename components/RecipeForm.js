@@ -62,7 +62,7 @@ const inputClass =
 const RecipeForm = () => {
   const fileInputRef = useRef(null)
   const [formState, setFormState] = useState(initialState)
-  const [isUploading, setIsUploading] = useState(true)
+  const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
   const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE)
 
@@ -252,7 +252,7 @@ const RecipeForm = () => {
         {renderError('ingredients')}
         {formState.ingredients.map((ing, index) => (
           <div
-            className='items-center mt-2 grid gap-3'
+            className='grid items-center gap-3 mt-2'
             key={index}
             style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
           >
@@ -292,7 +292,7 @@ const RecipeForm = () => {
         {renderError('steps')}
         {formState.steps.map((step, index) => (
           <div
-            className='items-center mt-2 grid gap-3'
+            className='grid items-center gap-3 mt-2'
             key={index}
             style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
           >
@@ -375,11 +375,7 @@ const RecipeForm = () => {
       {(isUploading || formState.imageData.url) && (
         <div className='my-4'>
           <span className='text-lg'>Image Preview</span>
-          {isUploading && (
-            <div className='block mx-auto text-center'>
-              <Loading />
-            </div>
-          )}
+          {isUploading && <Loading />}
           {!isUploading && !uploadError && formState.imageData.url && (
             <div className='flex items-center justify-center max-w-96'>
               <Image
