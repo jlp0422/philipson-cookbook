@@ -1,4 +1,4 @@
-import * as ERRORS from './formErrors'
+import { ERRORS } from './constants'
 
 const recipeFormValidator = formData => {
   const formErrors = {}

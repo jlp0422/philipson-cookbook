@@ -1,6 +1,6 @@
-import Head from '@/components/shared/Head'
-import Layout from '@/components/shared/Layout'
-import PageHeader from '@/components/shared/PageHeader'
+import Head from '~/components/shared/Head'
+import Layout from '~/components/shared/Layout'
+import PageHeader from '~/components/shared/PageHeader'
 
 const App = () => {
   const pageTitle = 'Philipson Cookbook'

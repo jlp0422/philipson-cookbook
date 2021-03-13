@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { upper } from '@/utils/helpers'
+import { upper } from '~/utils/helpers'
 
 const RecipeCard = ({ recipe }) => {
   const hasTags = Boolean(recipe.tags.length)

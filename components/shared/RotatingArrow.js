@@ -1,4 +1,4 @@
-import ArrowDown from '@/icons/ArrowDown'
+import ArrowDown from '~/icons/ArrowDown'
 
 const RotatingArrow = ({ flip }) => {
   return (

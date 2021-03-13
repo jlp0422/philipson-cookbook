@@ -1,4 +1,4 @@
-import FormError from '@/components/shared/form/FormError'
+import FormError from '~/components/shared/form/FormError'
 
 const FormArea = ({
   label,

@@ -2,16 +2,16 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/components/*": [
+      "~/components/*": [
         "components/*"
       ],
-      "@/utils/*": [
+      "~/utils/*": [
         "utils/*"
       ],
-      "@/graphql/*": [
+      "~/graphql/*": [
         "graphql/*"
       ],
-      "@/icons/*": [
+      "~/icons/*": [
         "icons/*"
       ],
     }
