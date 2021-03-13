@@ -1,4 +1,6 @@
+import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
+import TAGS_QUERY from '~/graphql/queries/tags'
 import IngredientFilter from './IngredientFilter'
 import Button from './shared/Button'
 import TagFilter from './TagFilter'
@@ -53,7 +55,7 @@ const FilterSlideout = ({
 
   return (
     <div
-      className='fixed z-20 w-3/4 p-4 overflow-y-scroll bg-gray-400 rounded-lg shadow-md transition duration-300 ease-in-out sm:duration-500 top-18 bottom-4 right-4 sm:w-3/5 md:w-1/2 lg:w-2/5'
+      className='fixed z-20 w-3/4 p-4 overflow-y-scroll transition duration-300 ease-in-out bg-gray-400 rounded-lg shadow-md sm:duration-500 top-18 bottom-4 right-4 sm:w-3/5 md:w-1/2 lg:w-2/5'
       style={{
         transform: showFilters ? 'translateX(0)' : 'translateX(110%)'
       }}
