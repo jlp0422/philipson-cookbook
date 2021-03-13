@@ -19,9 +19,6 @@ const flexWrapperStyles =
 const Recipe = ({ recipeId, data, loading, error }) => {
   const [comment, setComment] = useState({ text: '', author: '' })
   const [errors, setErrors] = useState({})
-  const { data, error, loading } = useQuery(RECIPE_QUERY, {
-    variables: { id: recipeId }
-  })
 
   if (loading) {
     return <h2>Loading...</h2>
