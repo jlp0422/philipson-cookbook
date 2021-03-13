@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
 import FormInput from '~/components/shared/form/FormInput'
@@ -19,9 +19,9 @@ const flexWrapperStyles =
 const Recipe = ({ recipeId, data, loading, error }) => {
   const [comment, setComment] = useState({ text: '', author: '' })
   const [errors, setErrors] = useState({})
-  // const { data, error, loading } = useQuery(RECIPE_QUERY, {
-  //   variables: { id: recipeId }
-  // })
+  const { data, error, loading } = useQuery(RECIPE_QUERY, {
+    variables: { id: recipeId }
+  })
 
   if (loading) {
     return <h2>Loading...</h2>
@@ -36,8 +36,8 @@ const Recipe = ({ recipeId, data, loading, error }) => {
   }
 
   const [
-    createComment
-    // { data: commentData, error: commentError, loading: isCommentLoading }
+    createComment,
+    { data: commentData, error: commentError, loading: isCommentLoading }
   ] = useMutation(CREATE_COMMENT, {
     refetchQueries: [{ query: RECIPE_QUERY, variables: { id: recipeId } }],
     onCompleted: () => setComment({ text: '', author: '' })

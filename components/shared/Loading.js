@@ -8,14 +8,22 @@ const borderStyles = {
   borderBottomColor: 'transparent'
 }
 
-const Loading = () => {
+const SIZES = {
+  small: 'w-16 h-16',
+  medium: 'w-20 h-20',
+  large: 'w-24 h-24',
+  xl: 'w-28 h-28'
+}
+
+const Loading = ({ size }) => {
   const delays = ['-0.45s', '-0.3s', '-0.15s', '0s']
+  const sizes = SIZES[size]
   return (
-    <div className='relative flex items-center w-20 mx-auto my-2 h-28'>
+    <div className={`relative flex items-center w-28 mx-auto my-2 h-28`}>
       {delays.map(animationDelay => (
         <div
           key={animationDelay}
-          className={divClass}
+          className={`${divClass} ${sizes}`}
           style={{ animationDelay, ...borderStyles }}
         ></div>
       ))}

@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Button from '~/components/shared/Button'
 import FormArea from '~/components/shared/form/FormArea'
 import FormError from '~/components/shared/form/FormError'
@@ -19,10 +19,17 @@ const inputClass =
 
 const RecipeForm = () => {
   const fileInputRef = useRef(null)
+  const loadingRef = useRef(null)
   const [formState, setFormState] = useState(initialState)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
   const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE)
+
+  useEffect(() => {
+    if (loadingRef.current) {
+      loadingRef.current.scrollIntoView()
+    }
+  }, [loadingRef, isUploading])
 
   const renderIngredientMeasurements = () => (
     <>
@@ -131,10 +138,9 @@ const RecipeForm = () => {
       })
       window.scrollTo(0, 0)
     } else {
-      console.log('creating recipe...', formState)
-      // createRecipe({
-      //   variables: { recipeInput: formDataToQueryInput(formState) }
-      // })
+      createRecipe({
+        variables: { recipeInput: formDataToQueryInput(formState) }
+      })
     }
   }
 
@@ -332,7 +338,11 @@ const RecipeForm = () => {
       {(isUploading || formState.imageData.url) && (
         <div className='my-4'>
           <span className='text-lg'>Image Preview</span>
-          {isUploading && <Loading />}
+          {isUploading && (
+            <div ref={loadingRef}>
+              <Loading />
+            </div>
+          )}
           {!isUploading && !uploadError && formState.imageData.url && (
             <div className='flex items-center justify-center max-w-96'>
               <Image
