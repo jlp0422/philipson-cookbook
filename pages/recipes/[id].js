@@ -7,11 +7,6 @@ import { useRouter } from 'next/router'
 const RecipePage = () => {
   const router = useRouter()
   const { id } = router.query
-
-  if (!id) {
-    return <h2>Loading...</h2>
-  }
-
   const { data, error, loading } = useQuery(RECIPE_QUERY, {
     variables: { id }
   })

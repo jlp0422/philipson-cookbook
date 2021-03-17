@@ -24,6 +24,7 @@ const RecipeForm = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
   const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE)
+  // need to redirect to recipe/id page after creation or show some sort of "successful" text
 
   useEffect(() => {
     if (loadingRef.current) {
@@ -70,6 +71,7 @@ const RecipeForm = () => {
   }
 
   const add = (stateKey, defaultValue) => {
+    // auto focus next empty element
     setFormState({
       ...formState,
       [stateKey]: [...formState[stateKey], defaultValue]

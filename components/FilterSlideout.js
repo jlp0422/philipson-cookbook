@@ -23,10 +23,12 @@ const FilterSlideout = ({
   })
 
   useEffect(() => {
-    const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
-    const uniqueTags = new Set(allTags)
-    setTags(Array.from(uniqueTags).sort())
-  }, [])
+    if (data) {
+      const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
+      const uniqueTags = new Set(allTags)
+      setTags(Array.from(uniqueTags).sort())
+    }
+  }, [data])
 
   const handleEscape = ev => {
     if (ev.key === 'Esc' || ev.key === 'Escape' || ev.keyCode === 27) {
