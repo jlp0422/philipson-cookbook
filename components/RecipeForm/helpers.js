@@ -1,3 +1,5 @@
+import { STATUSES } from './constants'
+
 export const formDataToQueryInput = ({
   author,
   title,
@@ -39,3 +41,8 @@ export const getImageDivisor = ({ height, width }) => {
   const max = height > width ? height : width
   return max / 500
 }
+
+export const isPending = status => status === STATUSES.PENDING
+export const isSuccess = status => status === STATUSES.SUCCESS
+export const isError = status => status === STATUSES.ERROR
+export const isIdle = status => status === STATUSES.IDLE

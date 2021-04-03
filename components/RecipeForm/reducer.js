@@ -1,7 +1,13 @@
-import { SUBMIT_ERROR, SUBMIT_SUCCESS, UPDATE_FIELD, UPDATE_STATUS } from './actions'
-import { STATUSES } from './constants'
+import {
+  RESET_FORM,
+  SUBMIT_ERROR,
+  SUBMIT_SUCCESS,
+  UPDATE_FIELD,
+  UPDATE_STATUS
+} from './actions'
+import { initialState, STATUSES } from './constants'
 
-export const reducer = (state, action) => {
+const reducer = (state, action) => {
   switch (action.type) {
     case UPDATE_FIELD:
       return {
@@ -23,7 +29,11 @@ export const reducer = (state, action) => {
         ...state,
         status: STATUSES.ERROR
       }
+    case RESET_FORM:
+      return initialState
     default:
       return state
   }
 }
+
+export default reducer

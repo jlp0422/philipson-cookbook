@@ -11,14 +11,24 @@ import NakedX from '~/icons/NakedX'
 import Upload from '~/icons/Upload'
 import { getImageMin } from '~/utils/helpers'
 import {
-  UPDATE_FIELD,
-  UPDATE_STATUS,
+  RESET_FORM,
+  SUBMIT_ERROR,
   SUBMIT_SUCCESS,
-  SUBMIT_ERROR
+  UPDATE_FIELD,
+  UPDATE_STATUS
 } from './actions'
 import { initialState, MEASUREMENTS, STATUSES } from './constants'
-import { formDataToQueryInput, getImageDivisor } from './helpers'
-import { reducer } from './reducer'
+import {
+  formDataToQueryInput,
+  getImageDivisor,
+  isError,
+  isPending,
+  isSuccess
+} from './helpers'
+import RecipeFormError from './RecipeFormError'
+import RecipeFormPending from './RecipeFormPending'
+import RecipeFormSuccess from './RecipeFormSuccess'
+import reducer from './reducer'
 import recipeFormValidator from './validator'
 
 const inputClass =
@@ -30,10 +40,14 @@ const RecipeForm = () => {
   const [formState, dispatch] = useReducer(reducer, initialState)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
-  const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE, {
-    onCompleted: () => dispatch({ type: SUBMIT_SUCCESS }),
-    onError: () => dispatch({ type: SUBMIT_ERROR })
-  })
+  const [createRecipe, { data: newRecipe, error }] = useMutation(
+    CREATE_RECIPE,
+    {
+      refetchQueries: ['Recipes'],
+      onCompleted: () => dispatch({ type: SUBMIT_SUCCESS }),
+      onError: () => dispatch({ type: SUBMIT_ERROR })
+    }
+  )
 
   useEffect(() => {
     if (loadingRef.current) {
@@ -172,7 +186,25 @@ const RecipeForm = () => {
     </Button>
   )
 
+  const resetForm = () => dispatch({ type: RESET_FORM })
+  const setStatusIdle = () =>
+    dispatch({ type: UPDATE_STATUS, status: STATUSES.IDLE })
+
   console.log({ formState })
+
+  if (isSuccess(formState.status)) {
+    return (
+      <RecipeFormSuccess onCreateAnother={resetForm} newRecipe={newRecipe} />
+    )
+  }
+
+  if (isError(formState.status)) {
+    return <RecipeFormError onCloseError={setStatusIdle} error={error} />
+  }
+
+  if (isPending(formState.status)) {
+    return <RecipeFormPending />
+  }
 
   return (
     <form className='mx-auto mt-4 prose' onSubmit={onFormSubmit}>
