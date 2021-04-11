@@ -15,20 +15,20 @@ const FilterSlideout = ({
 }) => {
   const [tags, setTags] = useState([])
   const { data, loading, error } = useQuery(TAGS_QUERY, {
-    onCompleted: data => {
-      const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
-      const uniqueTags = new Set(allTags)
-      setTags(Array.from(uniqueTags).sort())
-    }
+    onCompleted: setUniqueTags
   })
 
   useEffect(() => {
     if (data) {
-      const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
-      const uniqueTags = new Set(allTags)
-      setTags(Array.from(uniqueTags).sort())
+      setUniqueTags(data)
     }
   }, [data])
+
+  const setUniqueTags = data => {
+    const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
+    const uniqueTags = new Set(allTags)
+    setTags(Array.from(uniqueTags).sort())
+  }
 
   const handleEscape = ev => {
     if (ev.key === 'Esc' || ev.key === 'Escape' || ev.keyCode === 27) {
