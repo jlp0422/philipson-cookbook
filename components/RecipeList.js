@@ -1,10 +1,11 @@
 import FilterBar from '~/components/FilterBar'
 import RecipeCard from '~/components/RecipeCard'
+import Loading from './shared/Loading'
 
 const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
   const hasRecipes = recipes.length > 0
   if (loading) {
-    return <h2>Loading...</h2>
+    return <Loading modifier='orange' size='large' styles='mt-16' />
   }
 
   if (error) {
