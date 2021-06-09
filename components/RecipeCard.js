@@ -3,7 +3,6 @@ import { upper } from '~/utils/helpers'
 
 const RecipeCard = ({ recipe }) => {
   const hasTags = Boolean(recipe.tags.length)
-  // console.log({ recipeCard: recipe })
 
   return (
     <Link href={`/recipes/${recipe._id}`}>

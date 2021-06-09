@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import FilterIcon from '~/icons/Filter'
 import FilterSlideout from './FilterSlideout'
-import Button from './shared/Button'
-import FormInput from './shared/form/FormInput'
+import Button from '~/components/shared/Button'
+import FormInput from '~/components/shared/form/FormInput'
 
 const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
   const [showFilters, setShowFilters] = useState(false)

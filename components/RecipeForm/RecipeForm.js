@@ -168,7 +168,7 @@ const RecipeForm = () => {
       color='green'
       onClick={() => add(key, defaultValue)}
     >
-      Add Another
+      Add
     </Button>
   )
 
@@ -189,8 +189,6 @@ const RecipeForm = () => {
   const resetForm = () => dispatch({ type: RESET_FORM })
   const setStatusIdle = () =>
     dispatch({ type: UPDATE_STATUS, status: STATUSES.IDLE })
-
-  console.log({ formState })
 
   if (isSuccess(formState.status)) {
     return (

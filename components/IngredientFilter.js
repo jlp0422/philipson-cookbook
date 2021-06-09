@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import RadioButton from './shared/form/RadioButton'
-import RotatingArrow from './shared/RotatingArrow'
+import RadioButton from '~/components/shared/form/RadioButton'
+import RotatingArrow from '~/components/shared/RotatingArrow'
 
 const IngredientFilter = ({ maxNumIngredients, setMaxNumIngredients }) => {
   const [showIng, setShowIng] = useState(false)

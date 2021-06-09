@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
 import FormInput from '~/components/shared/form/FormInput'
@@ -6,8 +6,9 @@ import Head from '~/components/shared/Head'
 import CREATE_COMMENT from '~/graphql/mutations/createComment'
 import RECIPE_QUERY from '~/graphql/queries/recipe'
 import { createPageTitle, isLink, lower, upper } from '~/utils/helpers'
-import Button from './shared/Button'
-import FormArea from './shared/form/FormArea'
+import Button from '~/components/shared/Button'
+import FormArea from '~/components/shared/form/FormArea'
+import Loading from '~/components/shared/Loading'
 
 const sectionContainerStyles =
   'flex flex-col items-center w-full pt-0 mb-8 text-left lg:flex-grow md:w-1/2 lg:mr-20 lg:pr-24 md:pr-16 md:items-start md:text-left md:mb-0'
@@ -19,26 +20,22 @@ const flexWrapperStyles =
 const Recipe = ({ recipeId, data, loading, error }) => {
   const [comment, setComment] = useState({ text: '', author: '' })
   const [errors, setErrors] = useState({})
-  const [
-    createComment,
-    { data: commentData, error: commentError, loading: isCommentLoading }
-  ] = useMutation(CREATE_COMMENT, {
+  const [createComment] = useMutation(CREATE_COMMENT, {
     refetchQueries: [{ query: RECIPE_QUERY, variables: { id: recipeId } }],
     onCompleted: () => setComment({ text: '', author: '' })
   })
 
   if (loading) {
-    return <h2>Loading...</h2>
+    return <Loading modifier='orange' size='large' styles='mt-16' />
   }
 
   if (error) {
-    return <h3>error!: {JSON.stringify(error, null, 2)}</h3>
+    return <h3>Something went wrong: {JSON.stringify(error, null, 2)}</h3>
   }
 
   if (!data.findRecipeByID) {
     return <h3>No recipe found!</h3>
   }
-
 
   const validateComment = comment => {
     const commentFormErrors = {}
@@ -82,7 +79,6 @@ const Recipe = ({ recipeId, data, loading, error }) => {
   }
 
   const { findRecipeByID: recipe } = data
-  console.log({ 'components/recipe': recipe })
 
   return (
     <>
