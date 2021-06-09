@@ -1,12 +1,11 @@
 {
-  "name": "with-graphql-faunadb",
+  "name": "philipson-cookbook",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "setup": "node ./scripts/setup.js"
+    "start": "next start"
   },
   "dependencies": {
     "@apollo/client": "^3.3.7",
