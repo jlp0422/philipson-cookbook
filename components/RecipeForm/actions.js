@@ -1,0 +1,5 @@
+export const UPDATE_FIELD = 'UPDATE_FIELD'
+export const UPDATE_STATUS = 'UPDATE_STATUS'
+export const SUBMIT_SUCCESS = 'SUBMIT_SUCCESS'
+export const SUBMIT_ERROR = 'SUBMIT_ERROR'
+export const RESET_FORM = 'RESET_FORM'

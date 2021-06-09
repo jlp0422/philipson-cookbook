@@ -56,6 +56,13 @@ export const MEASUREMENTS = {
   TEASPOON: 'TSP'
 }
 
+export const STATUSES = {
+  IDLE: 'IDLE',
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR'
+}
+
 export const initialState = {
   author: '',
   title: '',
@@ -74,5 +81,6 @@ export const initialState = {
   source: '',
   tags: [],
   notes: '',
-  errors: {}
+  errors: {},
+  status: STATUSES.IDLE
 }

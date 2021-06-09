@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
 import Button from '~/components/shared/Button'
 import FormArea from '~/components/shared/form/FormArea'
 import FormError from '~/components/shared/form/FormError'
@@ -10,8 +10,25 @@ import CREATE_RECIPE from '~/graphql/mutations/createRecipe'
 import NakedX from '~/icons/NakedX'
 import Upload from '~/icons/Upload'
 import { getImageMin } from '~/utils/helpers'
-import { initialState, MEASUREMENTS } from './constants'
-import { formDataToQueryInput, getImageDivisor } from './helpers'
+import {
+  RESET_FORM,
+  SUBMIT_ERROR,
+  SUBMIT_SUCCESS,
+  UPDATE_FIELD,
+  UPDATE_STATUS
+} from './actions'
+import { initialState, MEASUREMENTS, STATUSES } from './constants'
+import {
+  formDataToQueryInput,
+  getImageDivisor,
+  isError,
+  isPending,
+  isSuccess
+} from './helpers'
+import RecipeFormError from './RecipeFormError'
+import RecipeFormPending from './RecipeFormPending'
+import RecipeFormSuccess from './RecipeFormSuccess'
+import reducer from './reducer'
 import recipeFormValidator from './validator'
 
 const inputClass =
@@ -19,10 +36,24 @@ const inputClass =
 
 const RecipeForm = () => {
   const fileInputRef = useRef(null)
-  const [formState, setFormState] = useState(initialState)
+  const loadingRef = useRef(null)
+  const [formState, dispatch] = useReducer(reducer, initialState)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
-  const [createRecipe, { data, loading, error }] = useMutation(CREATE_RECIPE)
+  const [createRecipe, { data: newRecipe, error }] = useMutation(
+    CREATE_RECIPE,
+    {
+      refetchQueries: ['Recipes'],
+      onCompleted: () => dispatch({ type: SUBMIT_SUCCESS }),
+      onError: () => dispatch({ type: SUBMIT_ERROR })
+    }
+  )
+
+  useEffect(() => {
+    if (loadingRef.current) {
+      loadingRef.current.scrollIntoView()
+    }
+  }, [loadingRef, isUploading])
 
   const renderIngredientMeasurements = () => (
     <>
@@ -37,48 +68,41 @@ const RecipeForm = () => {
     </>
   )
 
-  const onFormChange = key => ev => {
-    setFormState({
-      ...formState,
-      [key]: ev.target.value
+  const updateField = (field, value) => {
+    dispatch({
+      type: UPDATE_FIELD,
+      field,
+      value
     })
+  }
+
+  const updateText = field => ev => {
+    updateField(field, ev.target.value)
   }
 
   const onChangeStep = index => ev => {
     const stepsCopy = [...formState.steps]
     stepsCopy[index] = ev.target.value
-    setFormState({
-      ...formState,
-      steps: stepsCopy
-    })
+    updateField('steps', stepsCopy)
   }
 
   const onChangeIngredient = (key, index) => ev => {
     const ingCopy = [...formState.ingredients]
     ingCopy[index][key] = ev.target.value
-    setFormState({
-      ...formState,
-      ingredients: ingCopy
-    })
+    updateField('ingredients', ingCopy)
   }
 
   const add = (stateKey, defaultValue) => {
-    setFormState({
-      ...formState,
-      [stateKey]: [...formState[stateKey], defaultValue]
-    })
+    updateField(stateKey, [...formState[stateKey], defaultValue])
   }
 
   const remove = (stateKey, indexToRemove) => {
     const existing = formState[stateKey]
     const filtered = existing.filter((_, index) => indexToRemove !== index)
-    setFormState({
-      ...formState,
-      [stateKey]: filtered
-    })
+    updateField(stateKey, filtered)
   }
 
-  const onImageUpload = async () => {
+  const onImageUpload = () => {
     const [imageFile] = fileInputRef.current.files
     if (!imageFile) {
       return setUploadError('Please select an image.')
@@ -89,7 +113,7 @@ const RecipeForm = () => {
     const formData = new FormData()
     formData.append('image', imageFile)
 
-    const data = await fetch('/api/upload-image', {
+    fetch('/api/upload-image', {
       method: 'POST',
       body: formData
     })
@@ -105,43 +129,37 @@ const RecipeForm = () => {
         }
         return res.json()
       })
-      .catch(err => setUploadError(err.message))
-
-    if (data) {
-      setFormState({
-        ...formState,
-        imageData: {
+      .then(data => {
+        updateField('imageData', {
           filename: imageFile.name,
           url: data.secure_url,
           height: data.height,
           width: data.width,
           divisor: getImageDivisor({ height: data.height, width: data.width })
-        }
+        })
       })
-    }
+      .catch(err => setUploadError(err.message))
   }
 
   const onFormSubmit = ev => {
     ev.preventDefault()
     const formErrors = recipeFormValidator(formState)
     if (Object.keys(formErrors).length) {
-      setFormState({
-        ...formState,
-        errors: formErrors
-      })
+      updateField('errors', formErrors)
       window.scrollTo(0, 0)
     } else {
-      console.log('creating recipe...', formState)
-      // createRecipe({
-      //   variables: { recipeInput: formDataToQueryInput(formState) }
-      // })
+      dispatch({ type: UPDATE_STATUS, status: STATUSES.PENDING })
+      createRecipe({
+        variables: { recipeInput: formDataToQueryInput(formState) }
+      })
     }
   }
 
   const renderError = key => {
-    return formState.errors[key] ? (
-      <FormError error={formState.errors[key]} />
-    ) : null
+    if (formState.errors[key]) {
+      return <FormError error={formState.errors[key]} />
+    }
+    return null
   }
 
   const addAnotherButton = (key, defaultValue) => (
@@ -168,7 +186,25 @@ const RecipeForm = () => {
     </Button>
   )
 
+  const resetForm = () => dispatch({ type: RESET_FORM })
+  const setStatusIdle = () =>
+    dispatch({ type: UPDATE_STATUS, status: STATUSES.IDLE })
+
   console.log({ formState })
+
+  if (isSuccess(formState.status)) {
+    return (
+      <RecipeFormSuccess onCreateAnother={resetForm} newRecipe={newRecipe} />
+    )
+  }
+
+  if (isError(formState.status)) {
+    return <RecipeFormError onCloseError={setStatusIdle} error={error} />
+  }
+
+  if (isPending(formState.status)) {
+    return <RecipeFormPending />
+  }
 
   return (
     <form className='mx-auto mt-4 prose' onSubmit={onFormSubmit}>
@@ -176,7 +212,7 @@ const RecipeForm = () => {
         label='Author'
         id='author'
         value={formState.author}
-        onChange={onFormChange('author')}
+        onChange={updateText('author')}
         labelStyles='mb-4'
         error={formState.errors['author']}
       />
@@ -184,7 +220,7 @@ const RecipeForm = () => {
         label='Title'
         id='title'
         value={formState.title}
-        onChange={onFormChange('title')}
+        onChange={updateText('title')}
         labelStyles='mb-4'
         error={formState.errors['title']}
       />
@@ -192,7 +228,7 @@ const RecipeForm = () => {
         label='Description'
         id='description'
         value={formState.description}
-        onChange={onFormChange('description')}
+        onChange={updateText('description')}
         rows='3'
         style={{ height: 70 }}
         labelStyles='mb-4'
@@ -274,7 +310,7 @@ const RecipeForm = () => {
         id='time'
         type='number'
         value={formState.totalTime}
-        onChange={onFormChange('totalTime')}
+        onChange={updateText('totalTime')}
         labelStyles='mb-4'
         error={formState.errors['totalTime']}
       />
@@ -283,7 +319,7 @@ const RecipeForm = () => {
         id='servings'
         type='number'
         value={formState.servings}
-        onChange={onFormChange('servings')}
+        onChange={updateText('servings')}
         labelStyles='mb-4'
         error={formState.errors['servings']}
       />
@@ -291,14 +327,14 @@ const RecipeForm = () => {
         label='Source'
         id='source'
         value={formState.source}
-        onChange={onFormChange('source')}
+        onChange={updateText('source')}
         labelStyles='mb-4'
       />
       <FormArea
         label='Notes'
         id='notes'
         value={formState.notes}
-        onChange={onFormChange('notes')}
+        onChange={updateText('notes')}
         rows='3'
         style={{ height: 70 }}
         labelStyles='mb-4'
@@ -332,7 +368,11 @@ const RecipeForm = () => {
       {(isUploading || formState.imageData.url) && (
         <div className='my-4'>
           <span className='text-lg'>Image Preview</span>
-          {isUploading && <Loading />}
+          {isUploading && (
+            <div ref={loadingRef}>
+              <Loading />
+            </div>
+          )}
           {!isUploading && !uploadError && formState.imageData.url && (
             <div className='flex items-center justify-center max-w-96'>
               <Image

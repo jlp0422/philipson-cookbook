@@ -18,7 +18,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
         style={{
           gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'
         }}
-        className='text-left grid gap-x-8 gap-y-8'
+        className='grid text-left gap-x-8 gap-y-8'
       >
         {hasRecipes ? (
           recipes.map(recipe => <RecipeCard key={recipe._id} recipe={recipe} />)
