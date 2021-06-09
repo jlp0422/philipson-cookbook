@@ -1,6 +1,6 @@
 import FilterBar from '~/components/FilterBar'
 import RecipeCard from '~/components/RecipeCard'
-import Loading from './shared/Loading'
+import Loading from '~/components/shared/Loading'
 
 const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
   const hasRecipes = recipes.length > 0
@@ -9,7 +9,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
   }
 
   if (error) {
-    return <h3>error! {JSON.stringify(error, null, 2)}</h3>
+    return <h3>Something went wrong: {JSON.stringify(error, null, 2)}</h3>
   }
 
   return (
@@ -25,7 +25,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
           recipes.map(recipe => <RecipeCard key={recipe._id} recipe={recipe} />)
         ) : (
           <div>
-            <h2>no recipes found - adjust your filters!</h2>
+            <h2>No recipes found - adjust your filters!</h2>
           </div>
         )}
       </div>

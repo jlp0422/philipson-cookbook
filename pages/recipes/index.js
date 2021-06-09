@@ -16,8 +16,6 @@ const Recipes = () => {
     variables: { size: 100 }
   })
 
-  console.log({ 'pages/recipes': data })
-
   const filteredRecipes = useMemo(() => {
     if (!data) {
       return []

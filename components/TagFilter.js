@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Checkbox from './shared/form/Checkbox'
-import RotatingArrow from './shared/RotatingArrow'
+import Checkbox from '~/components/shared/form/Checkbox'
+import RotatingArrow from '~/components/shared/RotatingArrow'
 
 const TagFilter = ({ tags, selectedTags, setSelectedTags }) => {
   const [showTags, setShowTags] = useState(false)

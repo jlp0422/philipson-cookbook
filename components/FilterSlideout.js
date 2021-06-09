@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import TAGS_QUERY from '~/graphql/queries/tags'
 import IngredientFilter from './IngredientFilter'
-import Button from './shared/Button'
+import Button from '~/components/shared/Button'
 import TagFilter from './TagFilter'
 
 const FilterSlideout = ({
