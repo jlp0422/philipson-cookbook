@@ -1,6 +1,7 @@
 import FilterBar from '~/components/FilterBar'
 import RecipeCard from '~/components/RecipeCard'
 import Loading from '~/components/shared/Loading'
+import GridContainer from '~/components/shared/GridContainer'
 
 const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
   const hasRecipes = recipes.length > 0
@@ -15,12 +16,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
   return (
     <section className='py-0 mx-auto text-gray-700 sm:py-4 body-font'>
       <FilterBar {...filterProps} />
-      <div
-        style={{
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'
-        }}
-        className='text-left grid gap-x-8 gap-y-8'
-      >
+      <GridContainer>
         {hasRecipes ? (
           recipes.map(recipe => <RecipeCard key={recipe._id} recipe={recipe} />)
         ) : (
@@ -28,7 +24,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
             <h2>No recipes found - adjust your filters!</h2>
           </div>
         )}
-      </div>
+      </GridContainer>
     </section>
   )
 }

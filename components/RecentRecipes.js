@@ -1,9 +1,10 @@
 import { useQuery } from '@apollo/client'
 import React from 'react'
 import RecipeCard from '~/components/RecipeCard'
-import RecipeCardWide from '~/components/RecipeCardWide'
 import Loading from '~/components/shared/Loading'
+import GridContainer from '~/components/shared/GridContainer'
 import RECIPES_QUERY from '~/graphql/queries/recipes'
+import { getRandomAmount } from '~/utils/helpers'
 
 const RecentRecipes = () => {
   const { data, loading, error } = useQuery(RECIPES_QUERY, {
@@ -18,21 +19,27 @@ const RecentRecipes = () => {
     return <h3>Something went wrong: {JSON.stringify(error, null, 2)}</h3>
   }
 
-  const mostRecentRecipe = data.recipes.data.slice(-1)[0]
-  const nextFourRecipes = data.recipes.data.slice(-5, -1)
+  const recipes = data.recipes.data
+  const featured = getRandomAmount(3, data.recipes.data)
+  const trending = getRandomAmount(6, data.recipes.data)
 
   return (
     <div className='mt-4'>
-      <RecipeCardWide recipe={mostRecentRecipe} />
-      <div
-        style={{
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'
-        }}
-        className='grid text-left gap-x-8 gap-y-8'
-      >
-        {nextFourRecipes.map(recipe => (
-          <RecipeCard recipe={recipe} key={recipe._id} />
-        ))}
+      <div className='my-4'>
+        <h1 className='mb-4 text-xl sm:text-3xl'>Featured Recipes</h1>
+        <GridContainer>
+          {featured.map(index => (
+            <RecipeCard recipe={recipes[index]} key={recipes[index]._id} />
+          ))}
+        </GridContainer>
+      </div>
+      <div className='my-4'>
+        <h1 className='mb-4 text-xl sm:text-3xl'>Trending Recipes</h1>
+        <GridContainer>
+          {trending.map(index => (
+            <RecipeCard recipe={recipes[index]} key={recipes[index]._id} />
+          ))}
+        </GridContainer>
       </div>
     </div>
   )
