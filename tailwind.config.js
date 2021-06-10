@@ -3,6 +3,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      backgroundImage: () => ({
+        'chef-table': "url(https://res.cloudinary.com/jlp0422/image/upload/v1623287233/philipson-cookbook/background_sab2by.jpg)"
+      }),
       minWidth: {
         0: '0',
         '1/4': '25%',

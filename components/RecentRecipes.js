@@ -24,8 +24,8 @@ const RecentRecipes = () => {
   const trending = getRandomAmount(6, data.recipes.data)
 
   return (
-    <div className='mt-4'>
-      <div className='my-4'>
+    <div className='mt-4 mb-8'>
+      <div className='my-4 mb-8'>
         <h1 className='mb-4 text-xl sm:text-3xl'>Featured Recipes</h1>
         <GridContainer>
           {featured.map(index => (

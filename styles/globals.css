@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 body {
-  /* background-color: orange */
+  /* background-image: url('https://res.cloudinary.com/jlp0422/image/upload/v1623287233/philipson-cookbook/background_sab2by.jpg') */
+  /* background-color: orange; */
+  background-color: aliceblue;
 }
 
 @layer base {}

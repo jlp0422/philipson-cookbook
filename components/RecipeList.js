@@ -1,4 +1,4 @@
-import FilterBar from '~/components/FilterBar'
+import FilterBar from '~/components/shared/filter/FilterBar'
 import RecipeCard from '~/components/RecipeCard'
 import Loading from '~/components/shared/Loading'
 import GridContainer from '~/components/shared/GridContainer'
