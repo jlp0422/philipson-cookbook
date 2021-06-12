@@ -3,11 +3,11 @@ import React from 'react'
 import RecipeCard from '~/components/RecipeCard'
 import Loading from '~/components/shared/Loading'
 import GridContainer from '~/components/shared/GridContainer'
-import RECIPES_QUERY from '~/graphql/queries/recipes'
+import RECIPES_BY_TIMESTAMP_QUERY from '~/graphql/queries/recipesByTimestampDesc'
 import { getRandomAmount } from '~/utils/helpers'
 
 const RecentRecipes = () => {
-  const { data, loading, error } = useQuery(RECIPES_QUERY, {
+  const { data, loading, error } = useQuery(RECIPES_BY_TIMESTAMP_QUERY, {
     variables: { size: 100 }
   })
 
@@ -19,17 +19,18 @@ const RecentRecipes = () => {
     return <h3>Something went wrong: {JSON.stringify(error, null, 2)}</h3>
   }
 
-  const recipes = data.recipes.data
-  const featured = getRandomAmount(3, data.recipes.data)
-  const trending = getRandomAmount(6, data.recipes.data)
+  const recipes = data.recipesByTimestampDesc.data
+  const latest = recipes.slice(0, 3)
+  const trending = getRandomAmount(6, recipes.slice(3))
+  console.log({ latest })
 
   return (
     <div className='mt-4 mb-8'>
       <div className='my-4 mb-8'>
-        <h1 className='mb-4 text-xl sm:text-3xl'>Featured Recipes</h1>
+        <h1 className='mb-4 text-xl sm:text-3xl'>Latest Recipes</h1>
         <GridContainer>
-          {featured.map(index => (
-            <RecipeCard recipe={recipes[index]} key={recipes[index]._id} />
+          {latest.map(recipe => (
+            <RecipeCard recipe={recipe} key={recipe._id} />
           ))}
         </GridContainer>
       </div>
