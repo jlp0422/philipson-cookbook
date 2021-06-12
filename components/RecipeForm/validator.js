@@ -24,6 +24,9 @@ const recipeFormValidator = formData => {
   ) {
     formErrors.ingredients = ERRORS.ingredients
   }
+  if (!formData.imageData.url) {
+    formErrors.imageData = ERRORS.imageData
+  }
 
   return formErrors
 }

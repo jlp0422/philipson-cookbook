@@ -8,9 +8,7 @@ const RecipeCardWide = ({ recipe }) => {
       <a className='flex items-center w-full px-4 py-4 my-6 transition duration-300 ease-in-out bg-gray-200 rounded shadow-md align-center sm:shadow-sm'>
         <img
           className='object-cover object-center w-1/4 rounded cursor-pointer min-w-1/2 max-h-56'
-          src={
-            recipe.imageUrl || 'https://dummyimage.com/720x400/F3F4F7/8693ac'
-          }
+          src={recipe.imageUrl}
           alt='content'
         />
         <div className='flex-grow ml-4'>

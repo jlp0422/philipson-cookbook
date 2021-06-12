@@ -20,7 +20,14 @@ const FilterSlideout = ({
   close
 }) => {
   const [tags, setTags] = useState([])
-  const { data, loading, error } = useQuery(TAGS_QUERY, {
+
+  const setUniqueTags = data => {
+    const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
+    const uniqueTags = new Set(allTags)
+    setTags(Array.from(uniqueTags).sort())
+  }
+
+  const { data } = useQuery(TAGS_QUERY, {
     onCompleted: setUniqueTags
   })
 
@@ -29,12 +36,6 @@ const FilterSlideout = ({
       setUniqueTags(data)
     }
   }, [data])
-
-  const setUniqueTags = data => {
-    const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
-    const uniqueTags = new Set(allTags)
-    setTags(Array.from(uniqueTags).sort())
-  }
 
   const handleEscape = ev => {
     if (ev.key === 'Esc' || ev.key === 'Escape' || ev.keyCode === 27) {
@@ -51,7 +52,7 @@ const FilterSlideout = ({
 
   return (
     <div
-      className='fixed z-20 w-3/4 p-4 overflow-y-scroll bg-gray-400 rounded-lg shadow-md transition duration-300 ease-in-out sm:duration-500 top-18 bottom-4 right-4 sm:w-3/5 md:w-1/2 lg:w-2/5'
+      className='fixed z-20 w-3/4 p-4 overflow-y-scroll transition duration-300 ease-in-out bg-gray-400 rounded-lg shadow-md sm:duration-500 top-18 bottom-4 right-4 sm:w-3/5 md:w-1/2 lg:w-2/5'
       style={{
         transform: showFilters ? 'translateX(0)' : 'translateX(110%)'
       }}
