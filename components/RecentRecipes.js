@@ -22,7 +22,6 @@ const RecentRecipes = () => {
   const recipes = data.recipesByTimestampDesc.data
   const latest = recipes.slice(0, 3)
   const trending = getRandomAmount(6, recipes.slice(3))
-  console.log({ latest })
 
   return (
     <div className='mt-4 mb-8'>

@@ -20,6 +20,7 @@ const flexWrapperStyles =
 const Recipe = ({ recipeId, data, loading, error }) => {
   const [comment, setComment] = useState({ text: '', author: '' })
   const [errors, setErrors] = useState({})
+  const [showAddComment, setShowAddComment] = useState(false)
   const [createComment] = useMutation(CREATE_COMMENT, {
     refetchQueries: [{ query: RECIPE_QUERY, variables: { id: recipeId } }],
     onCompleted: () => setComment({ text: '', author: '' })
@@ -167,33 +168,45 @@ const Recipe = ({ recipeId, data, loading, error }) => {
                 </div>
               ))
             ) : (
-              <p>No comments yet, be the first!</p>
+              <div>
+                <p>No comments yet, be the first!</p>
+                {!showAddComment && (
+                  <Button
+                    className='py-2 my-2'
+                    color='blue'
+                    onClick={() => setShowAddComment(true)}
+                  >
+                    Add comment
+                  </Button>
+                )}
+              </div>
             )}
-            <form className='w-full mt-8' onSubmit={onSubmitComment}>
-              <h3 className='text-xl'>New Comment</h3>
-              <FormArea
-                label='Comment'
-                id='text'
-                value={comment.text}
-                onChange={onChangeComment('text')}
-                rows='3'
-                placeholder="This was the best dish I've ever eaten!"
-                labelStyles='mt-2'
-                error={errors['text']}
-              />
-              <FormInput
-                label='Name'
-                id='author'
-                value={comment.author}
-                onChange={onChangeComment('author')}
-                labelStyles='mt-2'
-                placeholder='Bobby Flay'
-                error={errors['author']}
-              />
-              <Button className='py-2 my-4' color='green' type='submit'>
-                Save comment
-              </Button>
-            </form>
+            {showAddComment && (
+              <form className='w-full mt-4' onSubmit={onSubmitComment}>
+                <FormArea
+                  label='Comment'
+                  id='text'
+                  value={comment.text}
+                  onChange={onChangeComment('text')}
+                  rows='3'
+                  placeholder="This was the best dish I've ever eaten!"
+                  labelStyles='mt-2'
+                  error={errors['text']}
+                />
+                <FormInput
+                  label='Name'
+                  id='author'
+                  value={comment.author}
+                  onChange={onChangeComment('author')}
+                  labelStyles='mt-2'
+                  placeholder='Bobby Flay'
+                  error={errors['author']}
+                />
+                <Button className='py-2 my-4' color='green' type='submit'>
+                  Save comment
+                </Button>
+              </form>
+            )}
           </div>
         </div>
       </section>
