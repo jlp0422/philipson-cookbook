@@ -8,6 +8,30 @@ body {
   background-color: aliceblue;
 }
 
+.hover-card {
+  transform: perspective(1500px) rotateY(8deg);
+  border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+  transition: transform 1s ease 0s;
+}
+
+.hover-card:hover {
+  transform: perspective(3000px) rotateY(5deg);
+}
+
+.angled {
+  transform: perspective(800px) rotateY(-8deg);
+  transition: transform 1s ease 0s;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.024) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0.05) 0px 1px 0px 0px, rgba(0, 0, 0, 0.03) 0px 0px 8px 0px,
+    rgba(0, 0, 0, 0.1) 0px 20px 30px 0px;
+}
+
+.angled:hover {
+  transform: perspective(800px) rotateY(-4deg);
+}
+
 @layer base {}
 
 @layer components {
@@ -24,7 +48,7 @@ body {
   }
 
   .loading {
-    @apply box-border block absolute w-20 h-20 m-2 border-8 border-solid rounded-full animate-loader;
+    @apply box-border absolute block w-20 h-20 m-2 border-8 border-solid rounded-full animate-loader;
   }
 
   .nav-new-recipe-button {

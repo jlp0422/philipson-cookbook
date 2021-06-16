@@ -30,7 +30,7 @@ export const totalTime = {
 
 export const imageData = {
   short: 'No image provided',
-  long: 'Please provide an image'
+  long: 'Please provide an image.'
 }
 
 export const ERRORS = {

@@ -1,12 +1,15 @@
 import Link from 'next/link'
 import { upper } from '~/utils/helpers'
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, showFilters }) => {
   const hasTags = Boolean(recipe.tags.length)
 
   return (
     <Link href={`/recipes/${recipe._id}`}>
-      <a className='px-4 py-6 transition duration-300 ease-in-out bg-gray-200 rounded shadow-md sm:shadow-sm'>
+      <a
+        className='px-4 py-6 transition duration-300 ease-in-out bg-gray-200 rounded shadow-md sm:shadow-sm hover-card'
+        style={showFilters ? { zIndex: -1 } : {}}
+      >
         <img
           className='object-cover object-center w-full h-40 mb-2 rounded cursor-pointer'
           src={recipe.imageUrl}
