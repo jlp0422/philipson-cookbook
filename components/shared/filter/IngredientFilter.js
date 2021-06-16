@@ -4,20 +4,15 @@ import RotatingArrow from '~/components/shared/RotatingArrow'
 
 const IngredientFilter = ({ maxNumIngredients, setMaxNumIngredients }) => {
   const [showIng, setShowIng] = useState(false)
+  const ingredientOptions = [5, 10]
   const options = [
     { max: 0, label: 'Any', id: 'any', checked: !maxNumIngredients },
-    {
-      max: 5,
-      label: '5 or less',
-      id: '5-or-less',
-      checked: maxNumIngredients === 5
-    },
-    {
-      max: 10,
-      label: '10 or less',
-      id: '10-or-less',
-      checked: maxNumIngredients === 10
-    }
+    ...ingredientOptions.map(numIngredients => ({
+      max: numIngredients,
+      label: `${numIngredients} or less`,
+      id: `${numIngredients}-or-less`,
+      checked: maxNumIngredients === numIngredients
+    }))
   ]
 
   return (

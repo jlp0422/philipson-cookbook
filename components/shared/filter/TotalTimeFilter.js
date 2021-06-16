@@ -4,26 +4,15 @@ import RotatingArrow from '~/components/shared/RotatingArrow'
 
 const TotalTimeFilter = ({ maxTotalTime, setMaxTotalTime }) => {
   const [showTimeOptions, setShowTimeOptions] = useState(false)
+  const timeOptions = [30, 60, 90]
   const options = [
     { max: 0, label: 'Any', id: 'any', checked: !maxTotalTime },
-    {
-      max: 30,
-      label: '30 mins or less',
-      id: '30-mins-or-less',
-      checked: maxTotalTime === 30
-    },
-    {
-      max: 60,
-      label: '60 mins or less',
-      id: '60-mins-or-less',
-      checked: maxTotalTime === 60
-    },
-    {
-      max: 90,
-      label: '90 mins or less',
-      id: '90-mins-or-less',
-      checked: maxTotalTime === 90
-    },
+    ...timeOptions.map(time => ({
+      max: time,
+      label: `${time} mins or less`,
+      id: `${time}-mins-or-less`,
+      checked: maxTotalTime === time
+    }))
   ]
 
   return (

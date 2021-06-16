@@ -4,26 +4,15 @@ import RotatingArrow from '~/components/shared/RotatingArrow'
 
 const ServingSizeFilter = ({ maxNumServings, setMaxNumServings }) => {
   const [showServingOptions, setShowServingOptions] = useState(false)
+  const servingOptions = [4, 6, 8]
   const options = [
     { max: 0, label: 'Any', id: 'any', checked: !maxNumServings },
-    {
-      max: 4,
-      label: '4 servings or less',
-      id: '4-servings-or-less',
-      checked: maxNumServings === 4
-    },
-    {
-      max: 6,
-      label: '6 servings or less',
-      id: '6-servings-or-less',
-      checked: maxNumServings === 6
-    },
-    {
-      max: 8,
-      label: '8 servings or less',
-      id: '8-servings-or-less',
-      checked: maxNumServings === 8
-    }
+    ...servingOptions.map(servingSize => ({
+      max: servingSize,
+      label: `${servingSize} servings or less`,
+      id: `${servingSize}-servings-or-less`,
+      checked: maxNumServings === servingSize
+    }))
   ]
 
   return (

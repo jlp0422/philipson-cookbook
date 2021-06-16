@@ -16,15 +16,19 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
   return (
     <section className='py-0 mx-auto text-gray-700 sm:py-4 body-font'>
       <FilterBar {...filterProps} />
-      <GridContainer>
-        {hasRecipes ? (
-          recipes.map(recipe => <RecipeCard key={recipe._id} recipe={recipe} />)
-        ) : (
-          <div>
-            <h2>No recipes found - adjust your filters!</h2>
-          </div>
-        )}
-      </GridContainer>
+      {hasRecipes ? (
+        <GridContainer>
+          {recipes.map(recipe => (
+            <RecipeCard key={recipe._id} recipe={recipe} />
+          ))}
+        </GridContainer>
+      ) : (
+        <div className='mx-4 mt-16 text-center'>
+          <h2 className='text-xl'>
+            No recipes found - adjust your filters or try a new search!
+          </h2>
+        </div>
+      )}
     </section>
   )
 }
