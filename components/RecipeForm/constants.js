@@ -28,13 +28,19 @@ export const totalTime = {
   long: 'Please add how long it takes to make this recipe.'
 }
 
+export const imageData = {
+  short: 'No image provided',
+  long: 'Please provide an image'
+}
+
 export const ERRORS = {
   author,
   title,
   servings,
   steps,
   ingredients,
-  totalTime
+  totalTime,
+  imageData
 }
 
 export const MEASUREMENTS = {

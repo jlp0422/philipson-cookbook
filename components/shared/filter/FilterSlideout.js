@@ -2,6 +2,8 @@ import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import TAGS_QUERY from '~/graphql/queries/tags'
 import IngredientFilter from './IngredientFilter'
+import TotalTimeFilter from './TotalTimeFilter'
+import ServingSizeFilter from './ServingSizeFilter'
 import Button from '~/components/shared/Button'
 import TagFilter from './TagFilter'
 
@@ -10,11 +12,22 @@ const FilterSlideout = ({
   setSelectedTags,
   maxNumIngredients,
   setMaxNumIngredients,
+  maxTotalTime,
+  setMaxTotalTime,
+  maxNumServings,
+  setMaxNumServings,
   showFilters,
   close
 }) => {
   const [tags, setTags] = useState([])
-  const { data, loading, error } = useQuery(TAGS_QUERY, {
+
+  const setUniqueTags = data => {
+    const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
+    const uniqueTags = new Set(allTags)
+    setTags(Array.from(uniqueTags).sort())
+  }
+
+  const { data } = useQuery(TAGS_QUERY, {
     onCompleted: setUniqueTags
   })
 
@@ -23,12 +36,6 @@ const FilterSlideout = ({
       setUniqueTags(data)
     }
   }, [data])
-
-  const setUniqueTags = data => {
-    const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
-    const uniqueTags = new Set(allTags)
-    setTags(Array.from(uniqueTags).sort())
-  }
 
   const handleEscape = ev => {
     if (ev.key === 'Esc' || ev.key === 'Escape' || ev.keyCode === 27) {
@@ -60,6 +67,14 @@ const FilterSlideout = ({
       <IngredientFilter
         maxNumIngredients={maxNumIngredients}
         setMaxNumIngredients={setMaxNumIngredients}
+      />
+      <TotalTimeFilter
+        maxTotalTime={maxTotalTime}
+        setMaxTotalTime={setMaxTotalTime}
+      />
+      <ServingSizeFilter
+        maxNumServings={maxNumServings}
+        setMaxNumServings={setMaxNumServings}
       />
       <Button className='py-2 my-4' onClick={close} color='red'>
         Close

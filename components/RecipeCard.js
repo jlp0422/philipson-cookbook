@@ -6,12 +6,10 @@ const RecipeCard = ({ recipe }) => {
 
   return (
     <Link href={`/recipes/${recipe._id}`}>
-      <a className='px-4 py-6 bg-gray-200 rounded shadow-md transition duration-300 ease-in-out sm:shadow-sm'>
+      <a className='px-4 py-6 transition duration-300 ease-in-out bg-gray-200 rounded shadow-md sm:shadow-sm'>
         <img
           className='object-cover object-center w-full h-40 mb-2 rounded cursor-pointer'
-          src={
-            recipe.imageUrl || 'https://dummyimage.com/720x400/F3F4F7/8693ac'
-          }
+          src={recipe.imageUrl}
           alt='content'
         />
         <span className='mb-1 text-xs font-medium tracking-wider text-blue-500'>

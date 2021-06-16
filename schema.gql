@@ -36,7 +36,7 @@ type Recipe {
   description: String
   ingredients: [Ingredient!]! @relation
   steps: [String!]!
-  imageUrl: String
+  imageUrl: String!
   source: String
   servings: String!
   totalTime: String!
@@ -46,8 +46,9 @@ type Recipe {
 }
 
 type Query {
-  recipes: [Recipe]!
-  ingredients: [Ingredient]!
-  comments: [Comment]!
+  recipesByTimestampDesc: [Recipe!]! @resolver(name: "all_recipes_by_timestamp", paginated: true)
+  recipes: [Recipe!]!
+  ingredients: [Ingredient!]!
+  comments: [Comment!]!
   # recipesByIngredients(ingredients: [String!]!): [Recipe]!
 }
