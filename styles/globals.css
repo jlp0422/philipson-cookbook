@@ -9,3 +9,29 @@ body {
 }
 
 @layer base {}
+
+@layer components {
+  .recipe-section {
+    @apply flex flex-col items-center w-full pt-0 mb-8 text-left lg:flex-grow md:w-1/2 lg:mr-20 lg:pr-24 md:pr-16 md:items-start md:text-left md:mb-0;
+  }
+
+  .recipe-section-header {
+    @apply mb-4 text-2xl font-bold tracking-tighter text-center text-blue-800 lg:text-left lg:text-4xl;
+  }
+
+  .recipe-flex-wrapper {
+    @apply container flex flex-col items-start px-5 py-8 mx-auto lg:px-20 md:flex-row;
+  }
+
+  .loading {
+    @apply box-border block absolute w-20 h-20 m-2 border-8 border-solid rounded-full animate-loader;
+  }
+
+  .nav-new-recipe-button {
+    @apply items-center px-4 py-2 text-sm font-semibold text-green-700 transition duration-500 ease-in-out transform bg-white border border-green-700 rounded-lg lg:inline-flex lg:ml-auto lg:mt-px hover:bg-green-700 hover:text-white focus:ring focus:outline-none;
+  }
+
+  .nav-link {
+    @apply block sm:inline-block sm:mr-8 text-base sm:text-sm rounded font-semibold text-gray-600 py-1.5 hover:bg-blue-300 px-2 transition duration-300 ease-in-out transform;
+  }
+}

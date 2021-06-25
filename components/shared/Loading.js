@@ -1,6 +1,3 @@
-const divClass =
-  'box-border block absolute w-20 h-20 m-2 border-8 border-solid rounded-full animate-loader'
-
 const borderStyles = color => ({
   borderTopColor: color,
   borderLeftColor: 'transparent',
@@ -29,11 +26,13 @@ const Loading = ({ size = 'medium', modifier = 'blue', styles }) => {
   const sizes = SIZES[size]
   const color = COLORS[modifier]
   return (
-    <div className={`relative flex items-center w-28 mx-auto my-2 h-28 ${styles}`}>
+    <div
+      className={`relative flex items-center w-28 mx-auto my-2 h-28 ${styles}`}
+    >
       {delays.map(animationDelay => (
         <div
           key={animationDelay}
-          className={`${divClass} ${sizes}`}
+          className={`loading ${sizes}`}
           style={{ animationDelay, ...borderStyles(color) }}
         ></div>
       ))}

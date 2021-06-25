@@ -1,21 +1,14 @@
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { useState } from 'react'
+import Button from '~/components/shared/Button'
+import FormArea from '~/components/shared/form/FormArea'
 import FormInput from '~/components/shared/form/FormInput'
 import Head from '~/components/shared/Head'
+import Loading from '~/components/shared/Loading'
 import CREATE_COMMENT from '~/graphql/mutations/createComment'
 import RECIPE_QUERY from '~/graphql/queries/recipe'
 import { createPageTitle, isLink, lower, upper } from '~/utils/helpers'
-import Button from '~/components/shared/Button'
-import FormArea from '~/components/shared/form/FormArea'
-import Loading from '~/components/shared/Loading'
-
-const sectionContainerStyles =
-  'flex flex-col items-center w-full pt-0 mb-8 text-left lg:flex-grow md:w-1/2 lg:mr-20 lg:pr-24 md:pr-16 md:items-start md:text-left md:mb-0'
-const sectionHeaderStyles =
-  'mb-4 text-2xl font-bold tracking-tighter text-center text-blue-800 lg:text-left lg:text-4xl'
-const flexWrapperStyles =
-  'container flex flex-col items-start px-5 py-8 mx-auto lg:px-20 md:flex-row'
 
 const Recipe = ({ recipeId, data, loading, error }) => {
   const [comment, setComment] = useState({ text: '', author: '' })
@@ -112,17 +105,17 @@ const Recipe = ({ recipeId, data, loading, error }) => {
             />
           </div>
         </div>
-        <div className={flexWrapperStyles}>
-          <div className={sectionContainerStyles}>
-            <h3 className={sectionHeaderStyles}>Ingredients</h3>
+        <div className='recipe-flex-wrapper'>
+          <div className='recipe-section'>
+            <h3 className='recipe-section-header'>Ingredients</h3>
             {recipe.ingredients.data.map(({ amount, item, measurement }) => (
               <p className='py-1' key={item}>
                 {amount} {lower(measurement)} {item}
               </p>
             ))}
           </div>
-          <div className={sectionContainerStyles}>
-            <h3 className={sectionHeaderStyles}>Steps</h3>
+          <div className='recipe-section'>
+            <h3 className='recipe-section-header'>Steps</h3>
             {recipe.steps.map((step, index) => (
               <p className='py-1' key={index}>
                 {`${index + 1}) ${step}`}
@@ -130,14 +123,14 @@ const Recipe = ({ recipeId, data, loading, error }) => {
             ))}
           </div>
         </div>
-        <div className={flexWrapperStyles}>
-          <div className={sectionContainerStyles}>
-            <h3 className={sectionHeaderStyles}>Notes</h3>
+        <div className='recipe-flex-wrapper'>
+          <div className='recipe-section'>
+            <h3 className='recipe-section-header'>Notes</h3>
             <p>{recipe.notes}</p>
           </div>
           {recipe.source ? (
-            <div className={sectionContainerStyles}>
-              <h3 className={sectionHeaderStyles}>Source</h3>
+            <div className='recipe-section'>
+              <h3 className='recipe-section-header'>Source</h3>
               {isLink(recipe.source) ? (
                 <a
                   className='text-blue-500 hover:text-blue-700'
@@ -152,9 +145,9 @@ const Recipe = ({ recipeId, data, loading, error }) => {
             </div>
           ) : null}
         </div>
-        <div className={flexWrapperStyles}>
-          <div className={`${sectionContainerStyles} md:w-full`}>
-            <h3 className={sectionHeaderStyles}>Comments</h3>
+        <div className='recipe-flex-wrapper'>
+          <div className='recipe-section md:w-full'>
+            <h3 className='recipe-section-header'>Comments</h3>
             {recipe.comments.data.length ? (
               recipe.comments.data.map((comment, index) => (
                 <div
