@@ -8,11 +8,6 @@ import HamburgerIcon from '~/icons/Hamburger'
 import NakedXIcon from '~/icons/NakedX'
 import { getRandomId } from '~/utils/helpers'
 
-const newRecipeClass =
-  'items-center px-4 py-2 text-sm font-semibold text-green-700 transition duration-500 ease-in-out transform bg-white border border-green-700 rounded-lg lg:inline-flex lg:ml-auto lg:mt-px hover:bg-green-700 hover:text-white focus:ring focus:outline-none'
-const navLink =
-  'block sm:inline-block sm:mr-8 text-base sm:text-sm rounded font-semibold text-gray-600 py-1.5 hover:bg-blue-300 px-2 transition duration-300 ease-in-out transform'
-
 const Navigation = ({ title }) => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
@@ -43,9 +38,9 @@ const Navigation = ({ title }) => {
 
   return (
     <header className='sticky top-0 z-50 text-gray-700 bg-blue-100 border-blue-300 sm:border-t sm:border-b body-font'>
-      <nav className='flex-col items-center justify-between px-2 py-2 border-b border-blue-300 max-w-screen-xl sm:px-0 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
+      <nav className='flex-col items-center justify-between max-w-screen-xl px-2 py-2 border-b border-blue-300 sm:px-0 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
         <div
-          className='py-1 grid sm:hidden'
+          className='grid py-1 sm:hidden'
           style={{ gridTemplateColumns: '50px 1fr 50px' }}
         >
           <button
@@ -67,10 +62,10 @@ const Navigation = ({ title }) => {
           }`}
         >
           <Link href='/'>
-            <a className={`${navLink} ${checkActivePath(asPath, '/')}`}>Home</a>
+            <a className={`nav-link ${checkActivePath(asPath, '/')}`}>Home</a>
           </Link>
           <Link href='/recipes'>
-            <a className={`${navLink} ${checkActivePath(asPath, '/recipes')}`}>
+            <a className={`nav-link ${checkActivePath(asPath, '/recipes')}`}>
               All Recipes
             </a>
           </Link>
@@ -80,7 +75,7 @@ const Navigation = ({ title }) => {
           <Link href='/recipes/new'>
             <a className='block sm:hidden'>
               <button
-                className={`${navLink} ${checkActivePath(
+                className={`nav-link ${checkActivePath(
                   asPath,
                   '/recipes/new'
                 )}`}
@@ -92,7 +87,7 @@ const Navigation = ({ title }) => {
         </div>
         <Link href='/recipes/new'>
           <a className='hidden sm:block'>
-            <button className={newRecipeClass}>New Recipe</button>
+            <button className="nav-new-recipe-button">New Recipe</button>
           </a>
         </Link>
       </nav>

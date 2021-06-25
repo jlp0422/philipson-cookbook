@@ -1,7 +1,4 @@
-import dynamic from 'next/dynamic'
 import Navigation from './Navigation'
-
-// const Navigation = dynamic(() => import('./Navigation'))
 
 const Layout = ({ title, children }) => {
   return (
