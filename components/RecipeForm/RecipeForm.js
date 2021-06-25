@@ -9,7 +9,7 @@ import Loading from '~/components/shared/Loading'
 import CREATE_RECIPE from '~/graphql/mutations/createRecipe'
 import NakedX from '~/icons/NakedX'
 import Upload from '~/icons/Upload'
-import { getImageMin } from '~/utils/helpers'
+import { getImageMin, isEmpty } from '~/utils/helpers'
 import {
   RESET_FORM,
   SUBMIT_ERROR,
@@ -206,6 +206,13 @@ const RecipeForm = () => {
 
   return (
     <form className='mx-auto mt-4 prose' onSubmit={onFormSubmit}>
+      {isEmpty(formState.errors) ? null : (
+        <FormError
+          error={{
+            long: 'Your recipe has some errors, please correct them and submit again!'
+          }}
+        />
+      )}
       <FormInput
         label='Author'
         id='author'

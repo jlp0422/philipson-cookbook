@@ -15,6 +15,8 @@ enum Measurement {
   GRAM
   KILOGRAM
   EACH
+  JAR
+  BOX
 }
 
 type Comment {
