@@ -208,6 +208,7 @@ const RecipeForm = () => {
     <form className='mx-auto mt-4 prose' onSubmit={onFormSubmit}>
       {isEmpty(formState.errors) ? null : (
         <FormError
+          size="text-xl"
           error={{
             long: 'Your recipe has some errors, please correct them and submit again!'
           }}
