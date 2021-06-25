@@ -253,6 +253,9 @@ const RecipeForm = () => {
               onChange={onChangeIngredient('amount', index)}
               type='number'
               placeholder='Amount'
+              inputArgs={{
+                min: 0
+              }}
             />
             <label className='block' htmlFor='measurement'>
               <select
@@ -311,6 +314,10 @@ const RecipeForm = () => {
         onChange={updateText('totalTime')}
         labelStyles='mb-4'
         error={formState.errors['totalTime']}
+        inputArgs={{
+          min: 0,
+          step: 5
+        }}
       />
       <FormInput
         label='Servings'
@@ -320,6 +327,10 @@ const RecipeForm = () => {
         onChange={updateText('servings')}
         labelStyles='mb-4'
         error={formState.errors['servings']}
+        inputArgs={{
+          min: 0,
+          step: 1
+        }}
       />
       <FormInput
         label='Source'

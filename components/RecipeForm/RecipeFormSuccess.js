@@ -5,10 +5,11 @@ const RecipeFormSuccess = ({ newRecipe, onCreateAnother }) => {
     <div className='flex flex-col items-center justify-center w-4/5 px-6 py-10 mx-auto bg-blue-100 rounded-md sm:mt-6'>
       <h3 className='mb-4 text-3xl font-semibold'>Recipe Created!</h3>
       <p className='my-4 text-xl text-center'>
-        Your recipe <span className='font-semibold'>{newRecipe.title}</span> was
-        created successfully.
+        Your recipe{' '}
+        <span className='font-semibold'>{newRecipe.createRecipe.title}</span>{' '}
+        was created successfully.
       </p>
-      <Link href={`/recipes/${newRecipe._id}`}>
+      <Link href={`/recipes/${newRecipe.createRecipe._id}`}>
         <a className='my-2 text-lg font-semibold text-blue-600 hover:text-blue-700'>
           View your new recipe
         </a>
