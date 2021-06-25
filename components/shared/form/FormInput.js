@@ -10,7 +10,8 @@ const FormInput = ({
   placeholder = '',
   labelStyles = '',
   error = null,
-  onClear
+  onClear,
+  inputArgs
 }) => {
   return (
     <label className={`block ${labelStyles}`} htmlFor={id}>
@@ -24,6 +25,7 @@ const FormInput = ({
         onChange={onChange}
         name={id}
         id={id}
+        {...inputArgs}
       />
       {onClear && (
         <button
