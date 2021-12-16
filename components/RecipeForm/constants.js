@@ -44,11 +44,13 @@ export const ERRORS = {
 }
 
 export const MEASUREMENTS = {
+  BOX: 'BOX',
   CUP: 'CUP',
   EACH: 'EACH',
   GALLON: 'GAL',
   GRAM: 'GRAM',
   'FLUID OUNCE': 'FL OZ',
+  JAR: 'JAR',
   KILOGRAM: 'KG',
   LITER: 'LITER',
   MILLILITER: 'ML',
