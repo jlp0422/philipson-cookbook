@@ -1,11 +1,11 @@
+import { useQuery } from '@apollo/client'
+import { useMemo, useState } from 'react'
 import RecipeList from '~/components/RecipeList'
 import Head from '~/components/shared/Head'
 import Layout from '~/components/shared/Layout'
 import PageHeader from '~/components/shared/PageHeader'
 import RECIPES_QUERY from '~/graphql/queries/recipes'
-import { useQuery } from '@apollo/client'
-import { useMemo, useState } from 'react'
-import { createPageTitle } from '~/utils/helpers'
+import { createPageTitle, lower } from '~/utils/helpers'
 
 const Recipes = () => {
   const pageTitle = 'All Recipes'
@@ -52,8 +52,8 @@ const Recipes = () => {
     if (searchQuery.length > 2) {
       recipes = recipes.filter(
         recipe =>
-          recipe.title.includes(searchQuery) ||
-          recipe.description.includes(searchQuery)
+          lower(recipe.title).includes(lower(searchQuery)) ||
+          lower(recipe.description).includes(lower(searchQuery))
       )
     }
 
