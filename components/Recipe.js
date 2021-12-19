@@ -161,7 +161,7 @@ const Recipe = ({ recipeId, data, loading, error }) => {
                 </div>
               ))
             ) : (
-              <div>
+              <div className='text-center sm:text-left'>
                 <p>No comments yet, be the first!</p>
                 {!showAddComment && (
                   <Button

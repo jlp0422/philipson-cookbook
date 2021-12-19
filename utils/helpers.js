@@ -36,3 +36,5 @@ export const createPageTitle = title => `${title} | Philipson Cookbook`
 
 export const getImageMin = (imageData, key) =>
   Math.min(imageData[key] / imageData.divisor)
+
+export const isEmpty = obj => Object.keys(obj).length === 0

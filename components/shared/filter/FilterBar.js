@@ -1,13 +1,16 @@
-import { useState } from 'react'
-import FilterIcon from '~/icons/Filter'
-import FilterSlideout from './FilterSlideout'
 import Button from '~/components/shared/Button'
 import FormInput from '~/components/shared/form/FormInput'
+import FilterIcon from '~/icons/Filter'
+import FilterSlideout from './FilterSlideout'
 
-const FilterBar = ({ searchQuery, setSearchQuery, ...props }) => {
-  const [showFilters, setShowFilters] = useState(false)
+const FilterBar = ({
+  showFilters,
+  setShowFilters,
+  searchQuery,
+  setSearchQuery,
+  ...props
+}) => {
   const closeFilters = () => setShowFilters(false)
-
   return (
     <section className='mb-4'>
       <div className='flex items-center'>

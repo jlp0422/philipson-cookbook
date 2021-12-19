@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import FilterBar from '~/components/shared/filter/FilterBar'
 import RecipeCard from '~/components/RecipeCard'
 import Loading from '~/components/shared/Loading'
 import GridContainer from '~/components/shared/GridContainer'
 
 const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
+  const [showFilters, setShowFilters] = useState(false)
   const hasRecipes = recipes.length > 0
   if (loading) {
     return <Loading modifier='orange' size='large' styles='mt-16' />
@@ -15,11 +17,19 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
 
   return (
     <section className='py-0 mx-auto text-gray-700 sm:py-4 body-font'>
-      <FilterBar {...filterProps} />
+      <FilterBar
+        {...filterProps}
+        showFilters={showFilters}
+        setShowFilters={setShowFilters}
+      />
       {hasRecipes ? (
         <GridContainer>
           {recipes.map(recipe => (
-            <RecipeCard key={recipe._id} recipe={recipe} />
+            <RecipeCard
+              key={recipe._id}
+              recipe={recipe}
+              showFilters={showFilters}
+            />
           ))}
         </GridContainer>
       ) : (

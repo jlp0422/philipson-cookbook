@@ -30,7 +30,7 @@ export const totalTime = {
 
 export const imageData = {
   short: 'No image provided',
-  long: 'Please provide an image'
+  long: 'Please provide an image.'
 }
 
 export const ERRORS = {
@@ -44,11 +44,13 @@ export const ERRORS = {
 }
 
 export const MEASUREMENTS = {
+  BOX: 'BOX',
   CUP: 'CUP',
   EACH: 'EACH',
   GALLON: 'GAL',
   GRAM: 'GRAM',
   'FLUID OUNCE': 'FL OZ',
+  JAR: 'JAR',
   KILOGRAM: 'KG',
   LITER: 'LITER',
   MILLILITER: 'ML',
