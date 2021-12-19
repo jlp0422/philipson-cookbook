@@ -263,7 +263,7 @@ const RecipeForm = () => {
               placeholder='Amount'
               inputArgs={{
                 min: 0,
-                ste: 0.01
+                step: "any"
               }}
             />
             <label className='block' htmlFor='measurement'>
