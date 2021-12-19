@@ -1,9 +1,9 @@
 const COLORS = {
-  yellow: [
-    'bg-yellow-500',
-    'focus:ring-yellow-400',
-    'hover:bg-yellow-700',
-    'bg-yellow-400'
+  amber: [
+    'bg-amber-500',
+    'focus:ring-amber-400',
+    'hover:bg-amber-700',
+    'bg-amber-400'
   ],
   red: ['bg-red-500', 'focus:ring-red-400', 'hover:bg-red-700', 'bg-red-400'],
   green: [
