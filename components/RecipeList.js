@@ -15,6 +15,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
   } = filterProps
   const [showFilters, setShowFilters] = useState(false)
   const hasRecipes = recipes.length > 0
+
   if (loading) {
     return <Loading modifier='orange' size='large' styles='mt-16' />
   }

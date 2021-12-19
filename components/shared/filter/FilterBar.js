@@ -2,6 +2,7 @@ import Button from '~/components/shared/Button'
 import FormInput from '~/components/shared/form/FormInput'
 import FilterIcon from '~/icons/Filter'
 import FilterSlideout from './FilterSlideout'
+import SelectedFilters from './SelectedFilters'
 
 const FilterBar = ({
   showFilters,
@@ -33,6 +34,7 @@ const FilterBar = ({
           onClear={() => setSearchQuery('')}
         />
       </div>
+      <SelectedFilters {...props} />
       {showFilters && (
         <button
           className='fixed inset-0 w-full h-full overflow-hidden bg-gray-500 cursor-default opacity-40'
@@ -40,7 +42,6 @@ const FilterBar = ({
           tabIndex='-1'
         />
       )}
-
       <FilterSlideout
         {...props}
         showFilters={showFilters}
