@@ -3,8 +3,16 @@ import FilterBar from '~/components/shared/filter/FilterBar'
 import RecipeCard from '~/components/RecipeCard'
 import Loading from '~/components/shared/Loading'
 import GridContainer from '~/components/shared/GridContainer'
+import Button from '~/components/shared/Button'
 
 const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
+  const {
+    setSelectedTags,
+    setSearchQuery,
+    setMaxNumIngredients,
+    setMaxTotalTime,
+    setMaxNumServings
+  } = filterProps
   const [showFilters, setShowFilters] = useState(false)
   const hasRecipes = recipes.length > 0
   if (loading) {
@@ -37,6 +45,19 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
           <h2 className='text-xl'>
             No recipes found - adjust your filters or try a new search!
           </h2>
+          <Button
+            color="blue"
+            className="py-2 mt-4 text-sm"
+            onClick={() => {
+              setSelectedTags([])
+              setSearchQuery('')
+              setMaxNumIngredients(0)
+              setMaxTotalTime(0)
+              setMaxNumServings(0)
+            }}
+          >
+            Reset filters
+          </Button>
         </div>
       )}
     </section>
