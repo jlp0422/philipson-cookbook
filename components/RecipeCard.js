@@ -23,7 +23,16 @@ const RecipeCard = ({ recipe, showFilters }) => {
             {recipe.title}
           </h2>
         </div>
-        <p className='mb-4 text-base leading-relaxed'>{recipe.description}</p>
+        <p
+          className='overflow-hidden text-base leading-relaxed'
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: '5',
+            WebkitBoxOrient: 'vertical'
+          }}
+        >
+          {recipe.description}
+        </p>
       </a>
     </Link>
   )
