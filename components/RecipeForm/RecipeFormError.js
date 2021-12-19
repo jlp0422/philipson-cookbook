@@ -10,8 +10,8 @@ const RecipeFormError = ({ onCloseError, error }) => {
         className='max-w-full my-6 overflow-hidden'
         style={{
           display: '-webkit-box',
-          '-webkit-line-clamp': '5',
-          '-webkit-box-orient': 'vertical'
+          WebkitLineClamp: '5',
+          WebkitBoxOrient: 'vertical'
         }}
       >
         <span className='font-semibold'>Error message:</span> {error.message}
