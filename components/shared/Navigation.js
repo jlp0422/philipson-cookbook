@@ -50,7 +50,7 @@ const Navigation = ({ title }) => {
           >
             {isOpen ? <NakedXIcon /> : <HamburgerIcon />}
           </button>
-          <h3 className='my-auto overflow-hidden text-xl text-center text-gray-700 overflow-ellipsis whitespace-nowrap'>
+          <h3 className='my-auto overflow-hidden text-xl text-center text-gray-700 text-ellipsis whitespace-nowrap'>
             {title}
           </h3>
         </div>

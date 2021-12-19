@@ -15,7 +15,7 @@ const FilterBar = ({
     <section className='mb-4'>
       <div className='flex items-center'>
         <Button
-          color='yellow'
+          color='amber'
           className='w-16 mr-4 sm:w-24 h-11'
           onClick={() => setShowFilters(!showFilters)}
         >
