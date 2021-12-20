@@ -43,26 +43,46 @@ export const ERRORS = {
   imageData
 }
 
-export const MEASUREMENTS = {
-  BOX: 'BOX',
-  CUP: 'CUP',
-  EACH: 'EACH',
-  GALLON: 'GAL',
-  GRAM: 'GRAM',
-  JAR: 'JAR',
-  KILOGRAM: 'KG',
-  LITER: 'LITER',
-  MILLILITER: 'ML',
-  OUNCE: 'OZ',
-  PACKAGE: 'PKG',
-  PINCH: 'PINCH',
-  PINT: 'PINT',
-  POUND: 'LB',
-  QUART: 'QT',
-  TABLESPOON: 'TBSP',
-  TEASPOON: 'TSP',
-  WHOLE: 'WHOLE'
-}
+const BOX = 'BOX'
+const CUP = 'CUP'
+const EACH = 'EACH'
+const GALLON = 'GALLON'
+const GRAM = 'GRAM'
+const JAR = 'JAR'
+const KILOGRAM = 'KILOGRAM'
+const LITER = 'LITER'
+const MILLILITER = 'MILLILITER'
+const OUNCE = 'OUNCE'
+const PACKAGE = 'PACKAGE'
+const PINCH = 'PINCH'
+const PINT = 'PINT'
+const POUND = 'POUND'
+const QUART = 'QUART'
+const TABLESPOON = 'TABLESPOON'
+const TEASPOON = 'TEASPOON'
+const WHOLE = 'WHOLE'
+const NOT_APPLICABLE = 'NOT_APPLICABLE'
+
+export const MEASUREMENTS = [
+  BOX,
+  CUP,
+  EACH,
+  GALLON,
+  GRAM,
+  JAR,
+  KILOGRAM,
+  LITER,
+  MILLILITER,
+  OUNCE,
+  PACKAGE,
+  PINCH,
+  PINT,
+  POUND,
+  QUART,
+  TABLESPOON,
+  TEASPOON,
+  WHOLE
+]
 
 export const STATUSES = {
   IDLE: 'IDLE',
@@ -81,7 +101,7 @@ export const initialState = {
     {
       amount: '',
       item: '',
-      measurement: 'NOT_APPLICABLE'
+      measurement: NOT_APPLICABLE
     }
   ],
   steps: [''],

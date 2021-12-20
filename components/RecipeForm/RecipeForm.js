@@ -17,7 +17,12 @@ import {
   UPDATE_FIELD,
   UPDATE_STATUS
 } from './actions'
-import { initialState, MEASUREMENTS, STATUSES } from './constants'
+import {
+  initialState,
+  MEASUREMENTS,
+  NOT_APPLICABLE,
+  STATUSES
+} from './constants'
 import {
   formDataToQueryInput,
   getImageDivisor,
@@ -57,10 +62,8 @@ const RecipeForm = () => {
 
   const renderIngredientMeasurements = () => (
     <>
-      <option value='NOT_APPLICABLE'>
-        --
-      </option>
-      {Object.keys(MEASUREMENTS).map(m => (
+      <option value={NOT_APPLICABLE}>--</option>
+      {MEASUREMENTS.map(m => (
         <option key={m} value={m}>
           {m}
         </option>
@@ -245,7 +248,7 @@ const RecipeForm = () => {
           {addAnotherButton('ingredients', {
             amount: '',
             item: '',
-            measurement: 'NOT_APPLICABLE'
+            measurement: NOT_APPLICABLE
           })}
         </div>
         {renderError('ingredients')}
