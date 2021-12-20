@@ -81,7 +81,7 @@ export const initialState = {
     {
       amount: '',
       item: '',
-      measurement: ''
+      measurement: 'NOT_APPLICABLE'
     }
   ],
   steps: [''],

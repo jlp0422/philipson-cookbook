@@ -17,6 +17,7 @@ enum Measurement {
   JAR
   BOX
   WHOLE
+  NOT_APPLICABLE
 }
 
 type Comment {

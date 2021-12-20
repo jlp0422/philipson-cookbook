@@ -10,14 +10,15 @@ const formatAmount = amount => {
 
 const getServings = servings => {
   const cleanServings = servings.replace(/\s/g, '')
-  let finalServings = 0
+  let finalServings = null
   if (cleanServings.includes('to')) {
-    finalServings = +cleanServings.split('to')[1]
+    finalServings = cleanServings.split('to')[1]
   } else if (cleanServings.includes('-')) {
-    finalServings = +cleanServings.split('-')[1]
+    finalServings = cleanServings.split('-')[1]
   } else {
-    finalServings = +cleanServings
+    finalServings = cleanServings
   }
+  return finalServings
 }
 
 export const formDataToQueryInput = ({

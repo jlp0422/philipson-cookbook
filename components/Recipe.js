@@ -108,11 +108,22 @@ const Recipe = ({ recipeId, data, loading, error }) => {
         <div className='recipe-flex-wrapper'>
           <div className='recipe-section'>
             <h3 className='recipe-section-header'>Ingredients</h3>
-            {recipe.ingredients.data.map(({ amount, item, measurement }) => (
-              <p className='py-1' key={item}>
-                {amount} {lower(measurement)} {item}
-              </p>
-            ))}
+            {recipe.ingredients.data.map(({ amount, item, measurement }) => {
+              const isUnmeasured = measurement === 'NOT_APPLICABLE'
+              return (
+                <p className='py-1' key={item}>
+                  {isUnmeasured ? (
+                    <>
+                      {amount} {item}
+                    </>
+                  ) : (
+                    <>
+                      {amount} {lower(measurement)} {item}
+                    </>
+                  )}
+                </p>
+              )
+            })}
           </div>
           <div className='recipe-section'>
             <h3 className='recipe-section-header'>Steps</h3>

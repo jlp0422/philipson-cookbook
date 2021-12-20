@@ -57,8 +57,8 @@ const RecipeForm = () => {
 
   const renderIngredientMeasurements = () => (
     <>
-      <option disabled value=''>
-        Select...
+      <option value='NOT_APPLICABLE'>
+        --
       </option>
       {Object.keys(MEASUREMENTS).map(m => (
         <option key={m} value={m}>
@@ -245,7 +245,7 @@ const RecipeForm = () => {
           {addAnotherButton('ingredients', {
             amount: '',
             item: '',
-            measurement: ''
+            measurement: 'NOT_APPLICABLE'
           })}
         </div>
         {renderError('ingredients')}
