@@ -15,6 +15,9 @@ const formatAmount = amount => {
 }
 
 const getServings = servings => {
+  // do i even want to format this?
+  // maybe i only do this on the filtering
+  // to get the max value
   const cleanServings = servings.replace(/\s/g, '')
   let finalServings = null
   if (cleanServings.includes('to')) {
