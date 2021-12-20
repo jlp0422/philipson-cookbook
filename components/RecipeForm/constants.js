@@ -10,7 +10,7 @@ export const title = {
 
 export const servings = {
   short: 'No servings',
-  long: 'Please add a serving size.'
+  long: 'Please add how many servings this dish makes.'
 }
 
 export const steps = {
