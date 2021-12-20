@@ -2,6 +2,12 @@ import { STATUSES } from './constants'
 
 const formatAmount = amount => {
   if (amount.includes('/')) {
+    if (amount.includes(' ')) {
+      const [num, frac] = amount.split(' ')
+      const [preDec, postDec] = frac.split('/')
+      const fracValue = +preDec / +postDec
+      return +num + fracValue
+    }
     const [preDec, postDec] = amount.split('/')
     return +preDec / +postDec
   }
