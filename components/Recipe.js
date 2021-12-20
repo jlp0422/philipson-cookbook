@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client'
+import Fraction from 'fraction.js'
 import Image from 'next/image'
 import { useState } from 'react'
 import Button from '~/components/shared/Button'
@@ -110,15 +111,17 @@ const Recipe = ({ recipeId, data, loading, error }) => {
             <h3 className='recipe-section-header'>Ingredients</h3>
             {recipe.ingredients.data.map(({ amount, item, measurement }) => {
               const isUnmeasured = measurement === 'NOT_APPLICABLE'
+              const rawFraction = new Fraction(amount)
+              const fraction = rawFraction.toFraction(true)
               return (
                 <p className='py-1' key={item}>
                   {isUnmeasured ? (
                     <>
-                      {amount} {item}
+                      {fraction} {item}
                     </>
                   ) : (
                     <>
-                      {amount} {lower(measurement)} {item}
+                      {fraction} {lower(measurement)} {item}
                     </>
                   )}
                 </p>
