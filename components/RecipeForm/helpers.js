@@ -1,5 +1,25 @@
 import { STATUSES } from './constants'
 
+const formatAmount = amount => {
+  if (amount.includes('/')) {
+    const [preDec, postDec] = amount.split('/')
+    return +preDec / +postDec
+  }
+  return +amount
+}
+
+const getServings = servings => {
+  const cleanServings = servings.replace(/\s/g, '')
+  let finalServings = 0
+  if (cleanServings.includes('to')) {
+    finalServings = +cleanServings.split('to')[1]
+  } else if (cleanServings.includes('-')) {
+    finalServings = +cleanServings.split('-')[1]
+  } else {
+    finalServings = +cleanServings
+  }
+}
+
 export const formDataToQueryInput = ({
   author,
   title,
@@ -21,12 +41,12 @@ export const formDataToQueryInput = ({
       create: ingredients.map(({ amount, item, measurement }) => ({
         item,
         measurement: measurement.split(' ').join('_'),
-        amount: Number(amount)
+        amount: formatAmount(amount)
       }))
     },
     steps,
     totalTime,
-    servings,
+    servings: getServings(servings),
     imageUrl: imageData.url,
     source,
     tags,

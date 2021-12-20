@@ -12,7 +12,7 @@ const Navigation = ({ title }) => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
   const { asPath, pathname, query } = router
-  const [getAllRecipeIds, { loading }] = useLazyQuery(RECIPES_BY_ID, {
+  const [getAllRecipeIds] = useLazyQuery(RECIPES_BY_ID, {
     onCompleted: data => routeToRandomRecipe(data)
   })
 
@@ -33,16 +33,21 @@ const Navigation = ({ title }) => {
     router.push(`/recipes/${randomRecipeId}`)
   }
 
+  const onNewRecipe = () => {
+    if (pathname === '/recipes/new') {
+      router.reload()
+    } else {
+      router.push('/recipes/new')
+    }
+  }
+
   const checkActivePath = (current, pathToCheck) =>
     current === pathToCheck ? 'bg-blue-200' : 'bg-blue-100'
 
   return (
     <header className='sticky top-0 z-50 text-gray-700 bg-blue-100 border-blue-300 sm:border-t sm:border-b body-font'>
       <nav className='flex-col items-center justify-between max-w-screen-xl px-2 py-2 border-b border-blue-300 sm:px-0 sm:mx-8 sm:flex sm:items-center sm:flex-row md:mx-12 lg:mx-16 2xl:mx-auto sm:border-0'>
-        <div
-          className='grid py-1 sm:hidden'
-          style={{ gridTemplateColumns: '50px 1fr 50px' }}
-        >
+        <div className='grid py-1 sm:hidden grid-cols-[50px_1fr_50px]'>
           <button
             onClick={() => setIsOpen(!isOpen)}
             type='button'
@@ -72,24 +77,22 @@ const Navigation = ({ title }) => {
           {/*<button className={navLink} onClick={getRandomRecipe}>
             Random Recipe
           </button>*/}
-          <Link href='/recipes/new'>
-            <a className='block sm:hidden'>
-              <button
-                className={`nav-link ${checkActivePath(
-                  asPath,
-                  '/recipes/new'
-                )}`}
-              >
-                New Recipe
-              </button>
-            </a>
-          </Link>
+          <button
+            onClick={onNewRecipe}
+            className={`nav-link block sm:hidden ${checkActivePath(
+              asPath,
+              '/recipes/new'
+            )}`}
+          >
+            New Recipe
+          </button>
         </div>
-        <Link href='/recipes/new'>
-          <a className='hidden sm:block'>
-            <button className="nav-new-recipe-button">New Recipe</button>
-          </a>
-        </Link>
+        <button
+          className='hidden sm:block nav-new-recipe-button'
+          onClick={onNewRecipe}
+        >
+          New Recipe
+        </button>
       </nav>
     </header>
   )

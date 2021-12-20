@@ -49,7 +49,6 @@ export const MEASUREMENTS = {
   EACH: 'EACH',
   GALLON: 'GAL',
   GRAM: 'GRAM',
-  'FLUID OUNCE': 'FL OZ',
   JAR: 'JAR',
   KILOGRAM: 'KG',
   LITER: 'LITER',
@@ -61,7 +60,8 @@ export const MEASUREMENTS = {
   POUND: 'LB',
   QUART: 'QT',
   TABLESPOON: 'TBSP',
-  TEASPOON: 'TSP'
+  TEASPOON: 'TSP',
+  WHOLE: 'WHOLE'
 }
 
 export const STATUSES = {
