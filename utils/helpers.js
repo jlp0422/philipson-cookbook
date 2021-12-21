@@ -52,3 +52,14 @@ export const getMaxServings = servings => {
 
   return isNaN(finalServings) ? 0 : finalServings
 }
+
+export const formatServings = servings => {
+  const cleanedServings = servings.replace(/\s/g, '')
+  if (servings.includes('to')) {
+    return cleanedServings.split('to').join(' - ')
+  }
+  if (servings.includes('-')) {
+    return cleanedServings.split('-').join(' - ')
+  }
+  return servings
+}

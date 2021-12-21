@@ -1,9 +1,14 @@
 import Link from 'next/link'
-// import { upper } from '~/utils/helpers'
+import { formatServings } from '~/utils/helpers'
 // import Pill from '~/components/shared/Pill'
 
 const RecipeCard = ({ recipe, showFilters }) => {
   // const hasTags = Boolean(recipe.tags.length)
+
+  const detail = [
+    `${recipe.totalTime} mins`,
+    `${formatServings(recipe.servings)} servings`
+  ]
 
   return (
     <Link href={`/recipes/${recipe._id}`}>
@@ -19,6 +24,14 @@ const RecipeCard = ({ recipe, showFilters }) => {
         {/* <span className='mb-1 text-xs font-medium tracking-wider text-blue-500'>
           {hasTags ? recipe.tags.map(upper).join(', ') : <br />}
         </span> */}
+        {detail.map((detail, index) => (
+          <span
+            className='mb-1 mr-3 text-xs font-medium tracking-wider text-blue-500 uppercase last:mr-0'
+            key={index}
+          >
+            {detail}
+          </span>
+        ))}
         <div className=''>
           <h2 className='mb-0 text-xl font-semibold text-gray-700 lg:text-2xl title-font hover:text-gray-800'>
             {recipe.title}

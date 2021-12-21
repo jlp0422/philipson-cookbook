@@ -1,11 +1,12 @@
 import {
-  lower,
-  upper,
-  isLink,
-  isEmpty,
+  formatServings,
   getImageMin,
+  getMaxServings,
+  isEmpty,
   isEqualArray,
-  getMaxServings
+  isLink,
+  lower,
+  upper
 } from './helpers'
 
 // component tests: https://nextjs.org/docs/testing#jest-and-react-testing-library
@@ -104,5 +105,19 @@ describe('getMaxServings', () => {
   it('returns 0 if the finalServings is not a valid number', () => {
     expect(getMaxServings('4or8')).toBe(0)
     expect(getMaxServings('4ta8s')).toBe(0)
+  })
+})
+
+describe('formatServings', () => {
+  it('formats "to" to "-"', () => {
+    expect(formatServings('4 to 6')).toBe('4 - 6')
+    expect(formatServings('4to6')).toBe('4 - 6')
+  })
+  it('formats "-"', () => {
+    expect(formatServings('4 - 6')).toBe('4 - 6')
+    expect(formatServings('4-6')).toBe('4 - 6')
+  })
+  it('does nothing to single numbers', () => {
+    expect(formatServings('4')).toBe('4')
   })
 })
