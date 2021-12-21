@@ -14,22 +14,6 @@ export const formatAmount = amount => {
   return +amount
 }
 
-const getServings = servings => {
-  // do i even want to format this?
-  // maybe i only do this on the filtering
-  // to get the max value
-  const cleanServings = servings.replace(/\s/g, '')
-  let finalServings = null
-  if (cleanServings.includes('to')) {
-    finalServings = cleanServings.split('to')[1]
-  } else if (cleanServings.includes('-')) {
-    finalServings = cleanServings.split('-')[1]
-  } else {
-    finalServings = cleanServings
-  }
-  return finalServings
-}
-
 export const formDataToQueryInput = ({
   author,
   title,
@@ -56,7 +40,7 @@ export const formDataToQueryInput = ({
     },
     steps,
     totalTime,
-    servings: getServings(servings),
+    servings,
     imageUrl: imageData.url,
     source,
     tags,

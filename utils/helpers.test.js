@@ -4,7 +4,8 @@ import {
   isLink,
   isEmpty,
   getImageMin,
-  isEqualArray
+  isEqualArray,
+  getMaxServings
 } from './helpers'
 
 // component tests: https://nextjs.org/docs/testing#jest-and-react-testing-library
@@ -77,5 +78,31 @@ describe('isEqualArray', () => {
     expect(isEqualArray(arr1, arr3)).toBe(false)
     expect(isEqualArray(arr3, arr2)).toBe(false)
     expect(isEqualArray(arr4, arr2)).toBe(false)
+  })
+})
+
+describe('getMaxServings', () => {
+  it('returns the servings if no delimeter is found', () => {
+    expect(getMaxServings('4')).toBe(4)
+    expect(getMaxServings('12')).toBe(12)
+  })
+
+  it('returns the servings if "-" is found', () => {
+    expect(getMaxServings('4 - 6')).toBe(6)
+    expect(getMaxServings('4-6')).toBe(6)
+    expect(getMaxServings('4- 6')).toBe(6)
+    expect(getMaxServings('4 - 6 - 12')).toBe(12)
+  })
+
+  it('returns the servings if "to" is found', () => {
+    expect(getMaxServings('4 to 8')).toBe(8)
+    expect(getMaxServings('4to8')).toBe(8)
+    expect(getMaxServings('4to 8')).toBe(8)
+    expect(getMaxServings('4 to 8 to 12')).toBe(12)
+  })
+
+  it('returns 0 if the finalServings is not a valid number', () => {
+    expect(getMaxServings('4or8')).toBe(0)
+    expect(getMaxServings('4ta8s')).toBe(0)
   })
 })
