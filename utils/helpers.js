@@ -1,4 +1,4 @@
-export const isLink = source => source.match(/(^http(s?):\/\/|www\.)/)
+export const isLink = source => source.match(/(^http(s?):\/\/|^www\.)/)
 
 export const getRandomIndex = array => Math.floor(Math.random() * array.length)
 
@@ -38,3 +38,28 @@ export const getImageMin = (imageData, key) =>
   Math.min(imageData[key] / imageData.divisor)
 
 export const isEmpty = obj => Object.keys(obj).length === 0
+
+export const getMaxServings = servings => {
+  const cleanServings = servings.replace(/\s/g, '')
+  const delimeter = /to|-/g
+  let finalServings = null
+  if (cleanServings.includes('to') || cleanServings.includes('-')) {
+    const splitServings = cleanServings.split(delimeter)
+    finalServings = +splitServings[splitServings.length - 1]
+  } else {
+    finalServings = +cleanServings
+  }
+
+  return isNaN(finalServings) ? 0 : finalServings
+}
+
+export const formatServings = servings => {
+  const cleanedServings = servings.replace(/\s/g, '')
+  if (servings.includes('to')) {
+    return cleanedServings.split('to').join(' - ')
+  }
+  if (servings.includes('-')) {
+    return cleanedServings.split('-').join(' - ')
+  }
+  return servings
+}

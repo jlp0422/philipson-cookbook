@@ -3,7 +3,6 @@ enum Measurement {
   TEASPOON
   TABLESPOON
   OUNCE
-  FLUID_OUNCE
   POUND
   CUP
   PINT
@@ -17,6 +16,8 @@ enum Measurement {
   EACH
   JAR
   BOX
+  WHOLE
+  NOT_APPLICABLE
 }
 
 type Comment {

@@ -5,7 +5,7 @@ import Head from '~/components/shared/Head'
 import Layout from '~/components/shared/Layout'
 import PageHeader from '~/components/shared/PageHeader'
 import RECIPES_QUERY from '~/graphql/queries/recipes'
-import { createPageTitle, lower } from '~/utils/helpers'
+import { createPageTitle, lower, getMaxServings } from '~/utils/helpers'
 
 const Recipes = () => {
   const pageTitle = 'All Recipes'
@@ -45,7 +45,7 @@ const Recipes = () => {
 
     if (maxNumServings) {
       recipes = recipes.filter(
-        recipe => Number(recipe.servings) <= maxNumServings
+        recipe => getMaxServings(recipe.servings) <= maxNumServings
       )
     }
 

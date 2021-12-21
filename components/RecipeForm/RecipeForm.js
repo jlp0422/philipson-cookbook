@@ -17,7 +17,12 @@ import {
   UPDATE_FIELD,
   UPDATE_STATUS
 } from './actions'
-import { initialState, MEASUREMENTS, STATUSES } from './constants'
+import {
+  initialState,
+  MEASUREMENTS,
+  NOT_APPLICABLE,
+  STATUSES
+} from './constants'
 import {
   formDataToQueryInput,
   getImageDivisor,
@@ -57,10 +62,8 @@ const RecipeForm = () => {
 
   const renderIngredientMeasurements = () => (
     <>
-      <option disabled value=''>
-        Select...
-      </option>
-      {Object.keys(MEASUREMENTS).map(m => (
+      <option value={NOT_APPLICABLE}>--</option>
+      {MEASUREMENTS.map(m => (
         <option key={m} value={m}>
           {m}
         </option>
@@ -208,7 +211,7 @@ const RecipeForm = () => {
     <form className='mx-auto mt-4 prose' onSubmit={onFormSubmit}>
       {isEmpty(formState.errors) ? null : (
         <FormError
-          size="text-xl"
+          size='text-xl'
           error={{
             long: 'Your recipe has some errors, please correct them and submit again!'
           }}
@@ -245,26 +248,21 @@ const RecipeForm = () => {
           {addAnotherButton('ingredients', {
             amount: '',
             item: '',
-            measurement: ''
+            measurement: NOT_APPLICABLE
           })}
         </div>
         {renderError('ingredients')}
         {formState.ingredients.map((ing, index) => (
           <div
-            className='grid items-center gap-3 mt-2'
+            className='grid items-center gap-3 mt-2 grid-cols-[2fr_2fr_3fr_35px]'
             key={index}
-            style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) 35px' }}
           >
             <FormInput
               id='amount'
               value={ing.amount}
               onChange={onChangeIngredient('amount', index)}
-              type='number'
+              type='text'
               placeholder='Amount'
-              inputArgs={{
-                min: 0,
-                step: "any"
-              }}
             />
             <label className='block' htmlFor='measurement'>
               <select
@@ -295,12 +293,11 @@ const RecipeForm = () => {
         {renderError('steps')}
         {formState.steps.map((step, index) => (
           <div
-            className='grid items-center gap-3 mt-2'
+            className='grid items-center gap-3 mt-2 grid-cols-[minmax(0,_1fr)_35px] relative'
             key={index}
-            style={{ gridTemplateColumns: 'minmax(0, 1fr) 35px' }}
           >
             <textarea
-              className={inputClass}
+              className={`${inputClass} pl-7`}
               placeholder=''
               rows='3'
               value={step}
@@ -310,6 +307,9 @@ const RecipeForm = () => {
               id={`step-${index}`}
               name={`step-${index}`}
             />
+            <span className='absolute text-gray-500 left-2 top-2'>{`${
+              index + 1
+            })`}</span>
             {xButton('steps', index)}
           </div>
         ))}
@@ -331,15 +331,12 @@ const RecipeForm = () => {
       <FormInput
         label='Servings'
         id='servings'
-        type='number'
+        type='text'
         value={formState.servings}
         onChange={updateText('servings')}
         labelStyles='mb-4'
         error={formState.errors['servings']}
-        inputArgs={{
-          min: 0,
-          step: 1
-        }}
+        placeholder=''
       />
       <FormInput
         label='Source'
@@ -347,6 +344,7 @@ const RecipeForm = () => {
         value={formState.source}
         onChange={updateText('source')}
         labelStyles='mb-4'
+        placeholder='URL (if found online)'
       />
       <FormArea
         label='Notes'

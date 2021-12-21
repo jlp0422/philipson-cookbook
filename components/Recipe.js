@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client'
+import Fraction from 'fraction.js'
 import Image from 'next/image'
 import { useState } from 'react'
 import Button from '~/components/shared/Button'
@@ -8,7 +9,14 @@ import Head from '~/components/shared/Head'
 import Loading from '~/components/shared/Loading'
 import CREATE_COMMENT from '~/graphql/mutations/createComment'
 import RECIPE_QUERY from '~/graphql/queries/recipe'
-import { createPageTitle, isLink, lower, upper } from '~/utils/helpers'
+import {
+  createPageTitle,
+  formatServings,
+  isLink,
+  lower,
+  upper
+} from '~/utils/helpers'
+import { NOT_APPLICABLE } from './RecipeForm/constants'
 
 const Recipe = ({ recipeId, data, loading, error }) => {
   const [comment, setComment] = useState({ text: '', author: '' })
@@ -74,6 +82,11 @@ const Recipe = ({ recipeId, data, loading, error }) => {
 
   const { findRecipeByID: recipe } = data
 
+  const detail = [
+    `${recipe.totalTime} mins`,
+    `${formatServings(recipe.servings)} servings`
+  ]
+
   return (
     <>
       <Head title={createPageTitle(recipe.title)} />
@@ -82,6 +95,13 @@ const Recipe = ({ recipeId, data, loading, error }) => {
           <div className='flex flex-col items-center w-full pt-0 mb-16 text-left lg:flex-grow lg:mr-16 lg:pr-18 md:pr-12 md:items-start md:text-left md:mb-0 lg:text-center'>
             <h2 className='mb-1 text-xs font-medium tracking-wider text-blue-500 title-font'>
               {recipe.tags.map(upper).join(', ')}
+            </h2>
+            <h2 className='mb-1 text-sm font-medium tracking-wider text-blue-500 uppercase title-font'>
+              {detail.map((detail, index) => (
+                <span className='mr-3 last:mr-0' key={index}>
+                  {detail}
+                </span>
+              ))}
             </h2>
             <h1 className='mb-8 text-3xl font-bold tracking-tighter text-center text-blue-800 lg:text-left lg:text-5xl title-font'>
               {recipe.title}
@@ -108,11 +128,24 @@ const Recipe = ({ recipeId, data, loading, error }) => {
         <div className='recipe-flex-wrapper'>
           <div className='recipe-section'>
             <h3 className='recipe-section-header'>Ingredients</h3>
-            {recipe.ingredients.data.map(({ amount, item, measurement }) => (
-              <p className='py-1' key={item}>
-                {amount} {lower(measurement)} {item}
-              </p>
-            ))}
+            {recipe.ingredients.data.map(({ amount, item, measurement }) => {
+              const isUnmeasured = measurement === NOT_APPLICABLE
+              const rawFraction = new Fraction(amount)
+              const fraction = rawFraction.toFraction(true)
+              return (
+                <p className='py-1' key={item}>
+                  {isUnmeasured ? (
+                    <>
+                      {fraction} {item}
+                    </>
+                  ) : (
+                    <>
+                      {fraction} {lower(measurement)} {item}
+                    </>
+                  )}
+                </p>
+              )
+            })}
           </div>
           <div className='recipe-section'>
             <h3 className='recipe-section-header'>Steps</h3>

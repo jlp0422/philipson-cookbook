@@ -1,5 +1,19 @@
 import { STATUSES } from './constants'
 
+export const formatAmount = amount => {
+  if (amount.includes('/')) {
+    if (amount.includes(' ')) {
+      const [num, frac] = amount.split(' ')
+      const [preDec, postDec] = frac.split('/')
+      const fracValue = +preDec / +postDec
+      return +num + fracValue
+    }
+    const [preDec, postDec] = amount.split('/')
+    return +preDec / +postDec
+  }
+  return +amount
+}
+
 export const formDataToQueryInput = ({
   author,
   title,
@@ -20,8 +34,8 @@ export const formDataToQueryInput = ({
     ingredients: {
       create: ingredients.map(({ amount, item, measurement }) => ({
         item,
-        measurement: measurement.split(' ').join('_'),
-        amount: Number(amount)
+        measurement,
+        amount: formatAmount(amount)
       }))
     },
     steps,
