@@ -7,6 +7,8 @@ import {
   isEqualArray
 } from './helpers'
 
+// component tests: https://nextjs.org/docs/testing#jest-and-react-testing-library
+
 describe('lower', () => {
   it('should lowercase the string', () => {
     expect(lower('HELLO')).toEqual('hello')
