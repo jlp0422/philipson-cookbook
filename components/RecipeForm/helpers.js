@@ -1,6 +1,6 @@
 import { STATUSES } from './constants'
 
-const formatAmount = amount => {
+export const formatAmount = amount => {
   if (amount.includes('/')) {
     if (amount.includes(' ')) {
       const [num, frac] = amount.split(' ')

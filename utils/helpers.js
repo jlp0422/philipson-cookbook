@@ -1,4 +1,4 @@
-export const isLink = source => source.match(/(^http(s?):\/\/|www\.)/)
+export const isLink = source => source.match(/(^http(s?):\/\/|^www\.)/)
 
 export const getRandomIndex = array => Math.floor(Math.random() * array.length)
 
