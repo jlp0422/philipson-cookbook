@@ -5,7 +5,7 @@ import Head from '~/components/shared/Head'
 import Layout from '~/components/shared/Layout'
 import PageHeader from '~/components/shared/PageHeader'
 import RECIPES_QUERY from '~/graphql/queries/recipes'
-import { createPageTitle, lower, getMaxServings } from '~/utils/helpers'
+import { createPageTitle, lower, getMaxMinValues } from '~/utils/helpers'
 
 const Recipes = () => {
   const pageTitle = 'All Recipes'
@@ -13,7 +13,7 @@ const Recipes = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [maxNumIngredients, setMaxNumIngredients] = useState(0)
   const [maxTotalTime, setMaxTotalTime] = useState(0)
-  const [maxNumServings, setMaxNumServings] = useState(0)
+  const [maxNumServings, setMaxNumServings] = useState([])
   const { data, loading, error } = useQuery(RECIPES_QUERY, {
     variables: { size: 100 }
   })
@@ -38,15 +38,15 @@ const Recipes = () => {
     }
 
     if (maxTotalTime) {
-      recipes = recipes.filter(
-        recipe => Number(recipe.totalTime) <= maxTotalTime
-      )
+      recipes = recipes.filter(recipe => +recipe.totalTime <= maxTotalTime)
     }
 
-    if (maxNumServings) {
-      recipes = recipes.filter(
-        recipe => getMaxServings(recipe.servings) <= maxNumServings
-      )
+    if (maxNumServings.length) {
+      const { max, min } = getMaxMinValues(maxNumServings)
+      recipes = recipes.filter(recipe => {
+        const serves = +recipe.servings
+        return serves >= min && serves <= max
+      })
     }
 
     if (searchQuery.length > 2) {

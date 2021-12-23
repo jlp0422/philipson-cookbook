@@ -14,7 +14,8 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
     setMaxNumServings
   } = filterProps
   const [showFilters, setShowFilters] = useState(false)
-  const hasRecipes = recipes.length > 0
+  const totalRecipes = recipes.length
+  const hasRecipes = totalRecipes > 0
 
   if (loading) {
     return <Loading modifier='orange' size='large' styles='mt-16' />
@@ -28,6 +29,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
     <section className='py-0 mx-auto text-gray-700 sm:py-4 body-font'>
       <FilterBar
         {...filterProps}
+        totalRecipes={totalRecipes}
         showFilters={showFilters}
         setShowFilters={setShowFilters}
       />
@@ -54,7 +56,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
               setSearchQuery('')
               setMaxNumIngredients(0)
               setMaxTotalTime(0)
-              setMaxNumServings(0)
+              setMaxNumServings([])
             }}
           >
             Reset filters

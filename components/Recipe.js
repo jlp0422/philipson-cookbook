@@ -84,7 +84,7 @@ const Recipe = ({ recipeId, data, loading, error }) => {
 
   const detail = [
     `${recipe.totalTime} mins`,
-    `${formatServings(recipe.servings)} servings`
+    `Serves ${formatServings(recipe.servings)}`
   ]
 
   return (

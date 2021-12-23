@@ -331,7 +331,7 @@ const RecipeForm = () => {
       <FormInput
         label='Servings'
         id='servings'
-        type='text'
+        type='number'
         value={formState.servings}
         onChange={updateText('servings')}
         labelStyles='mb-4'

@@ -1,6 +1,7 @@
 import {
   formatServings,
   getImageMin,
+  getMaxMinValues,
   getMaxServings,
   isEmpty,
   isEqualArray,
@@ -119,5 +120,12 @@ describe('formatServings', () => {
   })
   it('does nothing to single numbers', () => {
     expect(formatServings('4')).toBe('4')
+  })
+})
+
+describe('getMaxMinValues', () => {
+  it('returns the max and min values', () => {
+    const arr = [12, 40, 4, -4]
+    expect(getMaxMinValues(arr)).toEqual({ min: -4, max: 40 })
   })
 })

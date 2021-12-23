@@ -6,6 +6,10 @@ import TotalTimeFilter from './TotalTimeFilter'
 import ServingSizeFilter from './ServingSizeFilter'
 import Button from '~/components/shared/Button'
 import TagFilter from './TagFilter'
+import {
+  INGREDIENTS_FILTER_ENABLED,
+  TAGS_FILTER_ENABLED
+} from '~/utils/constants'
 
 const FilterSlideout = ({
   selectedTags,
@@ -17,9 +21,11 @@ const FilterSlideout = ({
   maxNumServings,
   setMaxNumServings,
   showFilters,
+  totalRecipes,
   close
 }) => {
   const [tags, setTags] = useState([])
+  const copy = totalRecipes === 1 ? 'recipe' : 'recipes'
 
   const setUniqueTags = data => {
     const allTags = data.recipes.data.flatMap(recipe => recipe.tags)
@@ -57,17 +63,19 @@ const FilterSlideout = ({
         transform: showFilters ? 'translateX(0)' : 'translateX(110%)'
       }}
     >
-      {tags.length ? (
+      {tags.length && TAGS_FILTER_ENABLED ? (
         <TagFilter
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
           tags={tags}
         />
       ) : null}
-      <IngredientFilter
-        maxNumIngredients={maxNumIngredients}
-        setMaxNumIngredients={setMaxNumIngredients}
-      />
+      {INGREDIENTS_FILTER_ENABLED && (
+        <IngredientFilter
+          maxNumIngredients={maxNumIngredients}
+          setMaxNumIngredients={setMaxNumIngredients}
+        />
+      )}
       <TotalTimeFilter
         maxTotalTime={maxTotalTime}
         setMaxTotalTime={setMaxTotalTime}
@@ -76,8 +84,8 @@ const FilterSlideout = ({
         maxNumServings={maxNumServings}
         setMaxNumServings={setMaxNumServings}
       />
-      <Button className='py-2 my-4' onClick={close} color='red'>
-        Close
+      <Button className='py-2 my-4' onClick={close} color='green'>
+        Search {`(${totalRecipes} ${copy})`}
       </Button>
     </div>
   )
