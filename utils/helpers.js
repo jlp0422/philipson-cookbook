@@ -63,3 +63,20 @@ export const formatServings = servings => {
   }
   return servings
 }
+
+export const getMaxMinValues = array => {
+  return array.reduce(
+    (memo, val) => {
+      if (val > memo.max) {
+        memo.max = val
+      }
+
+      if (val < memo.min) {
+        memo.min = val
+      }
+
+      return memo
+    },
+    { max: 0, min: Infinity }
+  )
+}

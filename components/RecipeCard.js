@@ -7,7 +7,7 @@ const RecipeCard = ({ recipe, showFilters }) => {
 
   const detail = [
     `${recipe.totalTime} mins`,
-    `${formatServings(recipe.servings)} servings`
+    `Serves ${formatServings(recipe.servings)}`
   ]
 
   return (
