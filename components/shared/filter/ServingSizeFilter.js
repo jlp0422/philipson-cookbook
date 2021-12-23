@@ -1,6 +1,6 @@
 import Checkbox from '~/components/shared/form/Checkbox'
 
-const ServingSizeFilter = ({ maxNumServings, setMaxNumServings }) => {
+const ServingSizeFilter = ({ selectedServings, setSelectedServings }) => {
   const servingOptions = [
     { value: 4, label: 'Just us two' },
     { value: 8, label: 'Family friendly' },
@@ -14,16 +14,16 @@ const ServingSizeFilter = ({ maxNumServings, setMaxNumServings }) => {
 
   const onHandleCheck = ev => {
     const serves = +ev.target.value
-    console.log({ serves, maxNumServings })
-    if (maxNumServings.includes(serves)) {
-      setMaxNumServings(maxNumServings.filter(s => s !== serves))
+    console.log({ serves, selectedServings })
+    if (selectedServings.includes(serves)) {
+      setSelectedServings(selectedServings.filter(s => s !== serves))
     } else {
-      setMaxNumServings(maxNumServings.concat(serves))
+      setSelectedServings(selectedServings.concat(serves))
     }
   }
 
   const onSelectOnly = serves => {
-    setMaxNumServings(serves)
+    setSelectedServings(serves)
   }
 
   return (
@@ -36,7 +36,7 @@ const ServingSizeFilter = ({ maxNumServings, setMaxNumServings }) => {
           label='All'
           id='all'
           first
-          checked={!maxNumServings.length}
+          checked={!selectedServings.length}
           onHandleCheck={() => onSelectOnly([])}
         />
         {options.map(({ max, label, id }) => (
@@ -45,10 +45,10 @@ const ServingSizeFilter = ({ maxNumServings, setMaxNumServings }) => {
             label={label}
             id={max}
             onHandleCheck={onHandleCheck}
-            checked={maxNumServings.includes(max)}
+            checked={selectedServings.includes(max)}
             onSelectOnly={() => onSelectOnly([max])}
             onlyDisabled={
-              maxNumServings.length === 1 && maxNumServings.includes(max)
+              selectedServings.length === 1 && selectedServings.includes(max)
             }
           />
         ))}

@@ -11,7 +11,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
     setSearchQuery,
     setMaxNumIngredients,
     setMaxTotalTime,
-    setMaxNumServings
+    setSelectedServings
   } = filterProps
   const [showFilters, setShowFilters] = useState(false)
   const totalRecipes = recipes.length
@@ -56,7 +56,7 @@ const RecipeList = ({ recipes, loading, error, ...filterProps }) => {
               setSearchQuery('')
               setMaxNumIngredients(0)
               setMaxTotalTime(0)
-              setMaxNumServings([])
+              setSelectedServings([])
             }}
           >
             Reset filters

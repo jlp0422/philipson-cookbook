@@ -11,10 +11,10 @@ const SelectedFilters = ({
   setMaxNumIngredients,
   maxTotalTime,
   setMaxTotalTime,
-  maxNumServings,
-  setMaxNumServings
+  selectedServings,
+  setSelectedServings
 }) => {
-  if (!maxNumIngredients && !maxTotalTime && !maxNumServings) {
+  if (!maxNumIngredients && !maxTotalTime && !selectedServings.length) {
     return null
   }
 
@@ -30,9 +30,9 @@ const SelectedFilters = ({
           {maxTotalTime} minutes or less
         </Pill>
       ) : null}
-      {maxNumServings.length > 0
-        ? maxNumServings.sort().map(serves => (
-            <Pill key={serves} onClear={() => setMaxNumServings(0)}>
+      {selectedServings.length > 0
+        ? selectedServings.sort().map(serves => (
+            <Pill key={serves} onClear={() => setSelectedServings(0)}>
               {SERVING_SIZE_TO_LABEL[serves]}
             </Pill>
           ))

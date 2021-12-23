@@ -13,7 +13,7 @@ const Recipes = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [maxNumIngredients, setMaxNumIngredients] = useState(0)
   const [maxTotalTime, setMaxTotalTime] = useState(0)
-  const [maxNumServings, setMaxNumServings] = useState([])
+  const [selectedServings, setSelectedServings] = useState([])
   const { data, loading, error } = useQuery(RECIPES_QUERY, {
     variables: { size: 100 }
   })
@@ -41,8 +41,8 @@ const Recipes = () => {
       recipes = recipes.filter(recipe => +recipe.totalTime <= maxTotalTime)
     }
 
-    if (maxNumServings.length) {
-      const { max, min } = getMaxMinValues(maxNumServings)
+    if (selectedServings.length) {
+      const { max, min } = getMaxMinValues(selectedServings)
       recipes = recipes.filter(recipe => {
         const serves = +recipe.servings
         return serves >= min && serves <= max
@@ -63,7 +63,7 @@ const Recipes = () => {
     searchQuery,
     maxNumIngredients,
     maxTotalTime,
-    maxNumServings,
+    selectedServings,
     data
   ])
 
@@ -84,8 +84,8 @@ const Recipes = () => {
           setMaxNumIngredients,
           maxTotalTime,
           setMaxTotalTime,
-          maxNumServings,
-          setMaxNumServings
+          selectedServings,
+          setSelectedServings
         }}
       />
     </Layout>

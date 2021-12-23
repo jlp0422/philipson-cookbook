@@ -18,8 +18,8 @@ const FilterSlideout = ({
   setMaxNumIngredients,
   maxTotalTime,
   setMaxTotalTime,
-  maxNumServings,
-  setMaxNumServings,
+  selectedServings,
+  setSelectedServings,
   showFilters,
   totalRecipes,
   close
@@ -81,8 +81,8 @@ const FilterSlideout = ({
         setMaxTotalTime={setMaxTotalTime}
       />
       <ServingSizeFilter
-        maxNumServings={maxNumServings}
-        setMaxNumServings={setMaxNumServings}
+        selectedServings={selectedServings}
+        setSelectedServings={setSelectedServings}
       />
       <Button className='py-2 my-4' onClick={close} color='green'>
         Search {`(${totalRecipes} ${copy})`}
